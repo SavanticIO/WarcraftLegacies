@@ -8,10 +8,10 @@ namespace MacroTools.Commands
   /// <summary>
   /// A <see cref="CommandSystem.Command"/> that sets the player's camera to a specific height.
   /// </summary>
-  public sealed class Cam : Command
+  public sealed class Captions : Command
   {
     /// <inheritdoc />
-    public override string CommandText => "cam";
+    public override string CommandText => "captions";
     
     /// <inheritdoc />
     public override bool Exact => false;
@@ -28,14 +28,12 @@ namespace MacroTools.Commands
     /// <inheritdoc />
     public override string Execute(player commandUser, params string[] parameters)
     {
-      var cameraHeight = parameters[0];
-      if (!int.TryParse(cameraHeight, out var cameraHeightInt))
-        return "You must specify a number as the first parameter.";
+      var captions = parameters[0];
+      if (!bool.TryParse(captions, out var captionsBool))
+        return "You must specify a boolean value(true or false) as the first parameter.";
       
-      cameraHeightInt = Math.Clamp(cameraHeightInt, 700, 2701);
-      DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set CamDistance for {GetPlayerName(commandUser)} to {cameraHeightInt}");
-      PlayerData.ByHandle(commandUser).CamDistance = cameraHeightInt;
-      return $"Setting camera height to {cameraHeightInt}.";
+      PlayerData.ByHandle(commandUser).ShowCaptions = captionsBool;
+      return $"Setting show captions option to {captionsBool}.";
     }
   }
 }

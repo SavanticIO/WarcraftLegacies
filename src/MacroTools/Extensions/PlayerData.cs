@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MacroTools.ControlPointSystem;
 using MacroTools.FactionSystem;
+using MacroTools.Libraries;
 using static War3Api.Common;
 
 namespace MacroTools.Extensions
@@ -39,10 +40,16 @@ namespace MacroTools.Extensions
     private float _partialGold; //Just used for income calculations
     private float _partialLumber;
 
+    private int? _camDistance;
+    private bool? _showCaptions;
+    private bool? _playDialoge;
+    private bool? _showQuestText;
+
     private PlayerData(player player)
     {
       Player = player;
       EliminationTurns = 0;
+      
     }
 
     private player Player { get; }
@@ -129,6 +136,53 @@ namespace MacroTools.Extensions
       {
         _bonusIncome = value;
         IncomeChanged?.Invoke(this, this);
+      }
+    }
+    
+    public int CamDistance
+    {
+      get => _camDistance ?? 700;
+      set
+      {
+        _camDistance = Math.Clamp(value, 700, 2701);
+        Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, CamDistance, 1);
+        if (Player == GetLocalPlayer())
+        {
+          FileIO.Write(Player);
+        }
+      }
+    }
+    
+    public bool ShowCaptions
+    {
+      get => _showCaptions ?? true;
+      set
+      {
+        _showCaptions = value;
+        if (Player == GetLocalPlayer())
+          FileIO.Write(Player);
+      }
+    }
+    
+    public bool ShowQuestText
+    {
+      get => _showQuestText ?? true;
+      set
+      {
+        _showQuestText = value;
+        if (Player == GetLocalPlayer())
+          FileIO.Write(Player);
+      }
+    }
+
+    public bool PlayDialogue
+    {
+      get => _playDialoge ?? true;
+      set
+      {
+        _playDialoge = value;
+        if (Player == GetLocalPlayer())
+          FileIO.Write(Player);
       }
     }
 

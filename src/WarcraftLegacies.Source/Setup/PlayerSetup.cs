@@ -1,4 +1,5 @@
 ﻿using MacroTools.Extensions;
+using MacroTools.Libraries;
 using WarcraftLegacies.Source.Setup.FactionSetup;
 using static War3Api.Common;
 
@@ -52,6 +53,7 @@ namespace WarcraftLegacies.Source.Setup
 
       //Player(19).SetFaction(CrisisFootmanSetup.CrisisFootman);
       //Player(19).SetTeam(TeamSetup.Crisis);
+      FileIO.Read(GetLocalPlayer());
     }
   }
 }

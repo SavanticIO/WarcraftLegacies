@@ -1,4 +1,5 @@
 ﻿using System;
+using MacroTools.Extensions;
 using static War3Api.Common;
 
 namespace MacroTools.Wrappers
@@ -58,7 +59,8 @@ namespace MacroTools.Wrappers
 
       if (playCondition(GetLocalPlayer()))
       {
-        StartSound(Sound);
+        if (PlayerData.ByHandle(GetLocalPlayer()).PlayDialogue)
+          StartSound(Sound);
       }
 
       if (disposeAfter)

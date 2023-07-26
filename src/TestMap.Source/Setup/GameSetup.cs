@@ -25,7 +25,9 @@ namespace TestMap.Source.Setup
       ControlPointSetup.Setup();
       AllQuestSetup.Setup();
       SpellSetup.Setup();
-      CheatSetup.Setup(new CommandManager());
+      var commandManager = new CommandManager();
+      CheatSetup.Setup(commandManager);
+      CommandSetup.Setup(commandManager);
       FactionMultiboard.Setup();
       BookSetup.Setup();
       TestSetup.Setup();
