@@ -3,6 +3,7 @@ using MacroTools;
 using MacroTools.Cheats;
 using MacroTools.CommandSystem;
 using MacroTools.ControlPointSystem;
+using MacroTools.Libraries;
 using MacroTools.Mechanics;
 using MacroTools.PassiveAbilitySystem;
 using MacroTools.UserInterface;
@@ -32,6 +33,7 @@ namespace WarcraftLegacies.Source.Setup
       var displayIntroText = new DisplayIntroText(25);
       var cinematicMode = new CinematicMode(59, displayIntroText);
       var gameTime = new GameTime();
+      GameCache.Setup();
       SetupControlPointManager();
       var preplacedUnitSystem = new PreplacedUnitSystem();
       SoundLibrary.Setup();
@@ -45,6 +47,7 @@ namespace WarcraftLegacies.Source.Setup
       AllFactionSetup.Setup(preplacedUnitSystem, artifactSetup);
       SharedFactionConfigSetup.Setup();
       PlayerSetup.Setup();
+      GameCache.SyncCache();
       ZandalarGoblinChoiceDialogue.Setup();
       IllidariSunfuryChoiceDialogue.Setup();
       DalaGilneasChoiceDialogue.Setup();

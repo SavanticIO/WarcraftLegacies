@@ -33,7 +33,6 @@ namespace MacroTools.Commands
         return "You must specify a number as the first parameter.";
       
       cameraHeightInt = Math.Clamp(cameraHeightInt, 700, 2701);
-      DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set CamDistance for {GetPlayerName(commandUser)} to {cameraHeightInt}");
       PlayerData.ByHandle(commandUser).CamDistance = cameraHeightInt;
       return $"Setting camera height to {cameraHeightInt}.";
     }

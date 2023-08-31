@@ -145,10 +145,11 @@ namespace MacroTools.Extensions
       set
       {
         _camDistance = Math.Clamp(value, 700, 2701);
+        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set CamDistance for {GetPlayerName(GetLocalPlayer())} to {_camDistance}");
         Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, CamDistance, 1);
         if (Player == GetLocalPlayer())
         {
-          FileIO.Write(Player);
+          FileIo.Write(Player);
         }
       }
     }
@@ -159,8 +160,9 @@ namespace MacroTools.Extensions
       set
       {
         _showCaptions = value;
+        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set ShowCaptions for {GetPlayerName(GetLocalPlayer())} to {_showCaptions}");
         if (Player == GetLocalPlayer())
-          FileIO.Write(Player);
+          FileIo.Write(Player);
       }
     }
     
@@ -170,8 +172,9 @@ namespace MacroTools.Extensions
       set
       {
         _showQuestText = value;
+        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set ShowQuestText for {GetPlayerName(GetLocalPlayer())} to {_showQuestText}");
         if (Player == GetLocalPlayer())
-          FileIO.Write(Player);
+          FileIo.Write(Player);
       }
     }
 
@@ -181,8 +184,9 @@ namespace MacroTools.Extensions
       set
       {
         _playDialoge = value;
+        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set PlayDialogue for {GetPlayerName(GetLocalPlayer())} to {_playDialoge}");
         if (Player == GetLocalPlayer())
-          FileIO.Write(Player);
+          FileIo.Write(Player);
       }
     }
 

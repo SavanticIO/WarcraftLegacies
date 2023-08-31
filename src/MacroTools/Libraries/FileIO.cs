@@ -4,40 +4,59 @@ using static War3Api.Common;
 
 namespace MacroTools.Libraries
 {
-  public class FileIO
+  /// <summary>
+  /// Class to read and write player settings data from a file
+  /// </summary>
+  public static class FileIo
   {
-    public class File
+    private sealed class File
     {
-      public readonly string fileName;
-      public readonly string data;
+      public readonly string FileName;
+      public readonly string Data;
 
       public File(player player)
       {
-        fileName = GetPlayerName(player)+"_WarcraftLegaciesData";
-        data = PlayerData.ByHandle(player).CamDistance + "-" + PlayerData.ByHandle(player).ShowQuestText + "-" + PlayerData.ByHandle(player).ShowCaptions + "-" + PlayerData.ByHandle(player).PlayDialogue;
+        FileName = GetPlayerName(player)+"_WarcraftLegaciesData";
+        Data = PlayerData.ByHandle(player).CamDistance + "-" + PlayerData.ByHandle(player).ShowQuestText + "-" + PlayerData.ByHandle(player).ShowCaptions + "-" + PlayerData.ByHandle(player).PlayDialogue;
       }
     }
 
+    /// <summary>
+    /// Reads player settings data from a file
+    /// </summary>
+    /// <param name="player"></param>
     public static void Read(player player)
     {
-      var currentPlayerName = GetPlayerName(GetLocalPlayer());
-      Preloader($"WarcraftLegacies\\{GetPlayerName(player)+"_WarcraftLegaciesData"}.txt");
-      var data = GetPlayerName(GetLocalPlayer()).Split('-');
-      SetPlayerName(GetLocalPlayer(), currentPlayerName);
+      var currentPlayerName = GetPlayerName(player);
+      Preloader($"WarcraftLegacies\\{currentPlayerName}_WarcraftLegaciesData.txt");
+      var data = GetPlayerName(player).Split('-');
+      SetPlayerName(player, currentPlayerName);
       if (data.Length != 4) return;
       PlayerData.ByHandle(player).CamDistance = Convert.ToInt32(data[0]);
+      GameCache.SavePlayerSetting(player,"CamDistance",Convert.ToInt32(data[0]));
+      
       PlayerData.ByHandle(player).ShowQuestText = Convert.ToBoolean(data[1]);
+      GameCache.SavePlayerSetting(player,"ShowQuestText",Convert.ToBoolean(data[1]));
+      
       PlayerData.ByHandle(player).ShowCaptions = Convert.ToBoolean(data[2]);
+      GameCache.SavePlayerSetting(player,"ShowCaptions",Convert.ToBoolean(data[2]));
+      
       PlayerData.ByHandle(player).PlayDialogue = Convert.ToBoolean(data[3]);
+      GameCache.SavePlayerSetting(player,"PlayDialogue",Convert.ToBoolean(data[3]));
+      SaveGameCache(GameCache.WarcraftLegaciesCache);
     }
 
+    /// <summary>
+    /// Writes player settings data to a file
+    /// </summary>
+    /// <param name="player"></param>
     public static void Write(player player)
     {
       var file = new File(player);
       PreloadGenClear();
       PreloadGenStart();
-      Preload("\" )\ncall SetPlayerName(GetLocalPlayer(),\"" + file.data + "\") //");
-      PreloadGenEnd($"WarcraftLegacies\\{file.fileName}.txt");
+      Preload($"\" )\ncall SetPlayerName(GetLocalPlayer(),\"{file.Data}\") //");
+      PreloadGenEnd($"WarcraftLegacies\\{file.FileName}.txt");
     }
   }
 }
