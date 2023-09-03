@@ -32,7 +32,7 @@ namespace MacroTools.Commands
       if (!bool.TryParse(captions, out var captionsBool))
         return "You must specify a boolean value(true or false) as the first parameter.";
       
-      PlayerData.ByHandle(commandUser).ShowCaptions = captionsBool;
+      PlayerData.ByHandle(commandUser).UpdatePlayerSetting("ShowCaptions", captionsBool);
       return $"Setting show captions option to {captionsBool}.";
     }
   }

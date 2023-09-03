@@ -32,16 +32,16 @@ namespace MacroTools.Libraries
       var data = GetPlayerName(player).Split('-');
       SetPlayerName(player, currentPlayerName);
       if (data.Length != 4) return;
-      PlayerData.ByHandle(player).CamDistance = Convert.ToInt32(data[0]);
+      PlayerData.ByHandle(player).UpdatePlayerSetting("CamDistance", Convert.ToInt32(data[0]));
       GameCache.SavePlayerSetting(player,"CamDistance",Convert.ToInt32(data[0]));
       
-      PlayerData.ByHandle(player).ShowQuestText = Convert.ToBoolean(data[1]);
+      PlayerData.ByHandle(player).UpdatePlayerSetting("ShowQuestText", Convert.ToInt32(data[1]));
       GameCache.SavePlayerSetting(player,"ShowQuestText",Convert.ToBoolean(data[1]));
       
-      PlayerData.ByHandle(player).ShowCaptions = Convert.ToBoolean(data[2]);
+      PlayerData.ByHandle(player).UpdatePlayerSetting("ShowCaptions", Convert.ToInt32(data[2]));
       GameCache.SavePlayerSetting(player,"ShowCaptions",Convert.ToBoolean(data[2]));
       
-      PlayerData.ByHandle(player).PlayDialogue = Convert.ToBoolean(data[3]);
+      PlayerData.ByHandle(player).UpdatePlayerSetting("PlayDialogue", Convert.ToInt32(data[3]));
       GameCache.SavePlayerSetting(player,"PlayDialogue",Convert.ToBoolean(data[3]));
       SaveGameCache(GameCache.WarcraftLegaciesCache);
     }

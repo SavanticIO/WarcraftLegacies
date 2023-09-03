@@ -32,7 +32,7 @@ namespace MacroTools.Commands
       if (!bool.TryParse(dialogue, out var dialogueBool))
         return "You must specify a boolean value(true or false) as the first parameter.";
       
-      PlayerData.ByHandle(commandUser).PlayDialogue = dialogueBool;
+      PlayerData.ByHandle(commandUser).UpdatePlayerSetting("PlayDialogue", dialogueBool);
       return $"Setting play dialogue option to {dialogueBool}.";
     }
   }

@@ -29,10 +29,10 @@ namespace MacroTools.Libraries
     {
       foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
       {
-        PlayerData.ByHandle(player).CamDistance = Convert.ToInt32(LoadPlayerSettingInteger(player,"CamDistance"));
-        PlayerData.ByHandle(player).ShowQuestText = Convert.ToBoolean(LoadPlayerSettingBoolean(player,"ShowQuestText"));
-        PlayerData.ByHandle(player).ShowCaptions = Convert.ToBoolean(LoadPlayerSettingBoolean(player,"ShowQuestText"));
-        PlayerData.ByHandle(player).PlayDialogue = Convert.ToBoolean(LoadPlayerSettingBoolean(player,"ShowQuestText"));
+        PlayerData.ByHandle(player).UpdatePlayerSetting("CamDistance", Convert.ToInt32(LoadPlayerSettingInteger(player,"CamDistance")));
+        PlayerData.ByHandle(player).UpdatePlayerSetting("ShowQuestText", Convert.ToBoolean(LoadPlayerSettingBoolean(player,"ShowQuestText")));
+        PlayerData.ByHandle(player).UpdatePlayerSetting("ShowCaptions", Convert.ToBoolean(LoadPlayerSettingBoolean(player,"ShowCaptions")));
+        PlayerData.ByHandle(player).UpdatePlayerSetting("PlayDialogue", Convert.ToBoolean(LoadPlayerSettingBoolean(player,"PlayDialogue")));
       }
       FlushGameCache(WarcraftLegaciesCache);
     }

@@ -32,7 +32,7 @@ namespace MacroTools.Commands
       if (!bool.TryParse(questText, out var questTextBool))
         return "You must specify a boolean value(true or false) as the first parameter.";
       
-      PlayerData.ByHandle(commandUser).ShowQuestText = questTextBool;
+      PlayerData.ByHandle(commandUser).UpdatePlayerSetting("ShowQuestText", questTextBool);
       return $"Setting show quest text option to {questTextBool}.";
     }
   }

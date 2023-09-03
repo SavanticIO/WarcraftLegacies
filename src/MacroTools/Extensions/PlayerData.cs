@@ -41,9 +41,6 @@ namespace MacroTools.Extensions
     private float _partialLumber;
 
     private int? _camDistance;
-    private bool? _showCaptions;
-    private bool? _playDialoge;
-    private bool? _showQuestText;
 
     private PlayerData(player player)
     {
@@ -142,52 +139,44 @@ namespace MacroTools.Extensions
     public int CamDistance
     {
       get => _camDistance ?? 700;
-      set
-      {
-        _camDistance = Math.Clamp(value, 700, 2701);
-        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set CamDistance for {GetPlayerName(GetLocalPlayer())} to {_camDistance}");
-        Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, CamDistance, 1);
-        if (Player == GetLocalPlayer())
-        {
-          FileIo.Write(Player);
-        }
-      }
+      private set => _camDistance = Math.Clamp(value, 700, 2701);
     }
     
-    public bool ShowCaptions
-    {
-      get => _showCaptions ?? true;
-      set
-      {
-        _showCaptions = value;
-        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set ShowCaptions for {GetPlayerName(GetLocalPlayer())} to {_showCaptions}");
-        if (Player == GetLocalPlayer())
-          FileIo.Write(Player);
-      }
-    }
+    public bool ShowQuestText { get; private set; } = true;
     
-    public bool ShowQuestText
+    public bool PlayDialogue { get; private set; } = true;
+    
+    public bool ShowCaptions { get; private set; } = true;
+    
+    public void UpdatePlayerSetting(string setting, int value)
     {
-      get => _showQuestText ?? true;
-      set
+      switch (setting)
       {
-        _showQuestText = value;
-        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set ShowQuestText for {GetPlayerName(GetLocalPlayer())} to {_showQuestText}");
-        if (Player == GetLocalPlayer())
-          FileIo.Write(Player);
+        case "CamDistance":
+          CamDistance = value;
+          Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, CamDistance, 1);
+          break;
       }
+      if (Player == GetLocalPlayer())
+        FileIo.Write(Player);
     }
 
-    public bool PlayDialogue
+    public void UpdatePlayerSetting(string setting, bool value)
     {
-      get => _playDialoge ?? true;
-      set
+      switch (setting)
       {
-        _playDialoge = value;
-        DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"Set PlayDialogue for {GetPlayerName(GetLocalPlayer())} to {_playDialoge}");
-        if (Player == GetLocalPlayer())
-          FileIo.Write(Player);
+        case "PlayDialogue":
+          PlayDialogue = value;
+          break;
+        case "ShowQuestText":
+          ShowQuestText = value;
+          break;
+        case "ShowCaptions":
+          ShowCaptions = value;
+          break;
       }
+      if (Player == GetLocalPlayer())
+        FileIo.Write(Player);
     }
 
     /// <summary>
