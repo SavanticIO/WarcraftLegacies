@@ -41,15 +41,15 @@ namespace MacroTools.DialogueSystem
         Sound.Play(players.Contains, true);
         foreach (var player in players)
         {
-          if (PlayerData.ByHandle(player).ShowCaptions)
+          if (PlayerData.ByHandle(player).PlayerSettings.ShowCaptions)
             DisplayTextToPlayer(player, 0, 0, $"|cffffcc00{_speaker}:|r {_caption}");
         }
       }
       else
       {
-        if (PlayerData.ByHandle(GetLocalPlayer()).ShowCaptions)
+        if (PlayerData.ByHandle(GetLocalPlayer()).PlayerSettings.ShowCaptions)
           DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"|cffffcc00{_speaker}:|r {_caption}");
-        if (PlayerData.ByHandle(GetLocalPlayer()).PlayDialogue)
+        if (PlayerData.ByHandle(GetLocalPlayer()).PlayerSettings.PlayDialogue)
           Sound.Play(true);
       }
     }

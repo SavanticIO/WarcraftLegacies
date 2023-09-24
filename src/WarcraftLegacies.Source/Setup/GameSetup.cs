@@ -4,6 +4,7 @@ using MacroTools.ControlPointSystem;
 using MacroTools.Libraries;
 using MacroTools.Mechanics;
 using MacroTools.PassiveAbilitySystem;
+using MacroTools.Save;
 using MacroTools.UserInterface;
 using WarcraftLegacies.Source.ArtifactBehaviour;
 using WarcraftLegacies.Source.GameLogic;
@@ -14,6 +15,7 @@ using WarcraftLegacies.Source.Mechanics.Scourge;
 using WarcraftLegacies.Source.Mechanics.Scourge.Blight;
 using WarcraftLegacies.Source.Setup.FactionSetup;
 using WarcraftLegacies.Source.UnitTypes;
+using WCSharp.SaveLoad;
 using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Setup
@@ -31,7 +33,6 @@ namespace WarcraftLegacies.Source.Setup
       var displayIntroText = new DisplayIntroText(25);
       var cinematicMode = new CinematicMode(59, displayIntroText);
       var gameTime = new GameTime();
-      GameCache.Setup();
       SetupControlPointManager();
       var preplacedUnitSystem = new PreplacedUnitSystem();
       SoundLibrary.Setup();
@@ -44,8 +45,8 @@ namespace WarcraftLegacies.Source.Setup
       TeamSetup.Setup();
       AllFactionSetup.Setup(preplacedUnitSystem, artifactSetup);
       SharedFactionConfigSetup.Setup();
+      SaveManager.Initialize();
       PlayerSetup.Setup();
-      GameCache.SyncCache();
       ZandalarGoblinChoiceDialogue.Setup();
       IllidariSunfuryChoiceDialogue.Setup();
       DalaGilneasChoiceDialogue.Setup();

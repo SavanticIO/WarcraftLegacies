@@ -59,7 +59,7 @@ namespace MacroTools.Wrappers
 
       if (playCondition(GetLocalPlayer()))
       {
-        if (PlayerData.ByHandle(GetLocalPlayer()).PlayDialogue)
+        if (PlayerData.ByHandle(GetLocalPlayer()).PlayerSettings.PlayDialogue)
           StartSound(Sound);
       }
 

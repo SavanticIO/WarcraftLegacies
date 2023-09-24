@@ -17,7 +17,6 @@ namespace TestMap.Source.Setup
       
       Player(2).SetFaction(DruidsSetup.FactionDruids);
       Player(2).SetTeam(TeamSetup.TeamAlliance);
-      FileIo.Read(GetLocalPlayer());
     }
   }
 }

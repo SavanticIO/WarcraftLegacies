@@ -53,7 +53,6 @@ namespace WarcraftLegacies.Source.Setup
 
       //Player(19).SetFaction(CrisisFootmanSetup.CrisisFootman);
       //Player(19).SetTeam(TeamSetup.Crisis);
-      FileIo.Read(GetLocalPlayer());
     }
   }
 }

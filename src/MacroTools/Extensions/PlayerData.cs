@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using MacroTools.ControlPointSystem;
 using MacroTools.FactionSystem;
-using MacroTools.Libraries;
+using MacroTools.Save;
+using WCSharp.SaveLoad;
 using static War3Api.Common;
 
 namespace MacroTools.Extensions
@@ -10,7 +11,7 @@ namespace MacroTools.Extensions
   /// <summary>
   /// Provides extra information about players that is not already tracked by the Warcraft 3 engine.
   /// </summary>
-  internal sealed class PlayerData
+  internal sealed class PlayerData : Saveable
   {
     /// <summary>
     /// Fired when the player leaves a team.
@@ -40,13 +41,11 @@ namespace MacroTools.Extensions
     private float _partialGold; //Just used for income calculations
     private float _partialLumber;
 
-    private int? _camDistance;
-
     private PlayerData(player player)
     {
       Player = player;
       EliminationTurns = 0;
-      
+      PlayerSettings = SaveManager.SavesByPlayer[player];
     }
 
     private player Player { get; }
@@ -136,29 +135,17 @@ namespace MacroTools.Extensions
       }
     }
     
-    public int CamDistance
-    {
-      get => _camDistance ?? 700;
-      private set => _camDistance = Math.Clamp(value, 700, 2701);
-    }
-    
-    public bool ShowQuestText { get; private set; } = true;
-    
-    public bool PlayDialogue { get; private set; } = true;
-    
-    public bool ShowCaptions { get; private set; } = true;
-    
     public void UpdatePlayerSetting(string setting, int value)
     {
       switch (setting)
       {
         case "CamDistance":
-          CamDistance = value;
-          Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, CamDistance, 1);
+          PlayerSettings.CamDistance = value;
+          Player.ApplyCameraField(CAMERA_FIELD_TARGET_DISTANCE, PlayerSettings.CamDistance, 1);
           break;
       }
       if (Player == GetLocalPlayer())
-        FileIo.Write(Player);
+        SaveManager.Save(PlayerSettings);
     }
 
     public void UpdatePlayerSetting(string setting, bool value)
@@ -166,18 +153,20 @@ namespace MacroTools.Extensions
       switch (setting)
       {
         case "PlayDialogue":
-          PlayDialogue = value;
+          PlayerSettings.PlayDialogue = value;
           break;
         case "ShowQuestText":
-          ShowQuestText = value;
+          PlayerSettings.ShowQuestText = value;
           break;
         case "ShowCaptions":
-          ShowCaptions = value;
+          PlayerSettings.ShowCaptions = value;
           break;
       }
       if (Player == GetLocalPlayer())
-        FileIo.Write(Player);
+        SaveManager.Save(PlayerSettings);
     }
+    
+    public PlayerSettings PlayerSettings { get; set; } = new();
 
     /// <summary>
     ///   Gold per second gained from primary sources like Control Points.
