@@ -3,7 +3,6 @@ using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WarcraftLegacies.Source.Setup;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Naga
 {
@@ -20,15 +19,15 @@ namespace WarcraftLegacies.Source.Quests.Naga
       @"ReplaceableTextures\CommandButtons\BTNKazzakIon.blp")
     {
       AddObjective(new ObjectiveLegendHasArtifact(illidan, eyeOfSargeras));
-      ResearchId = Constants.UPGRADE_R094_QUEST_COMPLETED_THE_EYE_OF_SARGERAS;
+      ResearchId = UPGRADE_R094_QUEST_COMPLETED_THE_EYE_OF_SARGERAS;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Eye of Sargeras' power needs to be channeled by powerful arcanists, the Naga Sea Witch will be the perfect vessels.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"Learn to train {GetObjectName(Constants.UNIT_HVSH_SEA_WITCH_ILLIDARI)}es from {GetObjectName(Constants.UNIT_N055_BETRAYER_S_CITADEL_ILLIDARI_T3)}s";
+      $"Learn to train {GetObjectName(UNIT_HVSH_SEA_WITCH_ILLIDARI)}es from {GetObjectName(UNIT_N055_BETRAYER_S_CITADEL_ILLIDARI_T3)}s";
   }
 }

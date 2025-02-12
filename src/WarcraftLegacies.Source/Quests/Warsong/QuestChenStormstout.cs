@@ -2,7 +2,6 @@
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Warsong
 {
@@ -21,11 +20,11 @@ namespace WarcraftLegacies.Source.Quests.Warsong
       AddObjective(new ObjectiveAnyUnitInRect(Regions.Chen, "Chen Stormstout", false));
       AddObjective(new ObjectiveSelfExists());
       _chen = chen;
-      Required = true;
+      
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "Chen Stormstout has joined the Warsong as a mercenary!";
+    public override string RewardFlavour => "Chen Stormstout has joined the Warsong as a mercenary!";
 
     /// <inheritdoc/>
     protected override string RewardDescription => "The hero Chen Stormstout is now trainable at the Altar";

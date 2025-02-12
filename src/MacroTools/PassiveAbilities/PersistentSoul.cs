@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MacroTools.Extensions;
+using MacroTools.Libraries;
 using MacroTools.PassiveAbilitySystem;
 using static War3Api.Common;
 
@@ -39,18 +40,17 @@ namespace MacroTools.PassiveAbilities
     /// How far away corpses can be to be a candidate for reanimation.
     /// </summary>
     public float Radius { get; init; }
-
+    
     /// <inheritdoc/>
     public override void OnDeath()
     {
       var caster = GetTriggerUnit();
-      if (IsUnitType(caster, UNIT_TYPE_SUMMONED))
-        return;
 
       foreach (var unit in CreateGroup().EnumUnitsInRange(caster.GetPosition(), Radius)
                  .EmptyToList()
                  .Where(x => IsUnitReanimationCandidate(caster, x))
                  .OrderByDescending(x => x.GetLevel())
+                 .ThenBy(x => MathEx.GetDistanceBetweenPoints(caster.GetPosition(), x.GetPosition()))
                  .Take(ReanimationCountLevel * GetUnitAbilityLevel(caster, _abilityTypeId)))
       {
         Reanimate(caster.OwningPlayer(), unit);

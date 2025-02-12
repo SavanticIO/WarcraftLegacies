@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WarcraftLegacies.Source.Mechanics.Scourge.Plague;
 using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Quests.Scourge
@@ -9,29 +8,13 @@ namespace WarcraftLegacies.Source.Quests.Scourge
   /// </summary>
   public sealed class PlagueParameters
   {
-    /// <summary>
-    /// Where to spawn Plague Cauldrons. Each <see cref="Rectangle"/> gets 1 Cauldron.
-    /// </summary>
+    /// <summary>Where to spawn Plague Cauldrons. Each <see cref="Rectangle"/> gets 1 army.</summary>
     public List<Rectangle> PlagueRects { get; set; } = new();
-  
-    /// <summary>
-    /// The unit type ID for Plague Cauldrons.
-    /// </summary>
-    public int PlagueCauldronUnitTypeId { get; set; }
 
-    /// <summary>
-    /// Which units to spawn around Plague Cauldrons and how many.
-    /// </summary>
-    public List<PlagueCauldronSummonParameter> PlagueCauldronSummonParameters { get; set; } = new();
-  
-    /// <summary>
-    /// How long the spawned Plague Cauldrons should last.
-    /// </summary>
-    public float Duration { get; set; }
+    /// <summary>Which units to spawn around Plague Cauldrons and how many.</summary>
+    public List<PlagueArmySummonParameter> PlagueArmySummonParameters { get; set; } = new();
 
-    /// <summary>
-    /// List of potential points plague cauldrons can send units too
-    /// </summary>
+    /// <summary>List of potential points spawned armies can be sent to.</summary>
     public List<Point> AttackTargets { get; set; } = new();
-}
+  }
 }

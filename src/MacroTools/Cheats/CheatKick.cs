@@ -13,12 +13,9 @@ namespace MacroTools.Cheats
 
     /// <inheritdoc />
     public override string CommandText => "kick";
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -31,9 +28,8 @@ namespace MacroTools.Cheats
     {
       try
       {
-        var faction = FactionManager.GetFromName(parameters[0]);
-        if (faction == null)
-          return $"There is no registered {nameof(Faction)} with the name {parameters[0]}.";
+        if (!FactionManager.TryGetFactionByName(parameters[0], out var faction))
+          return $"There is no faction named {parameters[0]}.";
         
         faction.Defeat();
         return $"Kicking {nameof(Faction)} {faction.Name}.";

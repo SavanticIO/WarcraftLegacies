@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MacroTools.Extensions;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.GameLogic
 {
@@ -77,8 +76,7 @@ namespace WarcraftLegacies.Source.GameLogic
     private static void PlayFactionMusic()
     {
       foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
-        if (GetLocalPlayer() == player)
-          PlayThematicMusic(player.GetFaction()?.CinematicMusic);
+        player.PlayMusicThematic(player.GetFaction().CinematicMusic);
     }
   }
 }

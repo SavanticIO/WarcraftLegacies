@@ -1,12 +1,15 @@
 ﻿using System;
+using MacroTools;
 using MacroTools.Cheats;
+using MacroTools.Extensions;
 using WarcraftLegacies.Source.GameLogic;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Cheats
 {
   public static class CheatSkipCinematic
   {
+    private static trigger? _skipTrigger;
+
     public static void Init()
     {
       var timer = CreateTimer();
@@ -15,10 +18,13 @@ namespace WarcraftLegacies.Source.Cheats
 
     private static void Actions()
     {
-      if (!TestMode.CheatCondition()) return;
+      if (!TestMode.CheatCondition()) 
+        return;
+
       try
       {
         CinematicMode.EndEarly();
+        GameTime.SkipTurns(1);
       }
       catch (Exception ex)
       {
@@ -32,10 +38,12 @@ namespace WarcraftLegacies.Source.Cheats
 
     private static void DelayedSetup()
     {
-      var trig = CreateTrigger();
+      _skipTrigger = CreateTrigger();
       foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
-        TriggerRegisterPlayerEvent(trig, player, EVENT_PLAYER_END_CINEMATIC);
-      TriggerAddAction(trig, Actions);
+        TriggerRegisterPlayerEvent(_skipTrigger, player, EVENT_PLAYER_END_CINEMATIC);
+      TriggerAddAction(_skipTrigger, Actions);
+
+      GameTime.GameStarted += (_, _) => _skipTrigger?.Destroy();
     }
   }
 }

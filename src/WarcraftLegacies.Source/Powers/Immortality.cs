@@ -8,7 +8,6 @@ using MacroTools.ObjectiveSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WCSharp.Events;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Powers
 {
@@ -63,7 +62,7 @@ namespace WarcraftLegacies.Source.Powers
         AddObjective(new ObjectiveControlCapital(worldTree, false)
         {
           EligibleFactions = new List<Faction>{ whichFaction }
-        });
+        }, whichFaction);
       RefreshIsActive();
     }
 
@@ -98,9 +97,10 @@ namespace WarcraftLegacies.Source.Powers
         .SetLifespan(1);
     }
     
-    private void AddObjective(Objective objective)
+    private void AddObjective(Objective objective, Faction faction)
     {
       _objectives.Add(objective);
+      objective.OnAdd(faction);
       objective.ProgressChanged += OnObjectiveProgressChanged;
     }
 

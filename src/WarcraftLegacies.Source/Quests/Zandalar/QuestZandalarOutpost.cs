@@ -2,9 +2,9 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
+using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Zandalar
 {
@@ -25,13 +25,14 @@ namespace WarcraftLegacies.Source.Quests.Zandalar
     {
       AddObjective(_enterZandalarRegion = new ObjectiveAnyUnitInRect(Regions.Zandalari_Echo_Unlock, "Zandalar Outpost", true));
       AddObjective(new ObjectiveSelfExists());
-      Required = true;
-      ResearchId = Constants.UPGRADE_VQ02_QUEST_COMPLETED_ZANDALAR_OUTPOST;
+      AddObjective(new ObjectiveExpire(600, Title));
+
+      ResearchId = UPGRADE_VQ02_QUEST_COMPLETED_ZANDALAR_OUTPOST;
       _rescueUnits = Regions.Zandalari_Echo_Unlock.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       $"{_enterZandalarRegion.CompletingUnitName} has spoken with the elders of the Echo Isles and they have agreed to let the Zandalar trolls set up an outpost on one of their islands.";
 
     /// <inheritdoc />

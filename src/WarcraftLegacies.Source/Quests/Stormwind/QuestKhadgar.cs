@@ -1,5 +1,4 @@
-﻿using MacroTools.FactionSystem;
-using MacroTools.LegendSystem;
+﻿using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 
@@ -16,11 +15,11 @@ namespace WarcraftLegacies.Source.Quests.Stormwind
       @"ReplaceableTextures\CommandButtons\BTNMageWC2.blp")
     {
       AddObjective(new ObjectiveCapitalDead(blackTemple));
-      ResearchId = Constants.UPGRADE_R016_QUEST_COMPLETED_KEEPER_OF_THE_ETERNAL_WATCH_STORMWIND;
+      ResearchId = UPGRADE_R016_QUEST_COMPLETED_KEEPER_OF_THE_ETERNAL_WATCH_STORMWIND;
     }
     
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Khadgar has been freed from his confines under the Black Temple, and he is now free to serve the Kingdom of Stormwind.";
 
     /// <inheritdoc/>

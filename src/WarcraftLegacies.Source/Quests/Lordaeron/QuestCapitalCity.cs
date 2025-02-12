@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MacroTools;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
@@ -6,11 +7,11 @@ using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.QuestBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
+using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.Powers;
 using MacroTools.QuestSystem;
 using WarcraftLegacies.Source.Setup.Legends;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Lordaeron
 {
@@ -28,30 +29,30 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestCapitalCity"/> class.
     /// </summary>
-    public QuestCapitalCity(Rectangle rescueRect, unit terenas, LegendaryHero uther,
+    public QuestCapitalCity(PreplacedUnitSystem preplacedUnitSystem, Rectangle rescueRect, unit terenas, LegendaryHero uther,
       LegendaryHero arthas, Capital caerDarrow, Capital capitalPalace, IEnumerable<QuestData> prequisites) :
       base("Hearthlands",
         "The territories of Lordaeron are fragmented. Regain control of the old Alliance's hold to secure the kingdom.",
         @"ReplaceableTextures\CommandButtons\BTNCastle.blp")
     {
-      AddObjective(new ObjectiveControlCapital(caerDarrow, false));
+      AddObjective(new ObjectiveUnitIsDead(preplacedUnitSystem.GetUnit(UNIT_N0AG_LORD_BAROV)));
       foreach (var prequisite in prequisites)
-        AddObjective(new ObjectiveCompleteQuest(prequisite));
+        AddObjective(new ObjectiveQuestComplete(prequisite));
       AddObjective(new ObjectiveControlLegend(arthas, false));
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R04Y_QUEST_COMPLETED_HEARTHLANDS;
+      ResearchId = UPGRADE_R04Y_QUEST_COMPLETED_HEARTHLANDS;
       _terenas = terenas;
       _uther = uther;
       _capitalPalace = capitalPalace;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures, RescueUnitFilter);
-      Required = true;
+      
     }
 
-    private static bool RescueUnitFilter(unit whichUnit) => GetUnitTypeId(whichUnit) != Constants.UNIT_N08F_UNDERCITY_ENTRANCE;
+    private static bool RescueUnitFilter(unit whichUnit) => GetUnitTypeId(whichUnit) != UNIT_N08F_UNDERCITY_ENTRANCE;
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Capital City of Lordaeron has joined Arthas.";
 
     /// <inheritdoc/>
@@ -86,10 +87,11 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
         _uther.Unit?.SetLevel(5, false);
       }
 
-      completingFaction.Player?.RescueGroup(_rescueUnits);
+      completingFaction.Player?
+        .RescueGroup(_rescueUnits)
+        .PlayMusicThematic("war3mapImported\\CapitalCity.mp3");
+      
       SetUnitInvulnerable(_terenas, true);
-      if (GetLocalPlayer() == completingFaction.Player)
-        PlayThematicMusic("war3mapImported\\CapitalCity.mp3");
       _uther.AddUnitDependency(_capitalPalace.Unit);
     }
   }

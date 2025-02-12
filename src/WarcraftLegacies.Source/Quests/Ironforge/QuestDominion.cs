@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
+using MacroTools.ObjectiveSystem.Objectives.QuestBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 
 namespace WarcraftLegacies.Source.Quests.Ironforge
@@ -17,23 +16,25 @@ namespace WarcraftLegacies.Source.Quests.Ironforge
   {
     private readonly List<unit> _rescueUnits;
 
-    public QuestDominion(Rectangle rescueRect) : base("Dwarven Dominion",
+    public QuestDominion(Rectangle rescueRect, params QuestData[] prerequisites) : base("Dwarven Dominion",
       "The Dwarven Dominion must be established before Ironforge can join the war.",
       @"ReplaceableTextures\CommandButtons\BTNDwarvenFortress.blp")
     {
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n017"))));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n014"))));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n013"))));
-      AddObjective(new ObjectiveUpgrade(FourCC("h07G"), FourCC("h07E")));
+      foreach (var prerequisite in prerequisites)
+        AddObjective(new ObjectiveQuestComplete(prerequisite));
+      
+      AddObjective(new ObjectiveControlPoint(UNIT_N017_DUN_MODR));
+      AddObjective(new ObjectiveControlPoint(UNIT_N014_DUN_MOROGH));
+      AddObjective(new ObjectiveUpgrade(UNIT_H07G_GREAT_HOLD_IRONFORGE_T3,
+        UNIT_H07E_MINING_COLONY_IRONFORGE_T1));
       AddObjective(new ObjectiveExpire(1462, Title));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = FourCC("R043");
+      ResearchId = UPGRADE_R043_QUEST_COMPLETED_DWARVEN_DOMINION;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.Invulnerable);
-      Required = true;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Dwarven Empire is re-united again, Ironforge is ready for war again.";
 
     /// <inheritdoc/>
@@ -53,7 +54,7 @@ namespace WarcraftLegacies.Source.Quests.Ironforge
     protected override void OnComplete(Faction completingFaction)
     {
       foreach (var unit in _rescueUnits) unit.Rescue(completingFaction.Player ?? Player(PLAYER_NEUTRAL_AGGRESSIVE));
-      if (GetLocalPlayer() == completingFaction.Player) PlayThematicMusic("war3mapImported\\DwarfTheme.mp3");
+      completingFaction.Player?.PlayMusicThematic("war3mapImported\\DwarfTheme.mp3");
     }
   }
 }

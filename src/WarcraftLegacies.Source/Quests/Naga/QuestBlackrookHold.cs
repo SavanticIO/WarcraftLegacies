@@ -1,12 +1,10 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Naga
 {
@@ -29,11 +27,11 @@ namespace WarcraftLegacies.Source.Quests.Naga
         Regions.BrokenIslesB
       }, "on the Broken Isles"));
       AddObjective(new NoOtherPlayerGetsCapital(blackrookHold));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N053_VAL_SHARAH)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N053_VAL_SHARAH, 0));
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Broken Isles have been secured, and Black Rook Hold's garrison has been re-established.";
 
     /// <inheritdoc />

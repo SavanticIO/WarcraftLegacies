@@ -1,12 +1,10 @@
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.MetaBased;
 using MacroTools.ObjectiveSystem.Objectives.QuestBased;
 using MacroTools.QuestSystem;
-using WarcraftLegacies.Source.Setup.FactionSetup;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Scourge
 {
@@ -19,13 +17,13 @@ namespace WarcraftLegacies.Source.Quests.Scourge
     private readonly ObjectiveEitherOf _objectiveEitherOf;
 
     /// <inheritdoc />
-    protected override string RewardFlavour => 
+    public override string RewardFlavour => 
       _objectiveEitherOf.ObjectiveA.Progress == QuestProgress.Complete
         ? "As foretold by the Lich King, Kel'thuzad has been slain. Unseen to his assailants, his spirit is carried away by the howling winds of Northrend and reconstituted at the base of Icecrown Citadel."
         : "In a rare twist of fate, the Lich King's prophecy did not come to pass: Kel'thuzad survived long enough to reach the Sunwell under his own power.";
 
     /// <inheritdoc />
-    protected override string RewardDescription => "If Kel'thuzad dies, he revives in spectral form at Icecrown Citadel. Otherwise, he gains 1000 experience";
+    protected override string RewardDescription => "If Kel'thuzad dies, he revives in spectral form at Icecrown Citadel. Otherwise, he gains 4000 experience";
 
     /// <inheritdoc />
     public QuestKelthuzadDies(QuestData questKelthuzadLich, LegendaryHero kelthuzad) : base("Life Beyond Death",
@@ -35,7 +33,7 @@ namespace WarcraftLegacies.Source.Quests.Scourge
       _kelthuzad = kelthuzad;
       _objectiveEitherOf = new ObjectiveEitherOf(
         new ObjectiveLegendDead(_kelthuzad),
-        new ObjectiveCompleteQuest(questKelthuzadLich));
+        new ObjectiveQuestComplete(questKelthuzadLich));
       AddObjective(_objectiveEitherOf);
     }
     
@@ -47,12 +45,12 @@ namespace WarcraftLegacies.Source.Quests.Scourge
       {
         _kelthuzad.UnitType = FourCC("U00M");
         _kelthuzad.PermaDies = false;
-        _kelthuzad.ForceCreate(ScourgeSetup.Scourge.Player, Regions.FTSummon.Center,
+        _kelthuzad.ForceCreate(whichFaction.Player, Regions.FTSummon.Center,
           270);
       }
       else
       {
-        _kelthuzad.Unit?.AddExperience(1000);
+        _kelthuzad.Unit?.AddExperience(4000);
       }
     }
   }

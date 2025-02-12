@@ -1,6 +1,6 @@
 ﻿using MacroTools;
 using MacroTools.LegendSystem;
-using static War3Api.Common;
+
 #pragma warning disable CS1591
 
 namespace WarcraftLegacies.Source.Setup.Legends
@@ -26,10 +26,10 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Thrall = new LegendaryHero("Thrall")
       {
-        UnitType = Constants.UNIT_OTHR_WARCHIEF_OF_THE_HORDE_FROSTWOLF,
-        StartingArtifactItemTypeIds = new()
+        UnitType = UNIT_OTHR_WARCHIEF_OF_THE_HORDE_FROSTWOLF,
+        StartingArtifacts = new()
         {
-          Constants.ITEM_I004_THE_DOOMHAMMER
+          new(CreateItem(ITEM_I004_THE_DOOMHAMMER, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
         }
       };
 
@@ -56,8 +56,8 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Voljin = new LegendaryHero("Vol'jin")
       {
-        UnitType = Constants.UNIT_ORKN_CHIEFTAIN_OF_THE_DARKSPEAR_TRIBE_FROSTWOLF,
-        StartingXp = 1000
+        UnitType = UNIT_ORKN_CHIEFTAIN_OF_THE_DARKSPEAR_TRIBE_FROSTWOLF,
+        StartingXp = 2800
       };
     }
     

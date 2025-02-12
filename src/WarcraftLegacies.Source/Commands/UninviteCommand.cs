@@ -1,6 +1,5 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Commands
 {
@@ -20,9 +19,8 @@ namespace WarcraftLegacies.Source.Commands
       var content = SubString(enteredString, StringLength(Command), StringLength(enteredString));
       content = StringCase(content, false);
 
-      if (FactionManager.FactionWithNameExists(content))
+      if (FactionManager.TryGetFactionByName(content, out var targetFaction))
       {
-        var targetFaction = FactionManager.GetFromName(content);
         if (targetFaction.Player != null)
           triggerPlayer.GetTeam()?.Uninvite(targetFaction.Player);
         else

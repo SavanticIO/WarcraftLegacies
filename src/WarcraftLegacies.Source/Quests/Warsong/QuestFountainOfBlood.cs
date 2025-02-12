@@ -13,12 +13,12 @@ namespace WarcraftLegacies.Source.Quests.Warsong
       AddObjective(new ObjectiveLegendReachRect(grom, Regions.FountainUnlock,
         "The Fountain of Blood"));
       AddObjective(new ObjectiveControlCapital(fountainOfBlood, false));
-      ResearchId = Constants.UPGRADE_R00X_QUEST_COMPLETED_THE_BLOOD_OF_MANNOROTH_WARSONG;
-      Required = true;
+      ResearchId = UPGRADE_R00X_QUEST_COMPLETED_THE_BLOOD_OF_MANNOROTH_WARSONG;
+      
     }
     
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Fountain of Blood is under Warsong control. As the orcs drink from it, they feel a a familiar fury awake within them.";
 
     /// <inheritdoc/>

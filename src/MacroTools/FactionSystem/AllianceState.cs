@@ -5,9 +5,6 @@
     Unallied,
     Allied,
     AlliedVision,
-    AlliedUnits,
-    AlliedAdvUnits,
-    Neutral,
-    NeutralVision
+    UnalliedVision
   }
 }

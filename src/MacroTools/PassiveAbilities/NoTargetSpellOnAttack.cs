@@ -1,5 +1,6 @@
-﻿using MacroTools.PassiveAbilitySystem;
-using MacroTools.SpellSystem;
+﻿using MacroTools.DummyCasters;
+using MacroTools.Extensions;
+using MacroTools.PassiveAbilitySystem;
 using static War3Api.Common;
 
 namespace MacroTools.PassiveAbilities
@@ -39,6 +40,11 @@ namespace MacroTools.PassiveAbilities
       AbilityTypeId = abilityTypeId;
     }
 
+    /// <summary>
+    /// The player must have this research for the ability to take effect.
+    /// </summary>
+    public int RequiredResearch { get; init; }
+
     /// <inheritdoc />
 
     public void OnDealsDamage()
@@ -46,13 +52,15 @@ namespace MacroTools.PassiveAbilities
       var caster = GetEventDamageSource();
       if (!BlzGetEventIsAttack() || GetUnitAbilityLevel(caster, AbilityTypeId) == 0)
         return;
-
+      if (RequiredResearch != 0)
+        if (GetPlayerTechCount(caster.OwningPlayer(), RequiredResearch, false) == 0)
+          return;
       if (GetRandomReal(0, 1) < ProcChance)
       {
         DoSpellNoTarget(caster);
       }
     }
-    private void DoSpellNoTarget(unit caster) => DummyCast.DummyCastNoTarget(caster, DummyAbilityId,
+    private void DoSpellNoTarget(unit caster) => DummyCasterManager.GetGlobalDummyCaster().CastNoTarget(caster, DummyAbilityId,
       DummyOrderId, GetUnitAbilityLevel(caster, AbilityTypeId));
   }
 }

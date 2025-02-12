@@ -95,9 +95,9 @@ namespace MacroTools.LegendSystem
     public string DeathSfx { private get; init; } = @"Abilities\Spells\Demon\DarkPortal\DarkPortalTarget.mdl";
 
     /// <summary>
-    /// The <see cref="LegendaryHero"/> will spawn with <see cref="Artifact"/>s with these IDs the first time they are created.
+    /// The <see cref="LegendaryHero"/> will spawn with these <see cref="Artifact"/>s the first time they are created.
     /// </summary>
-    public List<int> StartingArtifactItemTypeIds { get; init; } = new();
+    public List<Artifact> StartingArtifacts { get; init; } = new();
     
     /// <summary>
     /// Initializes a new instance of the <see cref="LegendaryHero"/> class.
@@ -159,6 +159,16 @@ namespace MacroTools.LegendSystem
       RefreshDummy();
     }
     
+    /// <summary>Permanently kills the <see cref="LegendaryHero"/>, preventing it from ever being revived.</summary>
+    public void PermanentlyKill()
+    {
+      if (Hivemind && OwningPlayer != null)
+        PlayerDistributor.DistributePlayer(OwningPlayer);
+      
+      OnPermaDeath();
+      PermanentlyDied?.Invoke(this, this);
+    }
+    
     private void OnDeath()
     {
       if (!_permaDies && !AllDependenciesAreMissing()) 
@@ -201,15 +211,14 @@ namespace MacroTools.LegendSystem
       SetUnitColor(Unit, HasCustomColor ? _playerColor : GetPlayerColor(GetOwningPlayer(Unit)));
       if (GetHeroXP(Unit) < StartingXp) 
         SetHeroXP(Unit, StartingXp, true);
-      if (StartingArtifactItemTypeIds.Any())
+      if (StartingArtifacts.Any())
       {
-        foreach (var artifactItemTypeId in StartingArtifactItemTypeIds)
+        foreach (var artifact in StartingArtifacts)
         {
-          var artifact = new Artifact(CreateItem(artifactItemTypeId, 0, 0));
           ArtifactManager.Register(artifact);
           Unit.AddItemSafe(artifact.Item);
         }
-        StartingArtifactItemTypeIds.Clear();
+        StartingArtifacts.Clear();
       }
       
       RefreshDummy();
@@ -231,20 +240,12 @@ namespace MacroTools.LegendSystem
 
       if (string.IsNullOrEmpty(DeathMessage)) 
         return;
-      DisplayTextToPlayer(GetLocalPlayer(), 0, 0,
-        GetOwningPlayer(Unit) == Player(PLAYER_NEUTRAL_AGGRESSIVE)
-          ? $"\n|cffffcc00LEGENDARY FOE SLAIN|r\n{DeathMessage}"
-          : $"\n|cffffcc00HERO SLAIN|r\n{DeathMessage}");
-    }
-
-    private void PermanentlyKill()
-    {
-      if (Hivemind && OwningPlayer != null)
-        PlayerDistributor.DistributePlayer(OwningPlayer);
-
-
-      OnPermaDeath();
-      PermanentlyDied?.Invoke(this, this);
+      
+      foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+        DisplayTextToPlayer(player, 0, 0,
+          GetOwningPlayer(Unit) == Player(PLAYER_NEUTRAL_AGGRESSIVE)
+            ? $"\n|cffffcc00LEGENDARY FOE SLAIN|r\n{DeathMessage}"
+            : $"\n|cffffcc00HERO SLAIN|r\n{DeathMessage}");
     }
     
     private void RefreshDummy()
@@ -292,8 +293,8 @@ namespace MacroTools.LegendSystem
       {
         var u = FirstOfGroup(tempGroup);
         if (u == null) break;
-
-        if (GetLocalPlayer() == GetTriggerPlayer()) PingMinimap(GetUnitX(u), GetUnitY(u), 5);
+        
+        GetTriggerPlayer().PingMinimapSimple(GetUnitX(u), GetUnitY(u), 5);
 
         GroupRemoveUnit(tempGroup, u);
       }

@@ -2,7 +2,7 @@ name: .NET
 
 on:
     push:
-        branches: [ main, dev ]
+        branches: [ main, dev, YakaryBovine/fixAnalysisSettings ]
     pull_request:
         branches: [ main, dev ]
 
@@ -14,15 +14,11 @@ jobs:
             -   name: Setup .NET
                 uses: actions/setup-dotnet@v1
                 with:
-                    dotnet-version: 6.0.x
-            -   name: Restore dependencies
-                run: dotnet restore
+                    dotnet-version: 7.0.x
             -   name: Build
-                run: dotnet build --no-restore
-            -   name: Test
-                run: dotnet test --no-build --verbosity normal
+                run: dotnet build
             -   name: Inspect code
-                uses: muno92/resharper_inspectcode@1.6.2
+                uses: muno92/resharper_inspectcode@1.11.14
                 with:
                     solutionPath: ./WarcraftLegacies.sln
                     minimumSeverity: error
@@ -30,4 +26,19 @@ jobs:
                     include: |
                         ./src/MacroTools/**
                         ./src/WarcraftLegacies.Source/**
+                        ./src/Launcher/**
+                        ./src/TestMap/**
                     solutionWideAnalysis: false
+                    
+    Integrity-Check:
+        runs-on: windows-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: Setup .NET
+                uses: actions/setup-dotnet@v1
+                with:
+                    dotnet-version: 7.0.x
+            -   name: Build
+                run: dotnet build
+            -   name: Test
+                run: dotnet test

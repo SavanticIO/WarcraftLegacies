@@ -1,4 +1,5 @@
-﻿using MacroTools.ControlPointSystem;
+﻿using System.Linq;
+using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
@@ -9,29 +10,75 @@ namespace MacroTools.ObjectiveSystem.Objectives.ControlPointBased
   public sealed class ObjectiveControlPoint : Objective
   {
     private readonly ControlPoint _target;
-
-    public ObjectiveControlPoint(ControlPoint target)
+    private int _maxKillCount;
+    private int _currentKillCount;
+    
+    private int CurrentKillCount
     {
-      _target = target;
-      Description = $"Your team controls {target.Name}";
-      TargetWidget = target.Unit;
-      target.ChangedOwner += OnTargetChangeOwner;
+      get => _currentKillCount;
+      set
+      {
+        _currentKillCount = value;
+        Description = $"You control {_target.Name} and all nearby creeps are dead ({_currentKillCount}/{_maxKillCount})";
+        RefreshProgress();
+      }
+    }
+
+    /// <summary>
+    /// Initializes a new instance of <see cref="ObjectiveControlPoint"/>.
+    /// </summary>
+    /// <param name="controlPointUnitType">The unit type of the <see cref="ControlPoint"/> that needs to be captured.</param>
+    /// <param name="range">The area in which creeps need to be killed to complete the objective.</param>
+    public ObjectiveControlPoint(int controlPointUnitType, float range = 700)
+    {
+      _target = ControlPointManager.Instance.GetFromUnitType(controlPointUnitType);
+      TargetWidget = _target.Unit;
       DisplaysPosition = true;
-      Position = new(GetUnitX(_target.Unit), GetUnitY(_target.Unit));
+      Position = _target.Unit.GetPosition();
+
+      if (range > 0)
+      {
+        RegisterKillTriggers(range);
+        CurrentKillCount = 0;
+      }
+      else
+        Description = $"You control {_target.Name}";
     }
 
-    internal override void OnAdd(Faction whichFaction)
+    public override void OnAdd(Faction whichFaction)
     {
       Progress = IsPlayerOnSameTeamAsAnyEligibleFaction(_target.Unit.OwningPlayer())
         ? QuestProgress.Complete
         : QuestProgress.Incomplete;
+      
+      _target.OwnerAllianceChanged += (_, _) => RefreshProgress();
     }
 
-    private void OnTargetChangeOwner(object? sender, ControlPointOwnerChangeEventArgs controlPointOwnerChangeEventArgs)
+    private void RefreshProgress()
     {
-      Progress = IsPlayerOnSameTeamAsAnyEligibleFaction(_target.Unit.OwningPlayer())
-        ? QuestProgress.Complete
-        : QuestProgress.Incomplete;
+      if (_currentKillCount == _maxKillCount && IsPlayerOnSameTeamAsAnyEligibleFaction(_target.Unit.OwningPlayer())) 
+        Progress = QuestProgress.Complete;
+    }
+
+    private void RegisterKillTriggers(float range)
+    {
+      var unitsNearby = CreateGroup()
+          .EnumUnitsInRange(_target.Unit.GetPosition(), range)
+          .EmptyToList()
+          .Where(x => x.OwningPlayer() == Player(PLAYER_NEUTRAL_AGGRESSIVE) && !x.IsType(UNIT_TYPE_ANCIENT) &&
+           !x.IsType(UNIT_TYPE_SAPPER) && !x.IsType(UNIT_TYPE_STRUCTURE)); 
+
+      foreach (var unit in unitsNearby)
+      {
+        _maxKillCount++;
+        CreateTrigger()
+          .RegisterUnitEvent(unit, EVENT_UNIT_DEATH)
+          .AddAction(() =>
+          {
+            CurrentKillCount++;
+            DestroyTrigger(GetTriggeringTrigger());
+          });
+      }
     }
   }
 }

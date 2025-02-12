@@ -1,7 +1,6 @@
 ﻿using MacroTools.Extensions;
 using static WarcraftLegacies.Source.AmbianceLibrary;
 using static War3Api.Blizzard;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Setup
 {
@@ -112,7 +111,7 @@ namespace WarcraftLegacies.Source.Setup
       Regions.BarrenAmbient3.AddSound(BarrensDay);
       Regions.BarrenAmbient4.AddSound(BarrensDay);
       Regions.BarrenAmbient5.AddSound(BarrensDay);
-      Regions.UldumAmbiance.AddSound(BarrensDay);
+      Regions.UldumAmbiance.AddSound(WetlandsNight);
       Regions.SilithusAmbient.AddSound(DalaranRuinsDay);
       Regions.UngoroAmbient.AddSound(WetlandsNight);
       Regions.ZulfarrakAmbient.AddSound(Wetlandsday);
@@ -121,6 +120,9 @@ namespace WarcraftLegacies.Source.Setup
       Regions.BrokenIslesB.AddSound(Wetlandsday);
       Regions.WinterspringAmbient1.AddSound(IceCrownDay);
       Regions.WinterspringAmbient2.AddSound(IceCrownDay);
+      Regions.Nyalotha.AddSound(BlackCitadelOutlandDay);
+      Regions.ElementalRealm.AddSound(BlackCitadelOutlandNight);
+
     }
   }
 }

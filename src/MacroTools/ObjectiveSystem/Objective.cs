@@ -122,9 +122,7 @@ namespace MacroTools.ObjectiveSystem
       
       return false;
     }
-
-    internal void AddEligibleFaction(Faction faction) => EligibleFactions.Add(faction);
-
+    
     /// <summary>Fires after the <see cref="Progress"/> of this objective has changed.</summary>
     public event EventHandler<Objective>? ProgressChanged;
 
@@ -132,7 +130,7 @@ namespace MacroTools.ObjectiveSystem
     /// Runs when this <see cref="Objective"/> is registered to a <see cref="QuestData"/>
     /// or the <see cref="TriggeredDialogueManager"/>.
     /// </summary>
-    internal virtual void OnAdd(Faction faction)
+    public virtual void OnAdd(Faction faction)
     {
     }
 
@@ -143,7 +141,7 @@ namespace MacroTools.ObjectiveSystem
           parentQuestProgress != QuestProgress.Incomplete) 
         return;
       
-      if (_minimapIcon == null && DisplaysPosition)
+      if (_minimapIcon == null && DisplaysPosition && Position != null)
         _minimapIcon = CreateMinimapIcon(Position.X, Position.Y, 255, 255, 0, SkinManagerGetLocalPath(PingPath),
           FOG_OF_WAR_MASKED);
       else if (_minimapIcon != null)
@@ -157,7 +155,7 @@ namespace MacroTools.ObjectiveSystem
         return;
       
       string effectPath;
-      if (MapEffectPath != null && _mapEffect == null)
+      if (MapEffectPath != null && _mapEffect == null && Position != null)
       {
         effectPath = EligibleFactions.Contains(GetLocalPlayer()) ? MapEffectPath : "";
         _mapEffect = AddSpecialEffect(effectPath, Position.X, Position.Y);

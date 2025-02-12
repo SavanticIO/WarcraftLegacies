@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
-using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Dalaran
 {
@@ -23,21 +20,19 @@ namespace WarcraftLegacies.Source.Quests.Dalaran
     /// Initializes a new instance of the <see cref="QuestSouthshore"/> class.
     /// </summary>
     /// <param name="rescueRect">Units in this area will start invulnerable and be rescued when the quest is complete.</param>
-    /// <param name="murlocToKill">This unit must be killed to complete the quest.</param>
-    public QuestSouthshore(Rectangle rescueRect, unit murlocToKill) : base("Murloc Troubles",
+    public QuestSouthshore(Rectangle rescueRect) : base("Murloc Troubles",
       "A small murloc skirmish is attacking Southshore, push them back",
       @"ReplaceableTextures\CommandButtons\BTNMurloc.blp")
     {
-      AddObjective(new ObjectiveUnitIsDead(murlocToKill));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N08M_SOUTHSHORE)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N08M_SOUTHSHORE));
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      Required = true;
+      
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "The Murlocs have been defeated, Southshore is safe.";
+    public override string RewardFlavour => "The Murlocs have been defeated, Southshore is safe.";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Control of all units in Southshore";

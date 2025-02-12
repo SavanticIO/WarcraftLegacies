@@ -2,8 +2,8 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -29,8 +29,8 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -56,8 +56,8 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -83,10 +83,10 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
-    "HeroLevel": 8,
+    "HeroLevel": 10,
     "InventoryData": [],
     "AbilityData": [],
     "CustomPlayerColorId": -1,
@@ -96,7 +96,7 @@
       "X": 19265.148,
       "Y": -24815.484
     },
-    "Rotation": 4.692773342132568,
+    "Rotation": 4.692841529846191,
     "Scale": {
       "X": 1,
       "Y": 1,

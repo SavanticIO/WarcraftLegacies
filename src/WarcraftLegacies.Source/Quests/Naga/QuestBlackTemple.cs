@@ -8,7 +8,6 @@ using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
 using WarcraftLegacies.Source.Setup.Legends;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Naga
 {
@@ -29,13 +28,13 @@ namespace WarcraftLegacies.Source.Quests.Naga
       AddObjective(new ObjectiveLegendInRect(illidan, Regions.IllidanBlackTempleUnlock, "Black Temple"));
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R09Y_QUEST_COMPLETED_SEAT_OF_POWER;
+      ResearchId = UPGRADE_R09Y_QUEST_COMPLETED_SEAT_OF_POWER;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      Required = true;
+      
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "The forces of Outland are now under Illidan's command.";
+    public override string RewardFlavour => "The forces of Outland are now under Illidan's command.";
 
     /// <inheritdoc />
     protected override string RewardDescription => $"Gain control of the Black Temple and enable Lady Vashj to be trained at the Altar of the Betrayer";

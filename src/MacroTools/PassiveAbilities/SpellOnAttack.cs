@@ -1,5 +1,6 @@
-﻿using MacroTools.PassiveAbilitySystem;
-using MacroTools.SpellSystem;
+﻿using MacroTools.DummyCasters;
+using MacroTools.Extensions;
+using MacroTools.PassiveAbilitySystem;
 using static War3Api.Common;
 
 namespace MacroTools.PassiveAbilities
@@ -20,9 +21,9 @@ namespace MacroTools.PassiveAbilities
     public int DummyAbilityId { get; init; }
 
     /// <summary>
-    /// An order string that can be used to cast the specified dummy ability.
+    /// An order ID that can be used to cast the specified dummy ability.
     /// </summary>
-    public string DummyOrderString { get; init; } = "";
+    public int DummyOrderId { get; init; }
     
     /// <summary>
     /// The percentage chance that the effect will occur on attack.
@@ -38,6 +39,10 @@ namespace MacroTools.PassiveAbilities
     {
       AbilityTypeId = abilityTypeId;
     }
+    /// <summary>
+    /// The player must have this research for the ability to take effect.
+    /// </summary>
+    public int RequiredResearch { get; init; }
 
     /// <inheritdoc />
     public void OnDealsDamage()
@@ -47,13 +52,16 @@ namespace MacroTools.PassiveAbilities
 
       var caster = GetEventDamageSource();
       var target = GetTriggerUnit();
+      if(RequiredResearch != 0)
+        if (GetPlayerTechCount(caster.OwningPlayer(), RequiredResearch, false) == 0)
+          return;
       if (GetRandomReal(0, 1) < ProcChance)
       {
         DoSpellOnTarget(caster, target);
       }
     }
     
-    private void DoSpellOnTarget(unit caster, unit target) => DummyCast.DummyCastUnit(caster, DummyAbilityId,
-      DummyOrderString, GetUnitAbilityLevel(caster, AbilityTypeId), target, DummyCastOriginType.Caster);
+    private void DoSpellOnTarget(unit caster, unit target) => DummyCasterManager.GetGlobalDummyCaster().CastUnit(caster, DummyAbilityId,
+      DummyOrderId, GetUnitAbilityLevel(caster, AbilityTypeId), target, DummyCastOriginType.Caster);
   }
 }

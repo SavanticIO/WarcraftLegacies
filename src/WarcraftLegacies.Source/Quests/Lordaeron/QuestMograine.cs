@@ -1,6 +1,5 @@
 ﻿using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Lordaeron
 {
@@ -9,7 +8,7 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
   /// </summary>
   public sealed class QuestMograine : QuestData
   {
-    private const int AltarId = Constants.UNIT_HALT_ALTAR_OF_KINGS_LORDAERON_ALTAR;
+    private const int AltarId = UNIT_HALT_ALTAR_OF_KINGS_LORDAERON_ALTAR;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestMograine"/> class.
@@ -19,15 +18,15 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
       @"ReplaceableTextures\CommandButtons\BTNAlexandros.blp")
     {
       AddObjective(new ObjectiveTime(900));
-      ResearchId = Constants.UPGRADE_R06P_QUEST_COMPLETED_THE_EXILE_LORDAERON;
+      ResearchId = UPGRADE_R06P_QUEST_COMPLETED_THE_EXILE_LORDAERON;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "With the threat of the Scourge and the Plague, Mograine has returned to help Lordaeorn in their dire times.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"You can summon Alexandros Mograine from the {GetObjectName(AltarId)}";
+      $"Learn to train Alexandros Mograine from the {GetObjectName(AltarId)}";
   }
 }

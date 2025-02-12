@@ -14,7 +14,7 @@ namespace MacroTools.LegendSystem
     /// <summary>
     ///   Whether or not the unit changes ownership to its attacker when its hitpoints are reduced past a threshold.
     /// </summary>
-    public bool Capturable { get; init; }
+    public bool Capturable { get; set; }
     
     /// <summary>
     /// The number of living <see cref="Protector"/> making this <see cref="Legend"/> invulnerable.
@@ -104,7 +104,8 @@ namespace MacroTools.LegendSystem
       if (Hivemind && OwningPlayer != null)
         PlayerDistributor.DistributePlayer(OwningPlayer);
       
-      DisplayTextToPlayer(GetLocalPlayer(), 0, 0, $"\n|cffffcc00CAPITAL DESTROYED|r\n{DeathMessage}");
+      foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+        DisplayTextToPlayer(player, 0, 0, $"\n|cffffcc00CAPITAL DESTROYED|r\n{DeathMessage}");
     }
   }
 }

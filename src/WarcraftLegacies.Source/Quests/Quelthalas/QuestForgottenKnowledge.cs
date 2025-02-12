@@ -1,8 +1,6 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
+﻿using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Quelthalas
 {
@@ -18,17 +16,16 @@ namespace WarcraftLegacies.Source.Quests.Quelthalas
       "The Sunfury have a long, proud history, tracing all the way back to their status as the Highborne. We have forgotten more knowledge than other races have ever known. Perhaps some of it lies within the ruins of the old Highborne kingdom, Suramar.",
       @"ReplaceableTextures\CommandButtons\BTNBloodelf_Arcane_Annihilator.blp")
     {
-      AddObjective(new ObjectiveControlLevel(
-        ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N032_SURAMAR), 10));
+      AddObjective(new ObjectiveControlLevel(UNIT_N032_SURAMAR, 10));
       AddObjective(new ObjectiveTime(1080));
-      ResearchId = Constants.UPGRADE_R08Z_QUEST_COMPLETED_FORGOTTEN_KNOWLEDGE;
+      ResearchId = UPGRADE_R08Z_QUEST_COMPLETED_FORGOTTEN_KNOWLEDGE;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "We have uncovered the technology to build arcane weaponry";
+    public override string RewardFlavour => "We have uncovered the technology to build arcane weaponry";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      $"Learn to train {GetObjectName(Constants.UNIT_E01B_ARCANE_ANNIHILATOR_QUEL_THALAS)}s from the {GetObjectName(Constants.UNIT_H0CI_ARTIFICER_S_COURT_SUNFURY_SPECIALIST)}";
+      $"Learn to train {GetObjectName(UNIT_E01B_ARCANE_ANNIHILATOR_QUEL_THALAS)}s from the {GetObjectName(UNIT_H0CI_ARTIFICER_S_COURT_SUNFURY_SIEGE)}";
   }
 }

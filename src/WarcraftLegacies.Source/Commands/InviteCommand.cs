@@ -1,7 +1,5 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using WarcraftLegacies.Source.GameLogic;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Commands
 {
@@ -21,13 +19,11 @@ namespace WarcraftLegacies.Source.Commands
       var content = SubString(enteredString, StringLength(Command), StringLength(enteredString));
       content = StringCase(content, false);
 
-      if (!FactionManager.FactionWithNameExists(content))
+      if (!FactionManager.TryGetFactionByName(content, out var targetFaction))
       {
         DisplayTextToPlayer(triggerPlayer, 0, 0, $"There is no Faction with the name {content}.");
         return;
       }
-
-      var targetFaction = FactionManager.GetFromName(content);
 
       if (triggerPlayer.GetFaction() == targetFaction)
       {

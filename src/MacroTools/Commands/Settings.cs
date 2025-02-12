@@ -8,12 +8,9 @@ namespace MacroTools.Commands
   {
     /// <inheritdoc />
     public override string CommandText => "settings";
-    
+
     /// <inheritdoc />
-    public override bool Exact => false;
-  
-    /// <inheritdoc />
-    public override int MinimumParameterCount => 0;
+    public override ExpectedParameterCount ExpectedParameterCount => new(0);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Normal;
@@ -24,7 +21,7 @@ namespace MacroTools.Commands
     /// <inheritdoc />
     public override string Execute(player commandUser, params string[] parameters)
     {
-      var playerSettings = PlayerData.ByHandle(commandUser).PlayerSettings;
+      var playerSettings = commandUser.GetPlayerSettings();
       return @"Current settings:
 Camera distance: " + playerSettings.CamDistance + @"
 

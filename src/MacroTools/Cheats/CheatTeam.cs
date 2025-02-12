@@ -12,12 +12,9 @@ namespace MacroTools.Cheats
   {
     /// <inheritdoc />
     public override string CommandText => "team";
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 2;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1, 2);
     
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -28,16 +25,15 @@ namespace MacroTools.Cheats
     /// <inheritdoc />
     public override string Execute(player cheater, params string[] parameters)
     {
-      var faction = FactionManager.GetFromName(parameters[0]);
-      if (faction == null)
-        return $"You must specify a valid {nameof(Faction)} name as the first parameter.";
+      if (!FactionManager.TryGetFactionByName(parameters[0], out var faction))
+        return $"There is no faction named {parameters[0]}.";
+      
       if (faction.Player == null)
-      {
         return $"The specified {nameof(Faction)} is not occupied by a player and therefore cannot have a {nameof(Team)}.";
-      }
-      var team = FactionManager.GetTeamByName(parameters[1]);
-      if (team == null)
+
+      if (!FactionManager.TryGetTeamByName(parameters[1], out var team))
         return $"You must specify a valid {nameof(Team)} name as the second parameter.";
+      
       faction.Player.SetTeam(team);
       return $"Set {faction.Name}'s {nameof(Team)} to {team.Name}.";
     }

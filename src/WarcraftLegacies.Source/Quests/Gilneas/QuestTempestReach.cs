@@ -1,9 +1,7 @@
 ﻿using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
 using System.Collections.Generic;
-using static War3Api.Common;
 using MacroTools.Extensions;
-using MacroTools.ControlPointSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
@@ -15,22 +13,22 @@ namespace WarcraftLegacies.Source.Quests.Gilneas
   /// </summary>
   public sealed class QuestTempestReach: QuestData
   {
-    private List<unit> _rescueUnits { get; }
+    private List<unit> RescueUnits { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestTempestReach"/> class.
     /// </summary>
     public QuestTempestReach() : base("Tempest Reach", "The first settlement we need to capture is Tempest Reach, just south of our location.", @"ReplaceableTextures\CommandButtons\BTNGilneasFarm.blp")
     {
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N084_TEMPEST_REACH)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N084_TEMPEST_REACH));
       AddObjective(new ObjectiveExpire(670, Title));
       AddObjective(new ObjectiveSelfExists());
-      _rescueUnits = Regions.GilneasUnlock1.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      Required = true;
+      RescueUnits = Regions.GilneasUnlock1.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
+      
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "Tempest Reach has been liberated.";
+    public override string RewardFlavour => "Tempest Reach has been liberated.";
 
     /// <inheritdoc/>
     protected override string RewardDescription => "Control of all buildings in Tempest Reach.";
@@ -38,7 +36,7 @@ namespace WarcraftLegacies.Source.Quests.Gilneas
     /// <inheritdoc/>
     protected override void OnComplete(Faction whichFaction)
     {
-      whichFaction.Player?.RescueGroup(_rescueUnits);
+      whichFaction.Player?.RescueGroup(RescueUnits);
     }
 
     /// <inheritdoc/>
@@ -48,7 +46,7 @@ namespace WarcraftLegacies.Source.Quests.Gilneas
         ? Player(PLAYER_NEUTRAL_AGGRESSIVE)
         : completingFaction.Player;
 
-      rescuer.RescueGroup(_rescueUnits);
+      rescuer.RescueGroup(RescueUnits);
     }
   }
 }

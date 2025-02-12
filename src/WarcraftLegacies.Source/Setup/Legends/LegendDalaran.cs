@@ -1,7 +1,6 @@
 ﻿using MacroTools;
 using MacroTools.LegendSystem;
-using WCSharp.Shared.Data;
-using static War3Api.Common;
+
 #pragma warning disable CS1591
 
 namespace WarcraftLegacies.Source.Setup.Legends
@@ -26,7 +25,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
     {
       Jaina = new LegendaryHero("Jaina Proudmoore")
       {
-        UnitType = Constants.UNIT_HJAI_ARCHMAGE_OF_DALARAN_DALARAN
+        UnitType = UNIT_HJAI_ARCHMAGE_OF_DALARAN_DALARAN
       };
 
       Medivh = new LegendaryHero("Medivh")
@@ -49,14 +48,11 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Dalaran = new Capital
       {
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_H002_THE_VIOLET_CITADEL_DALARAN_OTHER),
+        Unit = preplacedUnitSystem.GetUnit(UNIT_H002_THE_VIOLET_CITADEL_DALARAN_OTHER),
         DeathMessage =
           "The Violet Citadel, the ultimate bastion of arcane knowledge in the Eastern Kingdoms, crumbles like a sand castle.",
         Essential = true
       };
-      Dalaran.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N03G_VIOLET_TOWER, new Point(9084, 4979)));
-      Dalaran.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N03G_VIOLET_TOWER, new Point(9008, 4092)));
-      Dalaran.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N03G_VIOLET_TOWER, new Point(9864, 4086)));
 
       Antonidas = new LegendaryHero("Antonidas")
       {
@@ -68,7 +64,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Shadowfang = new Capital
       {
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_H058_SHADOWFANG_KEEP_DALARAN_OTHER),
+        Unit = preplacedUnitSystem.GetUnit(UNIT_H058_SHADOWFANG_KEEP_DALARAN_OTHER),
         Capturable = true
       };
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <RootNamespace>MacroTools</RootNamespace>
     </PropertyGroup>
@@ -17,5 +17,5 @@
         <PackageReference Include="WCSharp.SaveLoad" Version="2.2.0" />
         <PackageReference Include="WCSharp.Shared" Version="2.2.0" />
     </ItemGroup>
-
+    
 </Project>

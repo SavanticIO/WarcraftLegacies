@@ -1,7 +1,7 @@
-﻿using MacroTools.Spells;
+﻿using MacroTools.DummyCasters;
+using MacroTools.Spells;
 using MacroTools.SpellSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Setup.Spells
 {
@@ -15,33 +15,44 @@ namespace WarcraftLegacies.Source.Setup.Spells
     /// </summary>
     public static void Setup()
     {
-      SpellSystem.Register(new WaygateOpen(Constants.ABILITY_A0LM_OPEN_SHIP)
+      SpellSystem.Register(new WaygateOpen(ABILITY_A0LM_OPEN_SHIP)
       {
-        InteriorWaygateUnitTypeId = Constants.UNIT_H03V_ENTRANCE_PORTAL,
-        ExteriorWaygateUnitTypeId = Constants.UNIT_H05T_INSTANCE_ENTRANCE_PORTAL,
+        InteriorWaygateUnitTypeId = UNIT_H03V_ENTRANCE_PORTAL,
+        ExteriorWaygateUnitTypeId = UNIT_H05T_INSTANCE_ENTRANCE_PORTAL,
         GetExteriorWaygatePosition = () => new Point(GetSpellTargetX(), GetSpellTargetY()),
         GetInteriorWaygatePosition = () => Regions.ShipInside.Center
       });
       
-      SpellSystem.Register(new ChannelAnySpell(Constants.ABILITY_A0S5_BOMBING_RUN_STORMWIND_DUMMY)
+      SpellSystem.Register(new ChannelAnySpell(ABILITY_A0S5_BOMBING_RUN_STORMWIND_DUMMY)
       {
-        DummyAbilityId = Constants.ABILITY_A0S1_BOMBING_RUN_STORMWIND,
+        DummyAbilityId = ABILITY_A0S1_BOMBING_RUN_STORMWIND,
         DummyAbilityOrderString = "locustswarm",
         Duration = 15
       });
 
-      var warStompMeredith = new Stomp(Constants.ABILITY_A003_DISCORDANT_CADENZA_MEREDITH)
+      var warStompMeredith = new Stomp(ABILITY_A003_DISCORDANT_CADENZA_MEREDITH)
       {
         Radius = 800,
         DamageBase = 00,
         DamageLevel = 00,
         DurationBase = 4,
         DurationLevel = 2,
-        StunAbilityId = Constants.ABILITY_A0L0_SLEEP_DUMMY,
-        StunOrderString = "sleep",
+        StunAbilityId = ABILITY_A0L0_SLEEP_DUMMY,
+        StunOrderId = OrderId("sleep"),
         SpecialEffect = @"Abilities\Spells\Other\HowlOfTerror\HowlCaster.mdl"
       };
       SpellSystem.Register(warStompMeredith);
+
+      var scattershot = new MassAnySpell(ABILITY_A0GP_SCATTERSHOT_KUL_TIRAS_LADY_ASHVANE)
+      {
+        DummyAbilityId = ABILITY_A0GL_SCATTERSHOT_KUL_TIRAS_LADY_ASHVANE_DUMMY,
+        DummyAbilityOrderId = OrderId("thunderbolt"),
+        Radius = 250,
+        CastFilter = CastFilters.IsTargetEnemyAndAlive,
+        TargetType = SpellTargetType.Point,
+        DummyCastOriginType = DummyCastOriginType.Caster
+      };
+      SpellSystem.Register(scattershot);
     }
   }
 }

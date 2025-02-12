@@ -1,9 +1,9 @@
 ﻿using MacroTools.PassiveAbilities;
 using MacroTools.PassiveAbilitySystem;
 using MacroTools.Spells;
-using MacroTools.Spells.ExactJustice;
 using MacroTools.SpellSystem;
-using static War3Api.Common;
+using WarcraftLegacies.Source.Spells;
+using WarcraftLegacies.Source.Spells.ExactJustice;
 
 namespace WarcraftLegacies.Source.Setup.Spells
 {
@@ -11,23 +11,23 @@ namespace WarcraftLegacies.Source.Setup.Spells
   {
     public static void Setup()
     {
-      var consecration = new Stomp(Constants.ABILITY_A0WE_CONSECRATION_LORDAERON_UTHER)
+      var consecration = new Stomp(ABILITY_A0WE_CONSECRATION_LORDAERON_UTHER)
       {
         Radius = 350,
-        DamageBase = 0,
-        DamageLevel = 60,
+        DamageBase = 20,
+        DamageLevel = 50,
         DurationBase = 1,
-        StunAbilityId = Constants.ABILITY_S00H_THUNDER_CLAP_DUMMY,
-        StunOrderString = "cripple",
+        StunAbilityId = ABILITY_S00H_THUNDER_CLAP_DUMMY,
+        StunOrderId = OrderId("cripple"),
         SpecialEffect = @"Abilities\Spells\Human\Thunderclap\ThunderClapCaster.mdl"
       };
       SpellSystem.Register(consecration);
       
-      var solarJudgement = new SolarJudgementSpell(Constants.ABILITY_A01F_SOLAR_JUDGEMENT_LORDAERON_ARTHAS)
+      var solarJudgement = new SolarJudgementSpell(ABILITY_A01F_SOLAR_JUDGEMENT_LORDAERON_ARTHAS)
       {
-        DamageBase = 20,
-        DamageLevel = 20,
-        Duration = 14,
+        DamageBase = 0,
+        DamageLevel = 25,
+        Duration = 10,
         Period = 0.25f,
         HealMultiplier = 1.5f,
         UndeadDamageMultiplier = 1.1f,
@@ -38,7 +38,7 @@ namespace WarcraftLegacies.Source.Setup.Spells
       };
       SpellSystem.Register(solarJudgement);
 
-      var exactJustice = new ExactJusticeSpell(Constants.ABILITY_A097_EXACT_JUSTICE_PURPLE_UTHER)
+      var exactJustice = new ExactJusticeSpell(ABILITY_A097_EXACT_JUSTICE_PURPLE_UTHER)
       {
         DamageBase = 0,
         DamageLevel = 200,
@@ -60,10 +60,10 @@ namespace WarcraftLegacies.Source.Setup.Spells
       };
       SpellSystem.Register(exactJustice);
 
-      var willoftheAshbringer = new NoTargetSpellOnAttack(Constants.UNIT_H01J_THE_ASHBRINGER_LORDAERON,
-        Constants.ABILITY_A122_WILL_OF_THE_ASHBRINGER_MOGRAINE)
+      var willoftheAshbringer = new NoTargetSpellOnAttack(UNIT_H01J_THE_ASHBRINGER_LORDAERON,
+        ABILITY_A122_WILL_OF_THE_ASHBRINGER_MOGRAINE)
       {
-        DummyAbilityId = Constants.ABILITY_A0KA_RESURRECTION_DUMMY_MOGRAINE,
+        DummyAbilityId = ABILITY_A0KA_RESURRECTION_DUMMY_MOGRAINE,
         DummyOrderId = OrderId("resurrection"),
         ProcChance = 0.2f
       };

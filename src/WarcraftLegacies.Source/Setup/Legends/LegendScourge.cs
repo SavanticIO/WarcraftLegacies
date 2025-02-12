@@ -1,16 +1,13 @@
-﻿using MacroTools;
-using MacroTools.Extensions;
+﻿using System.Collections.Generic;
+using MacroTools;
+using MacroTools.ArtifactSystem;
 using MacroTools.LegendSystem;
-using WarcraftLegacies.Source.Setup.FactionSetup;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
-using static War3Api.Blizzard;
-#pragma warning disable CS1591
 
 namespace WarcraftLegacies.Source.Setup.Legends
 {
   /// <summary>
-  /// Responsible for setting up and managing all <see cref="ScourgeSetup.Scourge"/> <see cref="Legend"/>s.
+  /// Responsible for setting up and managing all Scourge <see cref="Legend"/>s.
   /// </summary>
   public sealed class LegendScourge
   {
@@ -48,8 +45,12 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Arthas = new LegendaryHero("Arthas Menethil")
       {
-        UnitType = Constants.UNIT_UEAR_CHAMPION_OF_THE_SCOURGE_SCOURGE,
-        StartingXp = 7000
+        UnitType = UNIT_UEAR_CHAMPION_OF_THE_SCOURGE_SCOURGE,
+        StartingXp = 7000,
+        StartingArtifacts = new List<Artifact>
+        {
+          new(CreateItem(ITEM_ZB07_FROSTMOURNE, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
+        }
       };
 
       Utgarde = new Capital
@@ -60,14 +61,12 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       TheFrozenThrone = new Capital
       {
-        Unit = preplacedUnitSystem.GetUnit(FourCC("u000")),
-        Hivemind = true,
-        DeathMessage =
-          "The great Lich King has been destroyed. With no central mind to command them, the forces of the Undead have gone rogue.",
-        Essential = true
+        Unit = preplacedUnitSystem.GetUnit(UNIT_U000_FROZEN_THRONE_SCOURGE_MAIN),
+        Essential = true,
+        Capturable = true
       };
     }
-    
+      
     public void RegisterLegends(PreplacedUnitSystem preplacedUnitSystem)
     {
       LegendaryHeroManager.Register(Kelthuzad);
@@ -75,17 +74,10 @@ namespace WarcraftLegacies.Source.Setup.Legends
       LegendaryHeroManager.Register(Rivendare);
       LegendaryHeroManager.Register(Arthas);
       CapitalManager.Register(TheFrozenThrone);
-      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3655, 20220)));
-      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3015, 20762)));
-      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3643, 22588)));
-      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(Constants.UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3638, 23374)));
-      CreateTrigger()
-        .RegisterUnitEvent(TheFrozenThrone.Unit, EVENT_UNIT_CHANGE_OWNER)
-        .AddAction(() =>
-      {
-        if (TheFrozenThrone.Unit.OwningPlayer() != Player(bj_PLAYER_NEUTRAL_VICTIM))
-          TheFrozenThrone.Unit.SetOwner(Player(bj_PLAYER_NEUTRAL_VICTIM));
-      });
+      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3655, 20220)));
+      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3015, 20762)));
+      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(UNIT_N094_ICECROWN_OBELISK_RED, new Point(2165, 20583)));
+      TheFrozenThrone.AddProtector(preplacedUnitSystem.GetUnit(UNIT_N094_ICECROWN_OBELISK_RED, new Point(-3638, 23374)));
       CapitalManager.Register(Utgarde);
     }
   }

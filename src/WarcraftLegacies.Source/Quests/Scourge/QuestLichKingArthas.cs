@@ -1,12 +1,13 @@
-﻿using MacroTools.ArtifactSystem;
+﻿using System.Collections.Generic;
+using MacroTools.ArtifactSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using WarcraftLegacies.Source.Setup.FactionSetup;
-using static War3Api.Common;
+using WarcraftLegacies.Source.FactionMechanics.Scourge;
+using WarcraftLegacies.Source.Powers;
 
 namespace WarcraftLegacies.Source.Quests.Scourge
 {
@@ -18,62 +19,74 @@ namespace WarcraftLegacies.Source.Quests.Scourge
     private readonly unit _utgardeKeep;
     private readonly Artifact _helmOfDomination;
     private readonly LegendaryHero _arthas;
-    private readonly Capital _lichKing;
+    private readonly Capital _theFrozenThrone;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestLichKingArthas"/> class.
     /// </summary>
-    public QuestLichKingArthas(unit utgardeKeep, Artifact helmOfDomination, LegendaryHero arthas, Capital lichKing) : base("The Ascension",
+    public QuestLichKingArthas(unit utgardeKeep, Artifact helmOfDomination, LegendaryHero arthas, Capital theFrozenThrone) : base("The Ascension",
       "From within the depths of the Frozen Throne, the Lich King Ner'zhul cries out for his champion. Release the Helm of Domination from its confines and merge its power with that of the Scourge's greatest Death Knight.",
       @"ReplaceableTextures\CommandButtons\BTNRevenant.blp")
     {
       _utgardeKeep = utgardeKeep;
       _helmOfDomination = helmOfDomination;
       _arthas = arthas;
-      _lichKing = lichKing;
-      AddObjective(new ObjectiveControlLegend(arthas, false));
-      AddObjective(new ObjectiveLegendLevel(arthas, 12));
-      AddObjective(new ObjectiveResearch(Constants.UPGRADE_R07X_MAKE_ARTHAS_THE_LICH_KING_SCOURGE, FourCC("u000")));
-      AddObjective(new ObjectiveLegendInRect(arthas, Regions.LichKing, "Icecrown Citadel"));
+      _theFrozenThrone = theFrozenThrone;
+      AddObjective(new ObjectiveLegendLevel(arthas, 12)
+      {
+        ResearchId = UPGRADE_ZB85_ARTHAS_MENETHIL_IS_LEVEL_12
+      });
+      AddObjective(new ObjectiveLegendCastSpellOnUnit(arthas, ABILITY_A0LR_ASCEND_ARTHAS, theFrozenThrone.Unit!));
       Global = true;
-      Required = true;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Arthas has ascended the Frozen Throne itself and shattered Ner'zhul's frozen prison. Ner'zhul and Arthas are now joined, body and soul, into one being: the god-like Lich King.";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      "Arthas becomes the Lich King, but the Frozen Throne loses its abilities";
+      "Arthas becomes the Lich King, the Frozen Throne loses its abilities, and you regain the Domination power if you don't have it";
 
     /// <inheritdoc />
     protected override void OnComplete(Faction completingFaction)
     {
       PlayThematicMusic(@"Sound\Music\mp3Music\LichKingTheme.mp3");
-      
-      _lichKing.DeathMessage =
-        "Icecrown Citadel been razed. Unfortunately, the Lich King has already vacated his unholy throne.";
-      _lichKing.Hivemind = false;
-      _lichKing.Unit?
-        .RemoveAbility(Constants.ABILITY_A0W8_RECALL_FROZEN_THRONE)
-        .RemoveAbility(Constants.ABILITY_A0L3_ANIMATE_DEAD_RED_THE_FROZEN_THRONE)
-        .RemoveAbility(Constants.ABILITY_A001_FROST_NOVA_RED_THE_FROZEN_THRONE)
-        .SetMaximumMana(0)
-        .SetName("Icecrown Citadel");
-      
-      _arthas.UnitType = Constants.UNIT_N023_LORD_OF_THE_SCOURGE_SCOURGE;
+
+      TheFrozenThrone.Vacate(false);
+      _theFrozenThrone.Unit?.SetOwner(completingFaction.Player!);
+
+      _arthas.UnitType = UNIT_N023_LORD_OF_THE_SCOURGE_SCOURGE;
       _arthas.PermaDies = true;
-      _arthas.Hivemind = true;
-      _arthas.DeathMessage =
-        "The great Lich King has been destroyed. With no central mind to command them, the forces of the Undead have gone rogue.";
+      _arthas.DeathMessage = "The day he was born, the very forests of Lordaeron whispered the name Arthas - but no King rules forever.";
 
       _arthas.Unit?
         .SetLifePercent(100)
         .SetManaPercent(100)
         .AddItemSafe(_helmOfDomination.Item);
+
+      _utgardeKeep.Rescue(completingFaction.Player!);
+
+      var domination = completingFaction.GetPowerByType<Domination>();
+      if (domination == null)
+      {
+        domination = new Domination
+        {
+          ResearchId = UPGRADE_R008_DOMINATION_POWER,
+          MindlessUndeadUnitTypes = new List<int>
+          {
+            UNIT_UGHO_GHOUL_SCOURGE,
+            UNIT_U012_HALF_GHOUL_SCOURGE,
+            UNIT_UABO_ABOMINATION_SCOURGE,
+            UNIT_UFRO_FROST_WYRM_SCOURGE,
+            UNIT_UCRM_BURROWED_CRYPT_FIEND_RED,
+            UNIT_UCRY_CRYPT_FIEND_SCOURGE
+          },
+          IconName = "Revenant"
+        };
       
-      _utgardeKeep.Rescue(ScourgeSetup.Scourge.Player);
+        completingFaction.AddPower(domination);
+      }
     }
   }
 }

@@ -8,11 +8,7 @@
     {
       "Id": 1953653089,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNSpell_Shadow_LifeDrain.blp"
-    },
-    {
-      "Id": 2020631137,
-      "Value": 1
+      "Value": "ReplaceableTextures\\CommandButtons\\BTNCannibalize.blp"
     },
     {
       "Id": 2037408353,
@@ -31,19 +27,23 @@
     {
       "Id": 1835101793,
       "Type": 3,
-      "Value": "Thirst for Blood"
+      "Value": "Carnage"
     },
     {
       "Level": 1,
       "Id": 829453409,
       "Type": 3,
-      "Value": "Thirst for Blood"
+      "Value": "Carnage"
     },
     {
       "Level": 1,
       "Id": 828536161,
       "Type": 3,
-      "Value": "Adds 50 bonus damage to the unit and causes its attacks to heal it for 80% of damage dealt. |nLasts 15 seconds."
+      "Value": "Grants this unit \u003CA13Y,DataA1\u003E bonus damage and \u003CA13Y,DataB1,%\u003E% lifesteal for \u003CA13Y,Dur1\u003E seconds."
+    },
+    {
+      "Id": 2020631137,
+      "Value": 1
     }
   ]
 }

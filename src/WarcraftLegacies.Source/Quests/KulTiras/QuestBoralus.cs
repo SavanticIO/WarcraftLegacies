@@ -3,15 +3,12 @@ using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 using static War3Api.Blizzard;
-using MacroTools;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.Powers;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
-using MacroTools.ControlPointSystem;
 
 namespace WarcraftLegacies.Source.Quests.KulTiras
 {
@@ -26,30 +23,29 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestBoralus"/> class.
     /// </summary>
-    /// <param name="preplacedUnitSystem">A system which can be used to find preplaced units.</param>
     /// <param name="rescueRect">All units in this area will be made neutral, then rescued when the quest is completed or made aggressive when the quest is failed.</param>
-    public QuestBoralus(Rectangle rescueRect, PreplacedUnitSystem preplacedUnitSystem) : base("The Admiralty of Kul Tiras",
+    public QuestBoralus(Rectangle rescueRect) : base("The Admiralty of Kul Tiras",
       "Kul Tiras has degenerated severely in contemporary times. Bandits and vile monsters threaten the islands and the noble houses have split apart. We must quell these threats and reunite the kingdom's various regions under Daelin Proudmoore's command.",
       @"ReplaceableTextures\CommandButtons\BTNHumanShipyard.blp")
     {
-      AddObjective(new ObjectiveUpgrade(Constants.UNIT_H06I_CASTLE_KUL_TIRAS_T3, Constants.UNIT_H062_TOWN_HALL_KUL_TIRAS_T1));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BX_TIRAGARDE_SOUND)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BW_STORMSONG_VALLEY)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BV_DRUSTVAR)));
+      AddObjective(new ObjectiveUpgrade(UNIT_H06I_CASTLE_KUL_TIRAS_T3, UNIT_H062_TOWN_HALL_KUL_TIRAS_T1));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BX_TIRAGARDE_SOUND));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BW_STORMSONG_VALLEY, 1000));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BV_DRUSTVAR));
       AddObjective(new ObjectiveExpire(480, Title));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R00L_QUEST_COMPLETED_THE_ADMIRALTY_OF_KUL_TIRAS_KUL_TIRAS;
+      ResearchId = UPGRADE_R00L_QUEST_COMPLETED_THE_ADMIRALTY_OF_KUL_TIRAS_KUL_TIRAS;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      Required = true;
+      
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Kul'tiras has joined the war and its military is now free to assist the Alliance.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"Gain control of all units in Kul'tiras, learn to train Katherine Proodmoure from the {GetObjectName(Constants.UNIT_H07M_ALTAR_OF_ADMIRALS_KUL_TIRAS_ALTAR)}, and acquire the {RewardPowerName} Power";
+      $"Gain control of all units in Kul'tiras, learn to train Katherine Proodmoure from the {GetObjectName(UNIT_H07M_ALTAR_OF_ADMIRALS_KUL_TIRAS_ALTAR)}, and acquire the {RewardPowerName} Power";
 
     /// <inheritdoc/>
     protected override void OnFail(Faction completingFaction)
@@ -68,7 +64,7 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
       {
         IconName = "LordAdmiralPendant",
         Name = RewardPowerName,
-        HeroGlowAbilityTypeId = Constants.ABILITY_A0GK_HERO_GLOW_ORIGIN,
+        HeroGlowAbilityTypeId = ABILITY_A0GK_HERO_GLOW_ORIGIN,
         Filter = unit =>
         {
           var x = GetUnitX(unit);
@@ -82,12 +78,11 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
       completingFaction.Player?.DisplayPowerAcquired(rewardPower);
       
       if (completingFaction.Player != null)
-        completingFaction.Player.RescueGroup(_rescueUnits);
+        completingFaction.Player
+          .RescueGroup(_rescueUnits)
+          .PlayMusicThematic("war3mapImported\\KultirasTheme.mp3");
       else
         Player(bj_PLAYER_NEUTRAL_VICTIM).RescueGroup(_rescueUnits);
-
-      if (GetLocalPlayer() == completingFaction.Player) 
-        PlayThematicMusic("war3mapImported\\KultirasTheme.mp3");
     }
   }
 }

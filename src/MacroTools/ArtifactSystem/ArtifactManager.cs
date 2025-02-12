@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MacroTools.Extensions;
 using MacroTools.ShoreSystem;
@@ -37,8 +38,11 @@ namespace MacroTools.ArtifactSystem
     /// <para>Case insensitive.</para>
     /// <para>Returns null if there is no match.</para>
     /// </summary>
-    public static Artifact? GetFromName(string name) =>
-      ArtifactsByName.ContainsKey(name.ToLower()) ? ArtifactsByName[name.ToLower()] : null;
+    public static bool TryGetByName(string name, [NotNullWhen(true)] out Artifact? artifact)
+    {
+      artifact = ArtifactsByName.TryGetValue(name.ToLower(), out var value) ? value : null;
+      return artifact != null;
+    }
 
     /// <summary>
     /// Registers an <see cref="Artifact"/> to the <see cref="ArtifactManager"/>.
@@ -93,7 +97,7 @@ namespace MacroTools.ArtifactSystem
           for (var i = 0; i < 6; i++)
           {
             var itemInSlot = UnitItemInSlot(triggerUnit, i);
-            if (itemInSlot == null)
+            if (itemInSlot == null || !itemInSlot.IsDroppable())
               continue;
             
             var artifactInSlot = GetFromTypeId(GetItemTypeId(itemInSlot));
@@ -103,9 +107,7 @@ namespace MacroTools.ArtifactSystem
             isPositionPathable ??= !IsTerrainPathable(GetUnitX(triggerUnit), GetUnitY(triggerUnit), PATHING_TYPE_WALKABILITY);
 
             if (isPositionPathable == true)
-            {
               itemInSlot.SetPosition(triggerUnit.GetPosition());
-            }
             else
             {
               var shore = ShoreManager.GetNearestShore(triggerUnit.GetPosition());

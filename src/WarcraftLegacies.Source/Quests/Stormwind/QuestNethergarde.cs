@@ -8,7 +8,6 @@ using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Stormwind
 {
@@ -25,11 +24,11 @@ namespace WarcraftLegacies.Source.Quests.Stormwind
       AddObjective(new ObjectiveExpire(600, Title));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = Regions.NethergardeUnlock.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      _gate = preplacedUnitSystem.GetUnit(Constants.UNIT_H00L_HORIZONTAL_WOODEN_GATE_OPEN, new Point(17140, -18000));
+      _gate = preplacedUnitSystem.GetUnit(UNIT_H00L_HORIZONTAL_WOODEN_GATE_OPEN, new Point(17140, -18000));
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "Varian has come to relieve the Nethergarde garrison.";
+    public override string RewardFlavour => "Varian has come to relieve the Nethergarde garrison.";
 
     /// <inheritdoc />
     protected override string RewardDescription => "You gain control of Nethergarde";

@@ -12,10 +12,10 @@ namespace WarcraftLegacies.Source.Quests.Warsong
   public sealed class QuestWarsongKillDruids : QuestData
   {
     private readonly LegendaryHero _grom;
-    private const int ExperienceReward = 8000;
+    private const int ExperienceReward = 7000;
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "Nordrassil has been captured. The Warsong is supreme!";
+    public override string RewardFlavour => "Nordrassil has been captured. The Warsong is supreme!";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
@@ -31,12 +31,13 @@ namespace WarcraftLegacies.Source.Quests.Warsong
       _grom = grom;
       AddObjective(new ObjectiveControlCapital(nordrassil, false));
       AddObjective(new ObjectiveLegendNotPermanentlyDead(grom));
-      ResearchId = Constants.UPGRADE_R08M_QUEST_COMPLETED_TEAR_IT_DOWN;
-      Required = true;
+      ResearchId = UPGRADE_R08M_QUEST_COMPLETED_TEAR_IT_DOWN;
     }
 
     /// <inheritdoc/>
-    protected override void OnComplete(Faction completingFaction) => 
+    protected override void OnComplete(Faction completingFaction) {
       _grom.Unit?.AddExperience(ExperienceReward);
+      _grom.StartingXp = ExperienceReward;
+    } 
   }
 }

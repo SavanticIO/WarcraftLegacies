@@ -8,7 +8,6 @@ using MacroTools.ObjectiveSystem.Objectives.ArtifactBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -43,12 +42,12 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
     private readonly ObjectiveAnyUnitInRect _anyUnitInRect;
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Highborne are no longer implicitly defended by the Night Elven presence at Feathermoon Stronghold. The Horde unleashes their full might against these Night Elven arcanists.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"Gain the Scepter of the Queen and reveal 4 hostile {GetObjectName(Constants.UNIT_NNMG_REDEEMED_HIGHBORNE_SENTINELS)} outside the Athenaeum";
+      $"Gain the Scepter of the Queen and reveal 4 hostile {GetObjectName(UNIT_NNMG_REDEEMED_HIGHBORNE_SENTINELS)} outside the Athenaeum";
 
     /// <inheritdoc/>
     protected override void OnComplete(Faction whichFaction)

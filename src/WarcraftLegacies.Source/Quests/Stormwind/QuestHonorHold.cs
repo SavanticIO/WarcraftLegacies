@@ -5,7 +5,6 @@ using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 
 namespace WarcraftLegacies.Source.Quests.Stormwind
@@ -25,16 +24,16 @@ namespace WarcraftLegacies.Source.Quests.Stormwind
           _rescueUnits.Add(unit);
         }
       AddObjective(new ObjectiveCapitalDead(hellfireCitadel));
-      ResearchId = Constants.UPGRADE_R039_QUEST_COMPLETED_HONOR_HOLD;
+      ResearchId = UPGRADE_R039_QUEST_COMPLETED_HONOR_HOLD;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Honor Hold is now free from the constant looming threat of Hellfire Citadel, and have finally been reconnected with their Alliance from Azeroth.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      "Control of all units at Honor Hold and the ability to train Siege Towers";
+      $"Control of all units at Honor Hold and {GetObjectName(UNIT_O06K_SIEGE_TOWER_STORMWIND)} gain the {GetObjectName(ABILITY_A108_ARTILLERY_BOMBARDMENT_STORMWIND)} ability."; 
 
     /// <inheritdoc/>
     protected override void OnFail(Faction completingFaction)

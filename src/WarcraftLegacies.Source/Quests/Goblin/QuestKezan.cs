@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 
 namespace WarcraftLegacies.Source.Quests.Goblin
@@ -22,25 +20,25 @@ namespace WarcraftLegacies.Source.Quests.Goblin
     /// Initializes a new instance of the <see cref="QuestKezan"/>.
     /// </summary>
     public QuestKezan() : base("Offshore Investment",
-      "The island of Kezan should be the first expansion of our trade empire.",
+      "The island of Kezan would be an ideal seat of power for the Bilgewater trade empire, but first we must secure a foothold on Kalimdor.",
       @"ReplaceableTextures\CommandButtons\BTNIronHordeMerchant.blp")
     {
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N092_ZUL_FARRAK)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BK_LOST_CITY_OF_THE_TOL_VIR)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N025_UN_GORO_CRATER)));
-      AddObjective(new ObjectiveUpgrade(Constants.UNIT_O03N_FORTRESS_GOBLIN_T3, Constants.UNIT_O03L_GREAT_HALL_GOBLIN_T1));
+      AddObjective(new ObjectiveControlPoint(UNIT_N092_ZUL_FARRAK));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BK_LOST_CITY_OF_THE_TOL_VIR));
+      AddObjective(new ObjectiveControlPoint(UNIT_N025_UN_GORO_CRATER));
+      AddObjective(new ObjectiveUpgrade(UNIT_O03N_FORTRESS_GOBLIN_T3, UNIT_O03L_GREAT_HALL_GOBLIN_T1));
       AddObjective(new ObjectiveSelfExists());
-      Required = true;
-      ResearchId = Constants.UPGRADE_R09Z_QUEST_COMPLETED_OFFSHORE_INVESTMENT;
+      
+      ResearchId = UPGRADE_R09Z_QUEST_COMPLETED_OFFSHORE_INVESTMENT;
       _rescueUnits = Regions.KezanUnlock.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures,
         filterUnit => filterUnit.GetTypeId() != FourCC("ngme"));
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "We have succesfully expanded our trade empire!";
+    public override string RewardFlavour => "With trade now able to flow into and out of Kalimdor, the goblins of Kezan are now all but forced to join the Bilgewater cartel.";
 
     /// <inheritdoc />
-    protected override string RewardDescription => "You can now train Traders and train Gallywix at the Altar of Industry";
+    protected override string RewardDescription => "Gain control of Kezan, and learn to train Gallywix at the Altar of Industry";
 
     /// <inheritdoc />
     protected override void OnFail(Faction completingFaction)
@@ -55,9 +53,9 @@ namespace WarcraftLegacies.Source.Quests.Goblin
     /// <inheritdoc />
     protected override void OnComplete(Faction completingFaction)
     {
-      completingFaction.Player.RescueGroup(_rescueUnits);
-      if (GetLocalPlayer() == completingFaction.Player) 
-        PlayThematicMusic("war3mapImported\\GoblinTheme.mp3");
+      completingFaction.Player
+        .RescueGroup(_rescueUnits)
+        .PlayMusicThematic("war3mapImported\\GoblinTheme.mp3");
     }
   }
 }

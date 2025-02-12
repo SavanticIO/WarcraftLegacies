@@ -2,8 +2,8 @@
   {
     "Flags": 2,
     "OwnerId": 24,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -2,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -29,8 +29,8 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -56,8 +56,8 @@
   {
     "Flags": 2,
     "OwnerId": 27,
-    "HP": -1,
-    "MP": -1,
+    "Hp": -1,
+    "Mp": -1,
     "TargetAcquisition": -1,
     "HeroLevel": 1,
     "InventoryData": [],
@@ -66,8 +66,8 @@
     "WaygateDestinationRegionId": -1,
     "TypeId": 2003788133,
     "Position": {
-      "X": -13760,
-      "Y": 10816
+      "X": -13728,
+      "Y": 10848
     },
     "Rotation": 4.71238899230957,
     "Scale": {

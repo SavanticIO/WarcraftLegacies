@@ -7,7 +7,6 @@ using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Naga
 {
@@ -28,11 +27,11 @@ namespace WarcraftLegacies.Source.Quests.Naga
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
-      Required = true;
+      
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "The outpost in Stranglethorn is now built";
+    public override string RewardFlavour => "The outpost in Stranglethorn is now built";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Gain control of the Stranglethorn Outpost";

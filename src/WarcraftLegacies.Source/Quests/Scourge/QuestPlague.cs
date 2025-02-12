@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using MacroTools;
 using MacroTools.Extensions;
@@ -8,11 +8,10 @@ using MacroTools.ObjectiveSystem.Objectives.MetaBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
+using MacroTools.UserInterface;
 using WarcraftLegacies.Source.GameLogic;
-using WarcraftLegacies.Source.Mechanics.Scourge.Plague;
-using WCSharp.Buffs;
+using WarcraftLegacies.Source.Rocks;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Scourge
 {
@@ -22,101 +21,118 @@ namespace WarcraftLegacies.Source.Quests.Scourge
   public sealed class QuestPlague : QuestData
   {
     private readonly Faction _plagueVictim;
-
-    private readonly unit _portalController1;
-    private readonly unit _portalController2;
-    private readonly unit _innerWaygate1;
-    private readonly unit _innerWaygate2;
-    private readonly unit _outerWaygate1;
-    private readonly unit _outerWaygate2;
-    
-    private readonly unit _gilneasDoor;
+   
     private readonly Faction _secondaryPlagueFaction;
     private readonly PlagueParameters _plagueParameters;
 
+    private readonly List<unit> _deathknellUnits;
+    private readonly List<unit> _coastUnits;
+    private readonly List<unit> _scholomanceUnits;
+
     /// <summary>
-    /// When completed, the quest holder initiates the Plague, creating Plague Cauldrons around Lordaeron
-    /// and converting villagers into Zombies.
+    /// When completed, the quest holder initiates the Plague.
     /// </summary>
     /// <param name="plagueParameters">Provides information about how the Plague should work.</param>
-    /// <param name="preplacedUnitSystem">A system for finding preplaced units.</param>
     /// <param name="plagueVictim">The faction that the plague will primarily affect.</param>
     /// <param name="secondaryPlagueFaction">The faction that will gain some of the fringe benefits of the plague.</param>
-    public QuestPlague(PlagueParameters plagueParameters, PreplacedUnitSystem preplacedUnitSystem, Faction plagueVictim,
-      Faction secondaryPlagueFaction) : base(
+    /// /// <param name="coast">The base near Stratholme coast.</param>
+    /// /// <param name="deathknell">The base near Capital Palace.</param>
+    /// /// <param name="scholomance">The base at Caer Darrow.</param>
+    public QuestPlague(PlagueParameters plagueParameters, Faction plagueVictim,
+      Faction secondaryPlagueFaction, Rectangle deathknell, Rectangle coast, Rectangle scholomance) : base(
       "Plague of Undeath",
       "The Cult of the Damned is prepared to unleash a devastating zombifying plague across the lands of Lordaeron.",
       @"ReplaceableTextures\CommandButtons\BTNPlagueBarrel.blp")
     {
-      _gilneasDoor = preplacedUnitSystem.GetUnit(Constants.UNIT_H02K_GREYMANE_S_GATE_CLOSED).SetInvulnerable(true);
       _plagueVictim = plagueVictim;
       _plagueParameters = plagueParameters;
       _secondaryPlagueFaction = secondaryPlagueFaction;
       AddObjective(new ObjectiveEitherOf(
-        new ObjectiveResearch(Constants.UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, FourCC("u000")),
+        new ObjectiveResearch(UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, FourCC("u000")),
         new ObjectiveTime(660)));
       AddObjective(new ObjectiveTime(540));
+      _deathknellUnits = deathknell.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
+      _scholomanceUnits = scholomance.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
+      _coastUnits = coast.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
       Global = true;
-      Required = true;
-      ResearchId = Constants.UPGRADE_R009_QUEST_COMPLETED_PLAGUE_OF_UNDEATH;
-
-      _portalController1 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03J_BLACK_PORTAL_AURA_CONTROL_NEXUS, new Point(-4137, 16957)).SetInvulnerable(true);
-      _portalController2 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03J_BLACK_PORTAL_AURA_CONTROL_NEXUS, new Point(14198, 6530)).SetInvulnerable(true);
-      _innerWaygate1 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03H_DEATH_GATE_WAYGATE, Regions.Scholomance_Exterior_1.Center).Show(false);
-      _innerWaygate2 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03H_DEATH_GATE_WAYGATE, Regions.Scholomance_Exterior_2.Center).Show(false);
-      _outerWaygate1 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03H_DEATH_GATE_WAYGATE, Regions.Wrathgate_Portal_1.Center).Show(false);
-      _outerWaygate2 = preplacedUnitSystem.GetUnit(Constants.UNIT_N03H_DEATH_GATE_WAYGATE, Regions.Wrathgate_Portal_2.Center).Show(false);
+      ResearchId = UPGRADE_R009_QUEST_COMPLETED_PLAGUE_OF_UNDEATH;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
-      "The plague has been unleashed! The citizens of Lordaeron are quickly transforming into mindless zombies, and the Black Gate has been opened in Dragonblight.";
+    public override string RewardFlavour =>
+      "The plague has been unleashed! The citizens of Lordaeron are quickly transforming into mindless zombies";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      "All villagers in Lordaeron are transformed into Zombies, several Zombie-spawning Plague Cauldrons spawn throughout Lordaeron, a portal opens between Dragonblight and Scholomance, you learn to build Necropoli, and Lordaeron's Control Points reset to level 0";
+      "Several small armies under your control spawn throughout Lordaeron, you gain control of three bases around Lordaeron, Lordaeron's Control Points reset to level 0, and you will be given a choice to instantly move your military units from Northrend to one of three locations in Lordaeron";
 
     /// <inheritdoc />
     protected override void OnComplete(Faction completingFaction)
     {
-      completingFaction.ModObjectLimit(Constants.UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, -Faction.UNLIMITED);
-      var plaguePower = new PlaguePower(_plagueVictim);
+      completingFaction.ModObjectLimit(UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, -Faction.UNLIMITED);
       if (completingFaction.Player != null)
-        CreatePlagueCauldrons(completingFaction);
-      completingFaction.AddPower(plaguePower);
-      _gilneasDoor
-        .SetInvulnerable(false);
+        SpawnArmies(completingFaction);
+
       ResetVictimControlPointLevel();
-      _portalController1.SetInvulnerable(false);
-      _portalController2.SetInvulnerable(false);
-      _innerWaygate1
-        .Show(true)
-        .SetWaygateDestination(Regions.Wrathgate_Portal_1.Center);
-      _innerWaygate2
-        .Show(true)
-        .SetWaygateDestination(Regions.Wrathgate_Portal_2.Center);
-      _outerWaygate1
-        .Show(true)
-        .SetWaygateDestination(Regions.Scholomance_Exterior_1.Center);
-      _outerWaygate2
-        .Show(true)
-        .SetWaygateDestination(Regions.Scholomance_Exterior_2.Center);
-      new ScourgeInvasionDialoguePresenter(
-        new Dictionary<string, Rectangle?>
-        {
-          {"No Invasion",null},
-          {"Scholomance", Regions.Scholomance_Exterior_1},
-          {"Straholme",Regions.StratholmeUnlock},
-          {"Tirisfal Glades",Regions.DalaStartPos}
-        }
-        ).Run(Player(3));
+      KillVillagers();
+      PresentInvasionDialogs();
+      RescueBases(completingFaction);
+      RegisterRocks();
+
+      if (completingFaction.TryGetPowerByName("Cult Spies", out var spiesPower))
+        completingFaction.RemovePower(spiesPower);
+      else
+        Logger.LogWarning($"Expected {completingFaction.Name} to have the Cult Spies Power.");
+    }
+
+    private static void RegisterRocks()
+    {
+      RockSystem.Register(new RockGroup(Regions.Northrend_Blocker_1, FourCC("B013"), 120));
+      RockSystem.Register(new RockGroup(Regions.Northrend_Blocker_2, FourCC("B013"), 120));
+    }
+
+    private void RescueBases(Faction completingFaction)
+    {
+      completingFaction.Player.RescueGroup(_deathknellUnits);
+      completingFaction.Player.RescueGroup(_coastUnits);
+      completingFaction.Player.RescueGroup(_scholomanceUnits);
+    }
+
+    private static void PresentInvasionDialogs()
+    {
+      new ScourgeInvasionDialogPresenter(
+          new Choice<Rectangle?>(null, "No invasion"),
+          new Choice<Rectangle?>(Regions.CaerDarrow, "Scholomance"),
+          new Choice<Rectangle?>(Regions.StratholmeScourgeBase, "Stratholme"),
+          new Choice<Rectangle?>(Regions.DeathknellUnlock, "Deathknell"))
+        .Run(Player(3));
     }
 
     /// <inheritdoc />
     protected override void OnAdd(Faction whichFaction) =>
-      whichFaction.ModObjectLimit(Constants.UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, Faction.UNLIMITED);
+      whichFaction.ModObjectLimit(UPGRADE_R06I_PLAGUE_OF_UNDEATH_SCOURGE, Faction.UNLIMITED);
+
+    private static void KillVillagers()
+    {
+      var villagerUnitTypeIds = new List<int>
+      {
+        FourCC("nvlw"),
+        FourCC("nvl2"),
+        FourCC("nvil"),
+        FourCC("nvlk"),
+        FourCC("nvk2")
+      };
+
+      var villagers = CreateGroup()
+        .EnumUnitsOfPlayer(Player(PLAYER_NEUTRAL_PASSIVE))
+        .EmptyToList()
+        .Where(x => villagerUnitTypeIds.Contains(x.GetTypeId()));
+      
+      foreach (var villager in villagers) 
+        villager.Kill();
+    }
     
-    private void CreatePlagueCauldrons(Faction completingFaction)
+    private void SpawnArmies(Faction completingFaction)
     {
       var primaryPlaguePlayer = completingFaction.ScoreStatus != ScoreStatus.Defeated && completingFaction.Player != null
         ? completingFaction.Player
@@ -129,25 +145,20 @@ namespace WarcraftLegacies.Source.Quests.Scourge
       foreach (var plagueRect in _plagueParameters.PlagueRects)
       {
         var position = plagueRect.GetRandomPoint();
-        var plagueCauldron = CreateUnit(primaryPlaguePlayer, _plagueParameters.PlagueCauldronUnitTypeId, position.X, position.Y, 0)
-          .SetTimedLife(_plagueParameters.Duration);
+        position.RemoveDestructablesInRadius(250f);
 
-        CreateUnit(secondaryPlaguePlayer, Constants.UNIT_U00D_LEGION_HERALD_LEGION_WORKER, position.X, position.Y, 0);
+        CreateUnit(secondaryPlaguePlayer, UNIT_U00D_LEGION_HERALD_LEGION_WORKER, position.X, position.Y, 0);
 
-        var attackTarget = _plagueParameters.AttackTargets.OrderBy(x => MathEx.GetDistanceBetweenPoints(position, x)).First();
+        var attackTarget = _plagueParameters.AttackTargets
+          .OrderBy(x => MathEx.GetDistanceBetweenPoints(position, x))
+          .First();
 
-        var plagueCauldronBuff = new PlagueCauldronBuff(plagueCauldron, plagueCauldron, attackTarget)
-        {
-          ZombieUnitTypeId = Constants.UNIT_NZOM_ZOMBIE_SCOURGE
-        };
-        BuffSystem.Add(plagueCauldronBuff);
-
-        foreach (var parameter in _plagueParameters.PlagueCauldronSummonParameters)
-        foreach (var unit in GeneralHelpers.CreateUnits(primaryPlaguePlayer, parameter.SummonUnitTypeId,
+        foreach (var parameter in _plagueParameters.PlagueArmySummonParameters)
+        foreach (var unit in CreateUnits(primaryPlaguePlayer, parameter.SummonUnitTypeId,
                    position.X, position.Y, 0, parameter.SummonCount))
         {
           if (!unit.IsType(UNIT_TYPE_PEON))
-            unit.IssueOrder("attack", attackTarget);
+            unit.IssueOrder(OrderId("attack"), attackTarget);
         }
       }
     }

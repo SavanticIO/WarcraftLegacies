@@ -6,7 +6,6 @@ using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests
 {
@@ -43,13 +42,14 @@ namespace WarcraftLegacies.Source.Quests
       _preventAccessTriggers = CreatePreventAccessTriggers(interiorRects);
       HideUnitsInsideTomb(interiorRects);
       _entranceDoor = entranceDoor.SetInvulnerable(true);
+      IsFactionQuest = false;
     }
 
     /// <inheritdoc />
     protected override string RewardDescription => "The Tomb of Sargeras opens";
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       $"The Tomb of Sargeras has been opened by {_enterTombOfSargerasRegion.CompletingUnitName}.";
 
     /// <inheritdoc />

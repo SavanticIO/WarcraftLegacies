@@ -9,31 +9,31 @@
       "Level": 1,
       "Id": 829579623,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNOrbOfDeath.blp"
+      "Value": "ReplaceableTextures\\CommandButtons\\BTNHeal.blp"
     },
     {
       "Level": 1,
       "Id": 1718840935,
       "Type": 3,
-      "Value": "(fel horde)"
+      "Value": "(Fel Horde)"
     },
     {
       "Level": 1,
       "Id": 1835101799,
       "Type": 3,
-      "Value": "Improved Shadow Infusion"
+      "Value": "Improved Heal"
     },
     {
       "Level": 1,
       "Id": 829453415,
       "Type": 3,
-      "Value": "Research Improved Shadow Infusion"
+      "Value": "Research Improved Heal"
     },
     {
       "Level": 1,
       "Id": 828536167,
       "Type": 3,
-      "Value": "Improves Shadow Infusion by increasing its heal amount by 35 and reducing its mana cost to 0."
+      "Value": "Improves Heal by increasing its heal amount to \u003CA0AR,DataA2\u003E and reducing its mana cost to \u003CA0AR,Cost2\u003E."
     },
     {
       "Level": 1,

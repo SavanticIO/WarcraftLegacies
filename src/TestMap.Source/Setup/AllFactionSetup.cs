@@ -1,7 +1,7 @@
-﻿using MacroTools.FactionSystem;
-using MacroTools.Powers;
-using TestMap.Source.Setup.FactionSetup.FactionSetup;
-using static War3Api.Common;
+﻿using System;
+using MacroTools.Extensions;
+using MacroTools.FactionSystem;
+using TestMap.Source.Factions;
 
 namespace TestMap.Source.Setup
 {
@@ -9,15 +9,18 @@ namespace TestMap.Source.Setup
   {
     public static void Setup()
     {
-      DalaranSetup.Setup();
-      DruidsSetup.Setup();
-      DraeneiSetup.Setup();
-
-      var spaceMarines = new Faction("Space Marines", PLAYER_COLOR_BLUE, "|c000042ff",
-        "ReplaceableTextures\\CommandButtons\\BTNMarine.blp");
-      var newPower = new DummyPower("Space", "You're from space, and can use spaceships.", "Marine");
-      spaceMarines.AddPower(newPower);
-      FactionManager.Register(spaceMarines);
+      SetupPlayer(Player(0), new SpaceMarines());
+    }
+    
+    private static void SetupPlayer(player player, Faction faction)
+    {
+      var traditionalTeam = faction.TraditionalTeam;
+      if (traditionalTeam != null)
+        player.SetTeam(traditionalTeam);
+      else
+        throw new InvalidOperationException($"{GetPlayerName(player)}'s {nameof(Faction)} doesn't have a {nameof(Faction.TraditionalTeam)}.");
+      player.SetFaction(faction);
+      FactionManager.Register(faction);
     }
   }
 }

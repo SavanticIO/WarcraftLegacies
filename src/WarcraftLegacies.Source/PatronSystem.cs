@@ -1,7 +1,6 @@
 ﻿using System;
 using MacroTools;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source
 {
@@ -13,9 +12,9 @@ namespace WarcraftLegacies.Source
     private static int TierToUnitType(PatronTier tier)
     {
       if (tier == PatronTier.One)
-        return Constants.UNIT_NHMC_PATRONS_FOOTMAN_TIER_1_PATRON;
+        return UNIT_NHMC_PATRONS_FOOTMAN_TIER_1_PATRON;
       if (tier == PatronTier.Two)
-        return Constants.UNIT_NFRO_PATRONS_KNIGHT_TIER_2_PATRON;
+        return UNIT_NFRO_PATRONS_KNIGHT_TIER_2_PATRON;
       throw new ArgumentOutOfRangeException(nameof(tier), tier, null);
     }
 
@@ -32,7 +31,6 @@ namespace WarcraftLegacies.Source
     {
       SetupPatron("bredbrodak", PatronTier.Two, new Point(16925, 14799), preplacedUnitSystem);
       SetupPatron("Dromoka", PatronTier.Two, new Point(13245, 5359), preplacedUnitSystem);
-      SetupPatron("Bocelot", PatronTier.Two, new Point(5403, 9746), preplacedUnitSystem);
       SetupPatron("Eagleman", PatronTier.Two, new Point(15276, 2550), preplacedUnitSystem);
     }
   }

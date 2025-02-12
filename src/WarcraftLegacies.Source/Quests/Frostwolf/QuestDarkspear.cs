@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -22,15 +21,15 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
       @"ReplaceableTextures\CommandButtons\BTNWitchDoctor.blp")
     {
       _rescueUnits = Regions.EchoUnlock.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
+      AddObjective(new ObjectiveAnyUnitInRect(Regions.EchoUnlock, "Echo Isles", true));
       AddObjective(new ObjectiveSelfExists());
       AddObjective(new ObjectiveExpire(480, Title));
-      AddObjective(new ObjectiveAnyUnitInRect(Regions.EchoUnlock, "Echo Isles", true));
-      Required = true;
-      ResearchId = Constants.UPGRADE_R032_QUEST_COMPLETED_THE_DARKSPEAR_TROLLS;
+      
+      ResearchId = UPGRADE_R032_QUEST_COMPLETED_THE_DARKSPEAR_TROLLS;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Vol'jin, foremost Shadow Hunter of the Darkspear Tribe, welcomes Thrall to his village with open arms. The trolls of the Echo Isles unanimously agree to join the new Horde.";
 
     /// <inheritdoc />

@@ -1,6 +1,5 @@
 ﻿using MacroTools;
 using MacroTools.LegendSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Setup.Legends
 {
@@ -16,7 +15,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
     public Capital TempleOfTheMoon { get; }
     public Capital CenarionHold { get; }
     
-    public static int UnittypeCenariusGhost => Constants.UNIT_E00H_DEMIGOD_OF_THE_NIGHT_ELVES_DRUIDS_GHOST;
+    public static int UnittypeCenariusGhost => UNIT_E00H_DEMIGOD_OF_THE_NIGHT_ELVES_DRUIDS_GHOST;
 
     public LegendDruids(PreplacedUnitSystem preplacedUnitSystem)
     {
@@ -33,9 +32,9 @@ namespace WarcraftLegacies.Source.Setup.Legends
       Malfurion = new LegendaryHero("Malfurion")
       {
         UnitType = FourCC("Efur"),
-        StartingArtifactItemTypeIds = new()
+        StartingArtifacts = new()
         {
-          Constants.ITEM_I00C_G_HANIR_THE_MOTHER_TREE
+          new(CreateItem(ITEM_I00C_G_HANIR_THE_MOTHER_TREE, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
         }
       };
 
@@ -67,7 +66,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
       {
         Capturable = true,
         Essential = true,
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_N06D_CENARION_HOLD_SENTINEL_OTHER)
+        Unit = preplacedUnitSystem.GetUnit(UNIT_N06D_CENARION_HOLD_SENTINEL_OTHER)
       };
 
       TempleOfTheMoon = new Capital

@@ -21,7 +21,7 @@ namespace MacroTools.Cheats
     public static bool CheatCondition()
     {
       var triggerPlayerName = GetPlayerName(GetTriggerPlayer());
-      return triggerPlayerName is "YakaryBovine#6863" or "Lordsebas#11619" || AreCheatsActive;
+      return triggerPlayerName is "YakaryBovine#6863" or "Lordsebas#11619" or "Technopig#2179" or "Vampirika#2506" || AreCheatsActive;
     }
 
     private static void CreateInfoQuests(CommandManager commandManager)
@@ -32,7 +32,7 @@ namespace MacroTools.Cheats
         (current, command) => $"{current} -{command.CommandText}: {command.Description}\n");
       QuestSetDescription(newQuest, description);
       QuestSetDiscovered(newQuest, true);
-      QuestSetRequired(newQuest, true);
+      QuestSetRequired(newQuest, false);
       QuestSetIconPath(newQuest, @"ReplaceableTextures\CommandButtons\BTNStaffOfTeleportation.blp");
       QuestSetCompleted(newQuest, false);
     }

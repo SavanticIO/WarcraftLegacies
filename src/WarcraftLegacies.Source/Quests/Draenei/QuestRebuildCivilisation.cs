@@ -3,10 +3,7 @@ using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
-using static War3Api.Common;
 using MacroTools.LegendSystem;
-using MacroTools.ObjectiveSystem.Objectives.LegendBased;
-using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using System.Collections.Generic;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 
@@ -23,19 +20,16 @@ namespace WarcraftLegacies.Source.Quests.Draenei
     /// </summary>
     public QuestRebuildCivilisation(Rectangle rescueRect, LegendaryHero velen) : base("The Way Forward", "The Draenei will need to rebuild their civilisation in Azeroth. Desolace seems like a perfect place for the birth of the second Draenei settlement.", @"ReplaceableTextures\CommandButtons\BTNDraeneiDivineCitadel.blp")
     {
-      Required = true;
+      
       AddObjective(new ObjectiveHostilesInAreaAreDead(new List<Rectangle> { Regions.DraeneiQuestKill }, "in Desolace"));
-      AddObjective(new ObjectiveLegendReachRect(velen, Regions.DesolaceUnlock, "Desolace"));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
-      ResearchId = Constants.UPGRADE_R082_QUEST_COMPLETED_THE_WAY_FORWARD;
+      ResearchId = UPGRADE_R082_QUEST_COMPLETED_THE_WAY_FORWARD;
     }
 
     /// <inheritdoc/>
     protected override void OnComplete(Faction whichFaction)
     {
-      if (whichFaction.Player != null)
-        whichFaction.Player.AddLumber(200);
       if (whichFaction.Player != null)
         whichFaction.Player.RescueGroup(_rescueUnits);
       else
@@ -43,10 +37,10 @@ namespace WarcraftLegacies.Source.Quests.Draenei
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "Maraad joins the Draenai and the new settlement is born";
+    public override string RewardFlavour => "Maraad joins the Draenai and the new settlement is born";
 
     /// <inheritdoc/>
-    protected override string RewardDescription => "Gain 200 Lumber, an Outpost in Desolace and Maraad is now trainable at the altar.";
-
-   }
- }
+    protected override string RewardDescription =>
+      "Gain an Outpost in Desolace and Maraad is now trainable at the altar.";
+  }
+}

@@ -1,12 +1,11 @@
-﻿using MacroTools;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
+using MacroTools.Sound;
 using WCSharp.Shared;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests
 {
@@ -24,9 +23,8 @@ namespace WarcraftLegacies.Source.Quests
     private readonly unit _waygateTwo;
     private readonly Rectangle _wayGateOneDestination;
     private readonly Rectangle _wayGateTwoDestination;
-    private timer _timer;
-
-
+    private readonly timer _timer;
+    
     /// <summary>
     /// Initilaizes the quest <see cref="QuestDragonsOfNightmare"/>
     /// </summary>
@@ -57,6 +55,7 @@ namespace WarcraftLegacies.Source.Quests
       AddObjective(new ObjectiveKillUnit(nightmareDragonEk));
       AddObjective(new ObjectiveTime(360));
       _timer = CreateTimer().Start(360, false, OnTimeElapsed);
+      IsFactionQuest = false;
     }
 
     private void OnTimeElapsed()
@@ -75,7 +74,7 @@ namespace WarcraftLegacies.Source.Quests
     protected override string RewardDescription => $"A portal between {_portalOneLocation} and {_portalTwoLocation} opens";
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => $"The Dragons of Nightmare {_nightmareDragonKalimdor.GetProperName()} and {_nightmareDragonEk.GetProperName()} have been defeated.";
+    public override string RewardFlavour => $"The Dragons of Nightmare {_nightmareDragonKalimdor.GetProperName()} and {_nightmareDragonEk.GetProperName()} have been defeated.";
 
     /// <inheritdoc/>
     protected override void OnComplete(Faction completingFaction)

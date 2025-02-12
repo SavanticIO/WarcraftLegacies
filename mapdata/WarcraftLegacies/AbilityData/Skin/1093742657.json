@@ -1,46 +1,28 @@
 {
-  "OldId": 1668565057,
+  "OldId": 1667318593,
   "NewId": 1093742657,
   "Unk": [
     0
   ],
   "Modifications": [
     {
-      "Id": 1953653089,
-      "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNNightElfBuild.blp"
+      "Id": 2020631137,
+      "Value": 1
     },
     {
-      "Id": 1952539489,
-      "Type": 3,
-      "Value": "Abilities\\Spells\\NightElf\\Starfall\\StarfallCaster.mdl"
+      "Id": 2037408353,
+      "Value": 1
     },
     {
       "Id": 1718840929,
       "Type": 3,
-      "Value": "(Brown - Nordrassil)"
-    },
-    {
-      "Id": 2037082209,
-      "Type": 3,
-      "Value": "X"
-    },
-    {
-      "Id": 1835101793,
-      "Type": 3,
-      "Value": "Regrow Trees"
-    },
-    {
-      "Level": 1,
-      "Id": 829453409,
-      "Type": 3,
-      "Value": "Regrow Trees"
+      "Value": "(Thrall)"
     },
     {
       "Level": 1,
       "Id": 828536161,
       "Type": 3,
-      "Value": "Regrows all trees in a massive radius."
+      "Value": "Gives \u003CA01A,DataA1,%\u003E% extra damage to the attacks of nearby friendly units."
     }
   ]
 }
