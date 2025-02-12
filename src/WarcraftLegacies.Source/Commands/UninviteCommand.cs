@@ -1,6 +1,6 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using static War3Api.Common;
+using WCSharp.Shared;
 
 namespace WarcraftLegacies.Source.Commands
 {
@@ -20,9 +20,8 @@ namespace WarcraftLegacies.Source.Commands
       var content = SubString(enteredString, StringLength(Command), StringLength(enteredString));
       content = StringCase(content, false);
 
-      if (FactionManager.FactionWithNameExists(content))
+      if (FactionManager.TryGetFactionByName(content, out var targetFaction))
       {
-        var targetFaction = FactionManager.GetFactionByName(content);
         if (targetFaction.Player != null)
           triggerPlayer.GetTeam()?.Uninvite(targetFaction.Player);
         else
@@ -38,7 +37,7 @@ namespace WarcraftLegacies.Source.Commands
     public static void Setup()
     {
       var trig = CreateTrigger();
-      foreach (var player in WCSharp.Shared.Util.EnumeratePlayers()) TriggerRegisterPlayerChatEvent(trig, player, Command, false);
+      foreach (var player in Util.EnumeratePlayers()) TriggerRegisterPlayerChatEvent(trig, player, Command, false);
 
       TriggerAddAction(trig, Actions);
     }

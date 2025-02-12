@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MacroTools.Extensions;
+using MacroTools.Libraries;
 using MacroTools.PassiveAbilitySystem;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.PassiveAbilities
@@ -45,10 +47,10 @@ namespace MacroTools.PassiveAbilities
     {
       var caster = GetTriggerUnit();
 
-      foreach (var unit in CreateGroup().EnumUnitsInRange(caster.GetPosition(), Radius)
-                 .EmptyToList()
+      foreach (var unit in GlobalGroup.EnumUnitsInRange(caster.GetPosition(), Radius)
                  .Where(x => IsUnitReanimationCandidate(caster, x))
                  .OrderByDescending(x => x.GetLevel())
+                 .ThenBy(x => MathEx.GetDistanceBetweenPoints(caster.GetPosition(), x.GetPosition()))
                  .Take(ReanimationCountLevel * GetUnitAbilityLevel(caster, _abilityTypeId)))
       {
         Reanimate(caster.OwningPlayer(), unit);

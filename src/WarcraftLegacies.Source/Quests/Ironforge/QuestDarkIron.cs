@@ -6,7 +6,6 @@ using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Ironforge
 {
@@ -28,12 +27,12 @@ namespace WarcraftLegacies.Source.Quests.Ironforge
       AddObjective(new ObjectiveLegendInRect(magni, shadowforgeCity,
         "Shadowforge City"));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R01A_QUEST_COMPLETED_DARK_IRON_ALLIANCE;
+      ResearchId = UPGRADE_R01A_QUEST_COMPLETED_DARK_IRON_ALLIANCE;
       _rescueUnits = shadowforgeCity.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The peace talk were succesful, The Dark Iron will join the Dwarven Empire.";
 
     /// <inheritdoc />

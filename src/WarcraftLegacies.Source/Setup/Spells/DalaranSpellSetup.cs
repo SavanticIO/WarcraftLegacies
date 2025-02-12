@@ -1,7 +1,7 @@
 ﻿using MacroTools.DummyCasters;
 using MacroTools.Spells;
 using MacroTools.SpellSystem;
-using static War3Api.Common;
+using WarcraftLegacies.Source.Spells;
 
 namespace WarcraftLegacies.Source.Setup.Spells
 {
@@ -12,9 +12,9 @@ namespace WarcraftLegacies.Source.Setup.Spells
     /// </summary>
     public static void Setup()
     {
-      var enchantedBolt = new MassAnySpell(Constants.ABILITY_A10L_ENCHANTED_BOLTS_DALARAN)
+      var enchantedBolt = new MassAnySpell(ABILITY_A10L_ENCHANTED_BOLTS_DALARAN)
       {
-        DummyAbilityId = Constants.ABILITY_A10O_ENCHANTED_BOLT_DALARAN_DUMMY,
+        DummyAbilityId = ABILITY_A10O_ENCHANTED_BOLT_DALARAN_DUMMY,
         DummyAbilityOrderId = OrderId("thunderbolt"),
         Radius = 250,
         CastFilter = CastFilters.IsTargetEnemyAndAlive,
@@ -23,15 +23,32 @@ namespace WarcraftLegacies.Source.Setup.Spells
       };
       SpellSystem.Register(enchantedBolt);
 
-      SpellSystem.Register(new ChannelAnySpellCaster(Constants.ABILITY_A11A_TIME_S_SHIELD_DALARAN_2)
+      SpellSystem.Register(new ChannelAnySpellCaster(ABILITY_A11A_TIME_S_SHIELD_DALARAN_2)
       {
-        DummyAbilityId = Constants.ABILITY_A11K_TIME_S_SHIELD_DALARAN_DUMMY,
+        DummyAbilityId = ABILITY_A11K_TIME_S_SHIELD_DALARAN_DUMMY,
         DummyAbilityOrderString = "voodoo",
         Duration = 4
       });
 
-      var rebornTime = new CooldownReset(Constants.ABILITY_A10T_REBORN_THROUGH_TIME_DALARAN);
+      var rebornTime = new CooldownReset(ABILITY_A10T_REBORN_THROUGH_TIME_DALARAN);
       SpellSystem.Register(rebornTime);
+
+      var massSimulacrum = new MassSimulacrum(ABILITY_A0DG_MASS_SIMULACRUM_ORANGE_ANTONIDAS)
+      {
+        Radius = 150,
+        CountBase = 2,
+        CountLevel = 4,
+        Duration = 60,
+        Effect = @"war3mapImported\Soul Discharge Blue.mdx",
+        EffectScale = 1.1f,
+        EffectTarget = @"Abilities\Spells\Items\AIil\AIilTarget.mdl",
+        EffectScaleTarget = 1.0f,
+        HealthBonusBase = -0.5f,
+        HealthBonusLevel = 0.2f,
+        DamageBonusBase = -0.5f,
+        DamageBonusLevel = 0.2f
+      };
+      SpellSystem.Register(massSimulacrum);
     }
   }
 }

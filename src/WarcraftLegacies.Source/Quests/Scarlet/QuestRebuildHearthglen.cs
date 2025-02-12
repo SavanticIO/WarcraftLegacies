@@ -1,11 +1,9 @@
-﻿using MacroTools.ControlPointSystem;
+﻿using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
+using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using MacroTools.LegendSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
-using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 
 namespace WarcraftLegacies.Source.Quests.Scarlet
 {
@@ -25,16 +23,16 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
       
       AddObjective(new ObjectiveBuildUniqueBuildingsInRect(questRect, "in Hearthglen", 3));
       AddObjective(new ObjectiveControlCapital(monastery, false));
-      AddObjective(new ObjectiveControlLevel(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N044_HEARTHGLEN), 2));
-      ResearchId = Constants.UPGRADE_R026_QUEST_COMPLETED_HEARTHGLEN;
+      AddObjective(new ObjectiveControlLevel(UNIT_N044_HEARTHGLEN, 2));
+      ResearchId = UPGRADE_R026_QUEST_COMPLETED_HEARTHGLEN;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "With the Monastery under Scarlet control, Sally Whitemane can be brought into the fold of the Crusade's leadership in earnest.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"Learn to train Sally Whitemane from the {GetObjectName(Constants.UNIT_H0BQ_ALTAR_OF_CRUSADERS_CRUSADE_ALTAR)}";
+      $"Learn to train Sally Whitemane from the {GetObjectName(UNIT_H0BQ_ALTAR_OF_CRUSADERS_CRUSADE_ALTAR)}";
   }
 }

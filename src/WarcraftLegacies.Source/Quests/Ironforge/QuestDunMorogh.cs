@@ -1,53 +1,32 @@
-﻿using MacroTools;
-using MacroTools.ControlPointSystem;
+﻿using System.Collections.Generic;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
-using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Ironforge
 {
   public sealed class QuestDunMorogh : QuestData
   {
-    public QuestDunMorogh(PreplacedUnitSystem preplacedUnitSystem) : base("Mountain Village",
+    private readonly List<unit> _rescueUnits;
+
+    public QuestDunMorogh() : base("Mountain Village",
       "A small troll skirmish is attacking Dun Morogh. Push them back!",
       @"ReplaceableTextures\CommandButtons\BTNIceTrollShadowPriest.blp")
     {
-      AddObjective(new ObjectiveUnitIsDead(preplacedUnitSystem.GetUnit(FourCC("nith"), new Point(10673, -7188)))); //Troll High Priest
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N014_DUN_MOROGH)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N014_DUN_MOROGH));
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
-      
+      _rescueUnits = Regions.DunmoroghAmbient2.PrepareUnitsForRescue(RescuePreparationMode.Invulnerable);
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "The Trolls have been defeated, Dun Morogh will join your cause.";
+    public override string RewardFlavour => "The Trolls have been defeated, Dun Morogh will join your cause.";
 
     /// <inheritdoc/>
     protected override string RewardDescription => "Control of all units in Dun Morogh";
-
-    private static void GrantDunMorogh(player whichPlayer)
-    {
-      var tempGroup = CreateGroup();
-
-      //Transfer all Neutral Passive units in DunMorogh
-      GroupEnumUnitsInRect(tempGroup, Regions.DunmoroghAmbient2.Rect, null);
-      var u = FirstOfGroup(tempGroup);
-      while (true)
-      {
-        if (u == null) break;
-        if (GetOwningPlayer(u) == Player(PLAYER_NEUTRAL_PASSIVE)) u.Rescue(whichPlayer);
-        GroupRemoveUnit(tempGroup, u);
-        u = FirstOfGroup(tempGroup);
-      }
-
-      DestroyGroup(tempGroup);
-    }
 
     /// <inheritdoc/>
     protected override void OnFail(Faction completingFaction)
@@ -56,13 +35,10 @@ namespace WarcraftLegacies.Source.Quests.Ironforge
         ? Player(PLAYER_NEUTRAL_AGGRESSIVE)
         : completingFaction.Player;
 
-      GrantDunMorogh(rescuer);
+      rescuer.RescueGroup(_rescueUnits);
     }
 
     /// <inheritdoc/>
-    protected override void OnComplete(Faction completingFaction)
-    {
-      GrantDunMorogh(completingFaction.Player);
-    }
+    protected override void OnComplete(Faction completingFaction) => completingFaction.Player.RescueGroup(_rescueUnits);
   }
 }

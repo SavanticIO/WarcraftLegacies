@@ -1,57 +1,54 @@
-﻿using MacroTools.Extensions;
-using WarcraftLegacies.Source.Setup.FactionSetup;
-using static War3Api.Common;
+﻿using System;
+using MacroTools.Extensions;
+using MacroTools.FactionSystem;
+using MacroTools.Systems;
+using WarcraftLegacies.Source.Factions;
 
 namespace WarcraftLegacies.Source.Setup
 {
-  public static class PlayerSetup
+  public sealed class PlayerSetup
   {
-    public static void Setup()
+    private readonly PreplacedUnitSystem _preplacedUnitSystem;
+    private readonly AllLegendSetup _allLegendSetup;
+    private readonly ArtifactSetup _artifactSetup;
+
+    public PlayerSetup(PreplacedUnitSystem preplacedUnitSystem, AllLegendSetup allLegendSetup, ArtifactSetup artifactSetup)
     {
-      Player(0).SetFaction(FrostwolfSetup.Frostwolf);
-      Player(0).SetTeam(TeamSetup.Horde);
-
-      Player(9).SetFaction(LordaeronSetup.Lordaeron);
-      Player(9).SetTeam(TeamSetup.NorthAlliance);
-
-      Player(2).SetFaction(QuelthalasSetup.Quelthalas);
-      Player(2).SetTeam(TeamSetup.NorthAlliance);
-      
-      Player(3).SetFaction(ScourgeSetup.Scourge);
-      Player(3).SetTeam(TeamSetup.Legion);
-
-      Player(4).SetFaction(IronforgeSetup.Ironforge);
-      Player(4).SetTeam(TeamSetup.SouthAlliance);
-
-      Player(5).SetFaction(WarsongSetup.WarsongClan);
-      Player(5).SetTeam(TeamSetup.Horde);
-
-      Player(6).SetFaction(FelHordeSetup.FelHorde);
-      Player(6).SetTeam(TeamSetup.Outland);
-
+      _preplacedUnitSystem = preplacedUnitSystem;
+      _allLegendSetup = allLegendSetup;
+      _artifactSetup = artifactSetup;
+    }
+    
+    public void Setup()
+    {
+      SetupPlayer(Player(0), new Frostwolf(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(1), new Stormwind(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(2), new Quelthalas(_preplacedUnitSystem, _allLegendSetup));
+      SetupPlayer(Player(3), new Scourge(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(4), new Ironforge(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(6), new FelHorde(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
       Player(7).SetTeam(TeamSetup.NorthAlliance);
-      
-      Player(8).SetTeam(TeamSetup.Horde);
-      
-      Player(1).SetFaction(StormwindSetup.Stormwind);
-      Player(1).SetTeam(TeamSetup.SouthAlliance);
-
-      Player(11).SetFaction(DruidsSetup.Druids);
-      Player(11).SetTeam(TeamSetup.NightElves);
-
-      Player(13).SetFaction(DraeneiSetup.Draenei);
-      Player(13).SetTeam(TeamSetup.NightElves);
-
-      Player(18).SetFaction(SentinelsSetup.Sentinels);
-      Player(18).SetTeam(TeamSetup.NightElves);
-      
+      SetupPlayer(Player(8), new Skywall());
+      SetupPlayer(Player(9), new Lordaeron(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(11), new Druids(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(12), new BlackEmpire(_preplacedUnitSystem, _allLegendSetup));
+      SetupPlayer(Player(16), new Ahnqiraj(_preplacedUnitSystem, _allLegendSetup));
+      Player(18).SetTeam(TeamSetup.Kalimdor);
       Player(15).SetTeam(TeamSetup.Outland);
+      SetupPlayer(Player(22), new Kultiras(_preplacedUnitSystem, _allLegendSetup, _artifactSetup));
+      SetupPlayer(Player(23), new Legion(_preplacedUnitSystem, _allLegendSetup));
+    }
+    
 
-      Player(22).SetFaction(KultirasSetup.Kultiras);
-      Player(22).SetTeam(TeamSetup.SouthAlliance);
-
-      Player(23).SetFaction(LegionSetup.Legion);
-      Player(23).SetTeam(TeamSetup.Legion);
+    private static void SetupPlayer(player player, Faction faction)
+    {
+      var traditionalTeam = faction.TraditionalTeam;
+      if (traditionalTeam != null)
+        player.SetTeam(traditionalTeam);
+      else
+        throw new InvalidOperationException($"{GetPlayerName(player)}'s {nameof(Faction)} doesn't have a {nameof(Faction.TraditionalTeam)}.");
+      player.SetFaction(faction);
+      FactionManager.Register(faction);
     }
   }
 }

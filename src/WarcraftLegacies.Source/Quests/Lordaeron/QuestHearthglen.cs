@@ -6,7 +6,6 @@ using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Lordaeron
 {
@@ -29,7 +28,7 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "The walking corpses assailing Hearthglen have been put back to rest, and Hearthglen lives to see another day.";
+    public override string RewardFlavour => "The walking corpses assailing Hearthglen have been put back to rest, and Hearthglen lives to see another day.";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Control of all units in Hearthglen";

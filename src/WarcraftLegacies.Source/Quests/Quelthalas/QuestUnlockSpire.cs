@@ -6,7 +6,6 @@ using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Quelthalas
 {
@@ -33,7 +32,7 @@ namespace WarcraftLegacies.Source.Quests.Quelthalas
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "Sylvanas has been trained, the Spire has joined the Kingdom.";
+    public override string RewardFlavour => "Sylvanas has been trained, the Spire has joined the Kingdom.";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Control of the Windrunner Spire";

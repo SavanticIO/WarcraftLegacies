@@ -1,6 +1,7 @@
 ﻿using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
 using System.Collections.Generic;
+using MacroTools.Systems;
 using static War3Api.Common;
 
 namespace MacroTools.ObjectiveSystem.Objectives.TimeBased
@@ -20,7 +21,7 @@ namespace MacroTools.ObjectiveSystem.Objectives.TimeBased
     public ObjectiveExpire(int duration, string questName)
     {
       var turn = GameTime.ConvertGameTimeToTurn(duration);
-      Description = $"Complete this quest before turn {turn} has passed";
+      Description = $"Turn {turn} hasn't started";
       _expirationTimer = CreateTimer();
       _warningTimer = CreateTimer();
       TimerStart(_expirationTimer, duration, false, OnExpire);
@@ -28,7 +29,7 @@ namespace MacroTools.ObjectiveSystem.Objectives.TimeBased
       _questName = questName;
     }
 
-    internal override void OnAdd(Faction whichFaction)
+    public override void OnAdd(Faction whichFaction)
     {
       _assignedFactions.Add(whichFaction);
       Progress = QuestProgress.Complete;

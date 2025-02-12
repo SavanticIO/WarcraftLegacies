@@ -4,8 +4,6 @@ using MacroTools.ObjectiveSystem.Objectives.MetaBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using WarcraftLegacies.Source.Setup.FactionSetup;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Fel_Horde
 {
@@ -40,30 +38,15 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
       _outerWaygate2 = outerWaygate2.Show(false);
       _outerWaygate3 = outerWaygate3.Show(false);
       AddObjective(new ObjectiveEitherOf(
-        new ObjectiveResearch(Constants.UPGRADE_R02C_THE_DARK_PORTAL_FEL_HORDE, Constants.UNIT_O008_HELLFIRE_CITADEL_FEL_HORDE, true),
+        new ObjectiveResearch(UPGRADE_R02C_THE_DARK_PORTAL_FEL_HORDE, UNIT_O008_HELLFIRE_CITADEL_FEL_HORDE, true),
         new ObjectiveTime(600)));
       AddObjective(new ObjectiveTime(480));
       Global = true;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour
-    {
-      get
-      {
-        var flavour = "The Dark Portal, previously thought to have been sealed forever, has been opened once more.";
-        if (StormwindSetup.Stormwind?.ScoreStatus != ScoreStatus.Defeated)
-          flavour +=
-            " The people of Stormwind are about to relive their worst nightmares, as the demonic Fel Horde spills forth from Outland to resume their slaughterous rampage.";
-        else if (IllidariSetup.Illidari?.ScoreStatus != ScoreStatus.Defeated)
-          flavour +=
-            " Illidan's forces brace themselves, ready to visit destruction upon Azeroth in the name of their new master.";
-        else
-          flavour +=
-            " Intrepid explorers may now move freely between the otherwise distant worlds of Azeroth and Outland.";
-        return flavour;
-      }
-    }
+    public override string RewardFlavour =>
+      "The Dark Portal, previously thought to have been sealed forever, has been opened once more. The people of Stormwind are about to relive their worst nightmares, as the demonic Fel Horde spills forth from Outland to resume their slaughterous rampage.";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
@@ -74,7 +57,7 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
 
     /// <inheritdoc />
     protected override void OnAdd(Faction whichFaction) =>
-      whichFaction.ModObjectLimit(Constants.UPGRADE_R02C_THE_DARK_PORTAL_FEL_HORDE, Faction.UNLIMITED);
+      whichFaction.ModObjectLimit(UPGRADE_R02C_THE_DARK_PORTAL_FEL_HORDE, Faction.UNLIMITED);
 
     private void OpenPortal()
     {

@@ -1,6 +1,6 @@
 using System.Linq;
 using MacroTools.CommandSystem;
-using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.Cheats
@@ -12,12 +12,9 @@ namespace MacroTools.Cheats
   {
     /// <inheritdoc />
     public override string CommandText => "spawn";
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1, 2);
     
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -46,7 +43,7 @@ namespace MacroTools.Cheats
         if (!int.TryParse(parameters[1], out count))
           return "You must specify a valid count as the second parameter.";
 
-      var firstSelectedUnit = CreateGroup().EnumSelectedUnits(cheater).EmptyToList().First();
+      var firstSelectedUnit = GlobalGroup.EnumSelectedUnits(cheater).First();
       SpawnUnitsOrItems(firstSelectedUnit, objectTypeId, count);
       return $"Attempted to spawn {count} of object {GetObjectName(objectTypeId)}.";
     }

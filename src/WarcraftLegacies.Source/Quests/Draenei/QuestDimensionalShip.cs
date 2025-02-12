@@ -1,16 +1,14 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
+using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.QuestBased;
+using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using MacroTools.LegendSystem;
 using WarcraftLegacies.Source.Objectives;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
-using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 
 namespace WarcraftLegacies.Source.Quests.Draenei
 {
@@ -34,21 +32,20 @@ namespace WarcraftLegacies.Source.Quests.Draenei
       
       AddObjective(new ObjectiveQuestComplete(prerequisite));
       AddObjective(new ObjectiveTime(1200));
-      AddObjective(new ObjectiveBuildInRect(questRect, "inside the Exodar", Constants.UNIT_O056_ARCANE_WELL_DRAENEI_FARM, 10));
-      AddObjective(new ObjectiveControlLevel(
-        ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BL_EXODAR_REGALIS), 20));
+      AddObjective(new ObjectiveBuildInRect(questRect, "inside the Exodar", UNIT_O056_ARCANE_WELL_DRAENEI_FARM, 10));
+      AddObjective(new ObjectiveControlLevel(UNIT_N0BL_EXODAR_REGALIS, 20));
       _objectivePowerSource = new ObjectivePowerSource(_dimensionalGenerator, new[]
       {
-        Constants.ITEM_I006_BOOK_OF_MEDIVH,
-        Constants.ITEM_I003_EYE_OF_SARGERAS,
-        Constants.ITEM_I011_CROWN_OF_THE_TRIUMVIRATE,
-        Constants.ITEM_I018_VIAL_OF_THE_SUNWELL,
-        Constants.ITEM_I00H_SULFURAS_HAND_OF_RAGNAROS,
-        Constants.ITEM_I01Y_HELM_OF_DOMINATION
+        ITEM_I006_BOOK_OF_MEDIVH,
+        ITEM_I003_EYE_OF_SARGERAS,
+        ITEM_I011_CROWN_OF_THE_TRIUMVIRATE,
+        ITEM_I018_VIAL_OF_THE_SUNWELL,
+        ITEM_I00H_SULFURAS_HAND_OF_RAGNAROS,
+        ITEM_I01Y_HELM_OF_DOMINATION
       });
       AddObjective(_objectivePowerSource);
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R09A_QUEST_COMPLETED_THE_DIMENSIONAL_SHIP;
+      ResearchId = UPGRADE_R09A_QUEST_COMPLETED_THE_DIMENSIONAL_SHIP;
     }
 
     /// <inheritdoc/>
@@ -61,11 +58,11 @@ namespace WarcraftLegacies.Source.Quests.Draenei
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "With the acquisition of a replacement power source, the Exodar's gemcrafters set to work reigniting the ship's dimensional portals. The Dimensional Generator can now now be used to travel the planes once more.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      "The Dimensional Generator gains the ability to channel portals to Argus, Azuremyst, and Outland. The Lightforged units and A'dal will become available";
+      "The Dimensional Generator gains the ability to channel portals to Argus and Outland. The Lightforged units and A'dal will become available";
   }
 }

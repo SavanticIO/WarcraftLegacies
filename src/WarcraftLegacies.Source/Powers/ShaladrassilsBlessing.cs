@@ -1,11 +1,9 @@
-﻿using MacroTools;
-using MacroTools.ControlPointSystem;
+﻿using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using WarcraftLegacies.Source.Setup.FactionSetup;
+using MacroTools.Setup;
 using WCSharp.Events;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Powers
 {
@@ -54,17 +52,22 @@ namespace WarcraftLegacies.Source.Powers
 
     private void OnPlayerTakesDamage()
     {
+      var owner = GetTriggerUnit().OwningPlayer();
       if (!GetTriggerUnit().IsControlPoint() 
-          || _shaladrassil.OwningPlayer() != DruidsSetup.Druids?.Player 
+          || _shaladrassil.OwningPlayer() != owner
           || !(_shaladrassil.GetMana() >= _manaCost)
           || GetTriggerUnit().GetLifePercent() < 100)
         return;
-      SummonTreants(GetTriggerUnit().OwningPlayer(), GetTriggerUnit().GetPosition());
-      _shaladrassil.RestoreMana(-_manaCost);
+
+      if (SummonTreants(owner, GetTriggerUnit().GetPosition())) 
+        _shaladrassil.RestoreMana(-_manaCost);
     }
 
-    private void SummonTreants(player owningPlayer, Point point)
+    private bool SummonTreants(player owningPlayer, Point point)
     {
+      if (IsTerrainPathable(point.X, point.Y, PATHING_TYPE_WALKABILITY))
+        return false;
+
       for (var i = 0; i < _summonedUnitCount; i++)
       {
         var treant = CreateUnit(owningPlayer, _summonedUnitTypeId, point.X, point.Y, 270)
@@ -75,6 +78,8 @@ namespace WarcraftLegacies.Source.Powers
             treant.GetPosition().Y)
           .SetLifespan();
       }
+
+      return true;
     }
   }
 }

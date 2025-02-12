@@ -9,13 +9,13 @@
       "Level": 1,
       "Id": 829579623,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNFire.blp"
+      "Value": "ReplaceableTextures/CommandButtons/BTNFlameStorm.blp"
     },
     {
       "Level": 2,
       "Id": 829579623,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNBloodLustOn.blp"
+      "Value": "ReplaceableTextures\\CommandButtons\\btnmassbloodlust.blp"
     },
     {
       "Id": 2020631143,
@@ -67,13 +67,13 @@
       "Level": 1,
       "Id": 828536167,
       "Type": 3,
-      "Value": "Increases Eredar Occultists\u0027 mana capacity, mana regeneration rate, attack damage and gives them the ability to cast Firestorm."
+      "Value": "Increases Eredar Occultists\u0027 mana capacity, mana regeneration rate, hit points and gives them the ability to cast Firestorm."
     },
     {
       "Level": 2,
       "Id": 828536167,
       "Type": 3,
-      "Value": "Increases Eredar Occultists\u0027 mana capacity, mana regeneration rate, attack damage and gives them the ability to cast Mass Bloodlust."
+      "Value": "Increases Eredar Occultists\u0027 mana capacity, mana regeneration rate, hit points and gives them the ability to cast Mass Bloodlust."
     }
   ]
 }

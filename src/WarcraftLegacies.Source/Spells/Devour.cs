@@ -1,8 +1,7 @@
-﻿using MacroTools;
+﻿using MacroTools.Data;
 using MacroTools.Extensions;
 using MacroTools.SpellSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Spells
 {

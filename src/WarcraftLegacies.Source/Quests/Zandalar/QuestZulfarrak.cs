@@ -5,8 +5,6 @@ using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
-
 
 namespace WarcraftLegacies.Source.Quests.Zandalar
 {
@@ -29,7 +27,7 @@ namespace WarcraftLegacies.Source.Quests.Zandalar
       @"ReplaceableTextures\CommandButtons\BTNDarkTroll.blp")
     {
       _zulfarrak = zulfarrak;
-      ResearchId = Constants.UPGRADE_R02F_QUEST_COMPLETED_FURY_OF_THE_SANDS_WARSONG;
+      ResearchId = UPGRADE_R02F_QUEST_COMPLETED_FURY_OF_THE_SANDS_WARSONG;
       AddObjective(new ObjectiveControlCapital(zulfarrak, false));
       AddObjective(new ObjectiveLegendReachRect(zul, rescueRect, "Zul'Farrak"));
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
@@ -37,8 +35,8 @@ namespace WarcraftLegacies.Source.Quests.Zandalar
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
-      $"Zul'farrak has fallen. The Sandfury trolls lend their might to the Zandalari.";
+    public override string RewardFlavour =>
+      "Zul'farrak has fallen. The Sandfury trolls lend their might to the Zandalari.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>

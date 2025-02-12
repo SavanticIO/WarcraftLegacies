@@ -2,9 +2,9 @@
 using MacroTools.ChannelSystem;
 using MacroTools.Extensions;
 using MacroTools.SpellSystem;
+using MacroTools.Utils;
 using WCSharp.Buffs;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Spells.ExactJustice
 {
@@ -96,8 +96,7 @@ namespace WarcraftLegacies.Source.Spells.ExactJustice
       AddSpecialEffect(EffectSettings.ExplodePath, GetUnitX(Caster), GetUnitY(Caster))
         .SetScale(EffectSettings.ExplodeScale)
         .SetLifespan();
-      foreach (var unit in CreateGroup().EnumUnitsInRange(Caster.GetPosition(), Radius)
-                 .EmptyToList()
+      foreach (var unit in GlobalGroup.EnumUnitsInRange(Caster.GetPosition(), Radius)
                  .Where(target => CastFilters.IsTargetEnemyAndAlive(Caster, target)))
       {
         unit.TakeDamage(Caster, _damage, false, false, damageType: DAMAGE_TYPE_MAGIC);

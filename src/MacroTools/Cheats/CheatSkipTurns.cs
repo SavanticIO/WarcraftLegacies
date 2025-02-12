@@ -1,4 +1,5 @@
 ﻿using MacroTools.CommandSystem;
+using MacroTools.Systems;
 using static War3Api.Common;
 
 namespace MacroTools.Cheats
@@ -9,10 +10,7 @@ namespace MacroTools.Cheats
     public override string CommandText => "skipturns";
 
     /// <inheritdoc />
-    public override bool Exact => false;
-
-    /// <inheritdoc />
-    public override int MinimumParameterCount => 0;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;

@@ -1,12 +1,10 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 using WarcraftLegacies.Source.Setup.Legends;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Lordaeron
 {
@@ -15,8 +13,8 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
   /// </summary>
   public sealed class QuestThunderEagle : QuestData
   {
-    private new const int ResearchId = Constants.UPGRADE_R04L_QUEST_COMPLETED_TO_THE_SKIES_LORDAERON;
-    private const int ThunderEagleId = Constants.UNIT_NWE2_THUNDER_EAGLE_LORDAERON;
+    private new const int ResearchId = UPGRADE_R04L_QUEST_COMPLETED_TO_THE_SKIES_LORDAERON;
+    private const int ThunderEagleId = UNIT_NWE2_THUNDER_EAGLE_LORDAERON;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestThunderEagle"/> class.
@@ -26,12 +24,12 @@ namespace WarcraftLegacies.Source.Quests.Lordaeron
       @"ReplaceableTextures\CommandButtons\BTNWarEagle.blp")
     {
       AddObjective(new ObjectiveControlCapital(draktharonKeep, false));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N02S_STORM_PEAKS)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N02S_STORM_PEAKS));
     }
 
     //Todo: bad flavour
     /// <inheritdoc/>
-    protected override string RewardFlavour => "The Thunder Eagles are now in the safe hands of Lordaeron.";
+    public override string RewardFlavour => "The Thunder Eagles are now in the safe hands of Lordaeron.";
 
     /// <inheritdoc/>
     protected override string RewardDescription => "Learn to train " + GetObjectName(ThunderEagleId) + "s";

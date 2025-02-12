@@ -17,10 +17,7 @@ namespace MacroTools.Commands
     public override string CommandText => _commandText;
 
     /// <inheritdoc />
-    public override bool Exact => false;
-
-    /// <inheritdoc />
-    public override int MinimumParameterCount => 2;
+    public override ExpectedParameterCount ExpectedParameterCount => new(2);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Normal;
@@ -31,8 +28,7 @@ namespace MacroTools.Commands
     /// <inheritdoc />
     public override string Execute(player cheater, params string[] parameters)
     {
-      var targetFaction = FactionManager.GetFactionByName(parameters[0]);
-      if (targetFaction == null) 
+      if (!FactionManager.TryGetFactionByName(parameters[0], out var targetFaction))
         return $"There is no faction named {parameters[0]}.";
 
       if (targetFaction.Player == null)

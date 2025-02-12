@@ -1,10 +1,9 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
+using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using MacroTools.LegendSystem;
 using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Quests.Scarlet
@@ -27,7 +26,7 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
     {
       
       AddObjective(new ObjectiveBuildUniqueBuildingsInRect(questRect, "in Brill", 4));
-      AddObjective(new ObjectiveControlLevel(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N03H_BRILL), 2));
+      AddObjective(new ObjectiveControlLevel(UNIT_N03H_BRILL, 2));
       _renault = renault;
     }
 
@@ -38,7 +37,7 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Nobody had noticed, but until now Renault has been somewhat reserved in his actions. With his hometown now reclaimed, he shines with a new vigour.";
 
     /// <inheritdoc/>

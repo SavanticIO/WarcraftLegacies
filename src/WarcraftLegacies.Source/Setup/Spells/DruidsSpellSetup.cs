@@ -1,7 +1,8 @@
-﻿using MacroTools;
-using MacroTools.Spells;
+﻿using MacroTools.Data;
+using MacroTools.PassiveAbilitySystem;
 using MacroTools.SpellSystem;
 using WarcraftLegacies.Source.Spells;
+using WarcraftLegacies.Source.Spells.MassiveAttack;
 
 namespace WarcraftLegacies.Source.Setup.Spells
 {
@@ -9,22 +10,7 @@ namespace WarcraftLegacies.Source.Setup.Spells
   {
     public static void Setup()
     {
-      SpellSystem.Register(new RegrowTrees(Constants.ABILITY_A01A_REGROW_TREES_BROWN_NORDRASSIL)
-      {
-        Radius = 8500
-      });
-      
-      SpellSystem.Register(new RegrowTrees(Constants.ABILITY_A0G8_SACRED_GROUND_BROWN_MAIN_BUILDINGS)
-      {
-        Radius = 1500
-      });
-      
-      SpellSystem.Register(new RegrowTrees(Constants.ABILITY_A04C_SEED_GROWTH)
-      {
-        Radius = 1200
-      });
-
-      SpellSystem.Register(new Devour(Constants.ABILITY_A0NP_DEVOUR_TORTOLLA)
+      SpellSystem.Register(new Devour(ABILITY_A0NP_DEVOUR_TORTOLLA)
       {
         PercentageOfMaxHealth = 0.5f,
         Damage = new LeveledAbilityField<float>
@@ -34,7 +20,7 @@ namespace WarcraftLegacies.Source.Setup.Spells
         }
       });
 
-      SpellSystem.Register(new Devour(Constants.ABILITY_A0S0_DEVOUR_OURO)
+      SpellSystem.Register(new Devour(ABILITY_A0S0_DEVOUR_OURO)
       {
         PercentageOfMaxHealth = 0.5f,
         Damage = new LeveledAbilityField<float>
@@ -42,6 +28,12 @@ namespace WarcraftLegacies.Source.Setup.Spells
           Base = 100,
           PerLevel = 100
         }
+      });
+      
+      PassiveAbilityManager.Register(new MassiveAttackAbility(UNIT_E00A_ANCIENT_GUARDIAN_DRUIDS)
+      {
+        AttackDamagePercentage = 0.5f,
+        Distance = 700
       });
     }
   }

@@ -1,13 +1,11 @@
-﻿using MacroTools.Extensions;
+﻿using System.Collections.Generic;
+using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using MacroTools.QuestSystem;
-using MacroTools.ObjectiveSystem.Objectives.UnitBased;
-using WCSharp.Shared.Data;
-using static War3Api.Common;
-using System.Collections.Generic;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
-using MacroTools.ControlPointSystem;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
+using MacroTools.ObjectiveSystem.Objectives.UnitBased;
+using MacroTools.QuestSystem;
+using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Quests.Fel_Horde
 {
@@ -26,7 +24,7 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
     {
       
       AddObjective(new ObjectiveAnyUnitInRect(rescueRect, "Shadowmoon Valley", false));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N02T_TEROKKAR_FOREST)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N02T_TEROKKAR_FOREST));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.Invulnerable);
     }
@@ -41,7 +39,7 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "The camp in Shadowmoon Valley has been recaptured for the Fel Horde";
+    public override string RewardFlavour => "The camp in Shadowmoon Valley has been recaptured for the Fel Horde";
 
     /// <inheritdoc/>
     protected override string RewardDescription => "Gain a base with a goldmine in Shadowmoon Valley";

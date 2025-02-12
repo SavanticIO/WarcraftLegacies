@@ -24,7 +24,7 @@ namespace WarcraftLegacies.Source.Quests.Druids
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "With Shaladrassil back under Druidic control, its roots begin to swell and its branches bloom flowers anew, as if welcoming the Night elves home.";
+    public override string RewardFlavour => "With Shaladrassil back under Druidic control, its roots begin to swell and its branches bloom flowers anew, as if welcoming the Night elves home.";
     
     /// <inheritdoc />
     protected override string RewardDescription => "You gain the Shaladrassil's Blessing Power";
@@ -33,7 +33,7 @@ namespace WarcraftLegacies.Source.Quests.Druids
     protected override void OnComplete(Faction completingFaction)
     {
       var power = new ShaladrassilsBlessing(_shaladrassil.Unit,
-        Constants.UNIT_EFON_TREANT_DRUIDS_SUMMONED, 60, 12, 50)
+        UNIT_EFON_TREANT_DRUIDS_SUMMONED, 60, 8, 100)
       {
         IconName = "TreeOfEternity"
       };

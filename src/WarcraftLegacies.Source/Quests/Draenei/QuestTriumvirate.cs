@@ -1,12 +1,10 @@
 using MacroTools.ArtifactSystem;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Draenei
 {
@@ -19,15 +17,15 @@ namespace WarcraftLegacies.Source.Quests.Draenei
       @"ReplaceableTextures\CommandButtons\BTNNeverMeltingCrown.blp")
     {
       _velen = velen;
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n0BH"))));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n0BL"))));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(FourCC("n09X"))));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BH_EREDATH));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BL_EXODAR_REGALIS, 0));
+      AddObjective(new ObjectiveControlPoint(UNIT_N09X_SHATTRATH_CITY));
       AddObjective(new ObjectiveLegendNotPermanentlyDead(velen));
       Global = true;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "Velen has liberated Argus and re-assembled the Crown of Triumvirate";
+    public override string RewardFlavour => "Velen has liberated Argus and re-assembled the Crown of Triumvirate";
 
     /// <inheritdoc />
     protected override string RewardDescription => "You gain the powerful item, the Crown of the Triumvirate";
@@ -35,7 +33,7 @@ namespace WarcraftLegacies.Source.Quests.Draenei
     /// <inheritdoc />
     protected override void OnComplete(Faction completingFaction)
     {
-      var crownOfTheTriumvirate = new Artifact(CreateItem(Constants.ITEM_I011_CROWN_OF_THE_TRIUMVIRATE, 0, 0));
+      var crownOfTheTriumvirate = new Artifact(CreateItem(ITEM_I011_CROWN_OF_THE_TRIUMVIRATE, 0, 0));
       ArtifactManager.Register(crownOfTheTriumvirate);
       _velen.Unit?.AddItemSafe(crownOfTheTriumvirate.Item);
     }

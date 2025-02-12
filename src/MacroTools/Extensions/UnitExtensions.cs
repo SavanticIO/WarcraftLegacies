@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MacroTools.ControlPointSystem;
 using MacroTools.LegendSystem;
 using MacroTools.Libraries;
+using MacroTools.Systems;
 using WCSharp.Shared.Data;
 using static War3Api.Common;
 using static MacroTools.Libraries.GeneralHelpers;
@@ -36,19 +37,6 @@ namespace MacroTools.Extensions
     public static unit ShowAttackUi(this unit whichUnit, bool show, int weaponSlot = 0)
     {
       BlzSetUnitWeaponBooleanField(whichUnit, UNIT_WEAPON_BF_ATTACK_SHOW_UI, weaponSlot, show);
-      return whichUnit;
-    }
-    
-    /// <summary>
-    /// Removes trees in a radius around a unit
-    /// </summary>
-    public static unit RemoveDestructablesInRadius(this unit whichUnit, float radius)
-    {
-      EnumDestructablesInCircle(radius,new Point(whichUnit.GetPosition().X,whichUnit.GetPosition().Y),
-        () =>
-        {
-          RemoveDestructable(GetEnumDestructable());
-        });
       return whichUnit;
     }
 
@@ -102,6 +90,14 @@ namespace MacroTools.Extensions
     {
       SetUnitState(whichUnit, UNIT_STATE_LIFE, value);
       return whichUnit;
+    }
+    
+    /// <summary>
+    /// Sets the unit's current hit points.
+    /// </summary>
+    public static int GetCurrentHitPoints(this unit whichUnit)
+    {
+      return (int)GetUnitState(whichUnit, UNIT_STATE_LIFE);
     }
 
     /// <summary>
@@ -205,7 +201,7 @@ namespace MacroTools.Extensions
     public static unit SetTimedLife(this unit whichUnit, float duration, int buffId = 0)
     {
       if (duration < 1)
-        throw new ArgumentException($"Cannot apply a timed life with a {nameof(duration)} less than 1.");
+        BlzUnitCancelTimedLife(whichUnit);
 
       UnitApplyTimedLife(whichUnit, buffId, duration);
       return whichUnit;
@@ -229,14 +225,26 @@ namespace MacroTools.Extensions
     }
 
     /// <summary>
-    /// Sets the unit's animation speed.
+    /// Sets the unit's active animation.
     /// </summary>
-    /// <param name="whichUnit">The unit to set animation speed for.</param>
+    /// <param name="whichUnit">The unit to set the animation for.</param>
     /// <param name="animation">The name of the animation to play, e.g. "birth".</param>
     /// <returns>The same unit that was passed in.</returns>
     public static unit SetAnimation(this unit whichUnit, string animation)
     {
       SetUnitAnimation(whichUnit, animation);
+      return whichUnit;
+    }
+    
+    /// <summary>
+    /// Queue an animation so it plays after the current one.
+    /// </summary>
+    /// <param name="whichUnit">The unit to queue the animation for.</param>
+    /// <param name="animation">The name of the animation to queue, e.g. "birth".</param>
+    /// <returns>The same unit that was passed in.</returns>
+    public static unit QueueAnimation(this unit whichUnit, string animation)
+    {
+      QueueUnitAnimation(whichUnit, animation);
       return whichUnit;
     }
 
@@ -397,7 +405,7 @@ namespace MacroTools.Extensions
     }
 
     /// <summary>
-    /// Returns the current owner of the specified unit/
+    /// Returns the current owner of the specified unit.
     /// </summary>
     public static player OwningPlayer(this unit unit)
     {
@@ -625,6 +633,18 @@ namespace MacroTools.Extensions
       BlzSetUnitBaseDamage(whichUnit, R2I(I2R(BlzGetUnitBaseDamage(whichUnit, weaponIndex)) * multiplier), weaponIndex);
       return whichUnit;
     }
+    
+    /// <summary>
+    /// Multiplies the specified unit's attack cooldown by the specified amount.
+    /// </summary>
+    /// <param name="whichUnit">The unit to affect.</param>
+    /// <param name="multiplier">The amount to multiply attack speed by.</param>
+    /// <param name="weaponIndex">Which weapon to change; can be 1 or 2.</param>
+    public static unit MultiplyAttackCooldown(this unit whichUnit, float multiplier, int weaponIndex)
+    {
+      BlzSetUnitAttackCooldown(whichUnit, BlzGetUnitAttackCooldown(whichUnit, weaponIndex) * multiplier, weaponIndex);
+      return whichUnit;
+    }
 
     /// <summary>
     /// Multiplities the specified unit's hit points by the specified amount.
@@ -788,14 +808,19 @@ namespace MacroTools.Extensions
         });
       return whichUnit;
     }
-
+    
     /// <summary>
-    /// Activates an ability's full cooldown for a unit.
+    /// Starts an ability's cooldown.
     /// </summary>
-    public static unit StartUnitAbilityCooldownFull(this unit whichUnit, int abilCode)
+    /// <param name="whichUnit">The unit to start the cooldown for.</param>
+    /// <param name="abilCode">The ability to start the cooldown for.</param>
+    /// <param name="cooldown">How long the cooldown should be. Defaults to the full cooldown of the ability.</param>
+    /// <returns></returns>
+    public static unit StartAbilityCooldown(this unit whichUnit, int abilCode, float? cooldown = null)
     {
-      var fullCooldown = BlzGetUnitAbilityCooldown(whichUnit, abilCode, 0);
-      BlzStartUnitAbilityCooldown(whichUnit, abilCode, fullCooldown);
+      BlzEndUnitAbilityCooldown(whichUnit, abilCode);
+      cooldown ??= BlzGetUnitAbilityCooldown(whichUnit, abilCode, 0);
+      BlzStartUnitAbilityCooldown(whichUnit, abilCode, cooldown.Value);
       return whichUnit;
     }
 
@@ -883,6 +908,20 @@ namespace MacroTools.Extensions
       var unitType = UnitType.GetFromHandle(whichUnit);
       return !CapitalManager.UnitIsCapital(whichUnit) && !CapitalManager.UnitIsProtector(whichUnit) &&
              !ControlPointManager.Instance.UnitIsControlPoint(whichUnit) && !unitType.NeverDelete;
+    }
+
+    /// <summary>
+    /// Returns true if the unit can be selected, i.e. it does not have Locust.
+    /// </summary>
+    public static bool IsSelectable(this unit whichUnit) => GetUnitAbilityLevel(whichUnit, FourCC("Aloc")) == 0;
+
+    /// <summary>
+    /// Returns true if the unit is classifed as a boat unit, i.e. has movement type 16.
+    /// </summary>
+    public static bool IsUnitBoat(this unit whichUnit)
+    {
+      var movementType = BlzGetUnitIntegerField(whichUnit, UNIT_IF_MOVE_TYPE);
+      return movementType == 16;
     }
   }
 }

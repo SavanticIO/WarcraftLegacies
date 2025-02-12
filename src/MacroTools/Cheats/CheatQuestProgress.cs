@@ -16,12 +16,9 @@ namespace MacroTools.Cheats
 
     /// <inheritdoc />
     public override string CommandText => _commandText;
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1, 2);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -50,9 +47,8 @@ namespace MacroTools.Cheats
       }
       else
       {
-        faction = FactionManager.GetFactionByName(parameters[1]);
-        if (faction == null) 
-          return $"{parameters[1]} is not a valid {nameof(Faction)}.";
+        if (!FactionManager.TryGetFactionByName(parameters[1], out faction))
+          return $"There is no faction named {parameters[0]}.";
       }
       
       var quest = faction.GetQuestByTitle(parameters[0]);

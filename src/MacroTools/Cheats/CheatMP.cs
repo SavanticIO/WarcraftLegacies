@@ -1,5 +1,6 @@
 using MacroTools.CommandSystem;
 using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.Cheats
@@ -8,12 +9,9 @@ namespace MacroTools.Cheats
   {
     /// <inheritdoc />
     public override string CommandText => "mp";
-    
+
     /// <inheritdoc />
-    public override bool Exact => false;
-    
-    /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1);
     
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -27,7 +25,7 @@ namespace MacroTools.Cheats
       if (!int.TryParse(parameters[0], out var mana))
         return "You must specify a valid integer as the first parameter.";
 
-      foreach (var unit in CreateGroup().EnumSelectedUnits(cheater).EmptyToList()) 
+      foreach (var unit in GlobalGroup.EnumSelectedUnits(cheater)) 
         unit.SetMana(mana);
       return $"Setting mana of selected units to {mana}.";
     }

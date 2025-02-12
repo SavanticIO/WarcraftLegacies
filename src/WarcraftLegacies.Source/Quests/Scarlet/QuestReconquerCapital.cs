@@ -1,12 +1,11 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
+using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
+using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using MacroTools.LegendSystem;
 using WCSharp.Shared.Data;
-using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 
 namespace WarcraftLegacies.Source.Quests.Scarlet
 {
@@ -32,8 +31,7 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
       
       AddObjective(new ObjectiveBuildUniqueBuildingsInRect(questRect, "in Capital City", 3));
       AddObjective(new ObjectiveControlCapital(capitalPalace, false));
-      AddObjective(new ObjectiveControlLevel(
-        ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N01G_LORDAERON_CITY), 4));
+      AddObjective(new ObjectiveControlLevel(UNIT_N01G_LORDAERON_CITY, 4));
       _saiden = saiden;
       _renault = renault;
       _sally = sally;
@@ -50,7 +48,7 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Scarlet Crusade has successfully rebuilt Lordaeron City, cementing their position as the rightful successors of Lordaeron's legacy.";
 
     /// <inheritdoc/>

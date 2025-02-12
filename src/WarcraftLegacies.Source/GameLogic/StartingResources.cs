@@ -1,5 +1,5 @@
 ﻿using MacroTools.Extensions;
-using static War3Api.Common;
+using WCSharp.Shared;
 
 namespace WarcraftLegacies.Source.GameLogic
 {
@@ -17,12 +17,11 @@ namespace WarcraftLegacies.Source.GameLogic
       TriggerRegisterTimerEvent(trig, 58, false);
       TriggerAddAction(trig, () =>
       {
-        foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+        foreach (var player in Util.EnumeratePlayers())
         {
           var faction = player.GetFaction();
           if (faction == null) continue;
           SetPlayerState(player, PLAYER_STATE_RESOURCE_GOLD, faction.StartingGold);
-          SetPlayerState(player, PLAYER_STATE_RESOURCE_LUMBER, faction.StartingLumber);
           SetPlayerState(player, PLAYER_STATE_RESOURCE_HERO_TOKENS, 1);
         }
       });

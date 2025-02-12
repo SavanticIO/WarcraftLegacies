@@ -4,6 +4,7 @@ using MacroTools.CommandSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.Libraries;
+using MacroTools.Utils;
 using WCSharp.Shared.Data;
 using static War3Api.Common;
 
@@ -16,12 +17,9 @@ namespace MacroTools.Commands
   {
     /// <inheritdoc />
     public override string CommandText => "limited";
-    
+
     /// <inheritdoc />
-    public override bool Exact => true;
-  
-    /// <inheritdoc />
-    public override int MinimumParameterCount => 0;
+    public override ExpectedParameterCount ExpectedParameterCount => new(0);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Normal;
@@ -34,9 +32,8 @@ namespace MacroTools.Commands
     {
       var pingedPositions = new HashSet<Point>();
       
-      var limitedUnits = CreateGroup()
+      var limitedUnits = GlobalGroup
         .EnumUnitsOfPlayer(commandUser)
-        .EmptyToList()
         .Where(u => commandUser.GetObjectLimit(u.GetTypeId()) is > 0 and < Faction.UNLIMITED && u.IsAlive());
 
       foreach (var unit in limitedUnits)

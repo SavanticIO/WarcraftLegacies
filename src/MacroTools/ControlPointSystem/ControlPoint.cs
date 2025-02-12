@@ -1,4 +1,5 @@
 using System;
+using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using static War3Api.Common;
 
@@ -14,14 +15,15 @@ namespace MacroTools.ControlPointSystem
     private float _controlLevel;
 
     /// <summary>
-    ///   Invoked when the <see cref="ControlPoint" /> changes its owner.
-    /// </summary>
-    public event EventHandler<ControlPointOwnerChangeEventArgs>? ChangedOwner;
-
-    /// <summary>
     /// Fired when the <see cref="ControlLevel"/> of this <see cref="ControlPoint"/> changes.
     /// </summary>
     public event EventHandler? ControlLevelChanged;
+
+    /// <summary>
+    /// The owner of this <see cref="ControlPoint"/> changed their alliances, or the <see cref="ControlPoint"/> itself
+    /// changed ownership.
+    /// </summary>
+    public event EventHandler<ControlPoint>? OwnerAllianceChanged;
     
     /// <summary>
     /// A tower that appears on the <see cref="ControlPoint"/> when its <see cref="ControlLevel"/> exceeds 0.
@@ -33,6 +35,11 @@ namespace MacroTools.ControlPointSystem
     /// </summary>
     public player Owner => GetOwningPlayer(Unit);
 
+    /// <summary>
+    /// Whether or not this <see cref="ControlPoint"/> can gain levels.
+    /// </summary>
+    public bool UseControlLevels { get; }
+    
     /// <summary>
     ///   How much gold this <see cref="ControlPoint" /> grants per minute.
     /// </summary>
@@ -46,7 +53,7 @@ namespace MacroTools.ControlPointSystem
     /// <summary>
     /// A user-friendly name for the <see cref="ControlPoint"/>.
     /// </summary>
-    public string Name => GetUnitName(Unit);
+    public string Name { get; }
 
     /// <summary>
     /// The unit representing the <see cref="ControlPoint"/>.
@@ -66,21 +73,37 @@ namespace MacroTools.ControlPointSystem
         ControlLevelChanged?.Invoke(this, EventArgs.Empty);
       }
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ControlPoint"/> class.
     /// </summary>
     /// <param name="representingUnit">The unit representing the <see cref="ControlPoint"/>.</param>
     /// <param name="value">The gold income granted by the <see cref="ControlPoint"/>.</param>
-    public ControlPoint(unit representingUnit, float value)
+    /// <param name="useControlLevels">Whether or not this <see cref="ControlPoint"/> can gain levels.</param>
+    public ControlPoint(unit representingUnit, float value, bool useControlLevels)
     {
       Unit = representingUnit;
       Value = value;
+      Name = representingUnit.GetName();
+      UseControlLevels = useControlLevels;
     }
 
     /// <summary>
-    /// Invokes the <see cref="ChangedOwner"/> event with the provided arguments.
+    /// Fired when the <see cref="ControlPoint"/> is registered.
     /// </summary>
-    public void SignalOwnershipChange(ControlPointOwnerChangeEventArgs args) => ChangedOwner?.Invoke(this, args);
+    internal void OnRegister()
+    {
+      CreateTrigger()
+        .RegisterUnitEvent(Unit, EVENT_UNIT_CHANGE_OWNER)
+        .AddAction(() =>
+        {
+          SignalOwnerAllianceChange();
+        });
+    }
+
+    /// <summary>
+    /// Signals that the <see cref="ControlPoint"/>'s <see cref="ControlPoint.Owner"/> has changed its alliances.
+    /// </summary>
+    internal void SignalOwnerAllianceChange() => OwnerAllianceChanged?.Invoke(this, this);
   }
 }

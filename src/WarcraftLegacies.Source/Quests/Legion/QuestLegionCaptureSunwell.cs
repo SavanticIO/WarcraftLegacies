@@ -11,11 +11,11 @@ namespace WarcraftLegacies.Source.Quests.Legion
       @"ReplaceableTextures\CommandButtons\BTNOrbOfCorruption.blp")
     {
       AddObjective(new ObjectiveControlCapital(sunwell, false));
-      ResearchId = Constants.UPGRADE_R054_QUEST_COMPLETED_FALL_OF_SILVERMOON;
+      ResearchId = UPGRADE_R054_QUEST_COMPLETED_FALL_OF_SILVERMOON;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Dreadlords drink freely of the Sunwell. The energies that once coursed through the waters of the well now course through the veins of the Nazrethim, infusing them with power enough to tear holes in dimensions.";
 
     /// <inheritdoc/>

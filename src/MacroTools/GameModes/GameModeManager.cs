@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.GameModes
@@ -66,9 +67,12 @@ namespace MacroTools.GameModes
 
       GetExpiredTimer().Destroy();
       DialogClear(dialog);
-      
+
       foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+      {
+        DisplayTextToPlayer(player, 0, 0, $"The {highestVotedGameMode.GameMode.Name} game mode has been chosen.");
         DialogDisplay(player, dialog, false);
+      }
       
       foreach (var trigger in buttonClickTriggers)
         trigger.Destroy();

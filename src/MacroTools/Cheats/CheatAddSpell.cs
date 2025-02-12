@@ -1,5 +1,5 @@
 ﻿using MacroTools.CommandSystem;
-using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.Cheats
@@ -11,12 +11,9 @@ namespace MacroTools.Cheats
   {
     /// <inheritdoc />
     public override string CommandText => "add";
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -40,7 +37,7 @@ namespace MacroTools.Cheats
         return "That is not a valid object ID for this map.";
       }
       
-      foreach (var unit in CreateGroup().EnumSelectedUnits(cheater).EmptyToList())
+      foreach (var unit in GlobalGroup.EnumSelectedUnits(cheater))
         UnitAddAbility(unit, fourCc);
 
       return $"Adding {objectName} to selected units.";

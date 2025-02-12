@@ -1,4 +1,4 @@
-﻿using static War3Api.Common;
+﻿using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Setup
 {
@@ -27,7 +27,7 @@ namespace WarcraftLegacies.Source.Setup
         FourCC("B011"),
       };
 
-      EnumDestructablesInRect(WCSharp.Shared.Data.Rectangle.WorldBounds.Rect, null, () =>
+      EnumDestructablesInRect(Rectangle.WorldBounds.Rect, null, () =>
       {
         foreach (var pathingBlocker in pathingBlockers)
         {

@@ -1,7 +1,6 @@
-﻿using MacroTools.QuestSystem;
-using static War3Api.Common;
+﻿using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
-using MacroTools.LegendSystem;
+using MacroTools.QuestSystem;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -19,16 +18,16 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
     {
       _cairne = cairne;
       AddObjective(new ObjectiveLegendLevel(cairne, 8));
-      ResearchId = Constants.UPGRADE_R0AB_QUEST_COMPLETED_RAGETOTEM_TRIBE;
+      ResearchId = UPGRADE_R0AB_QUEST_COMPLETED_RAGETOTEM_TRIBE;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Tales of Cairne's strength and wisdom reverberate throughout Kalimdor. As strength is drawn to strength, the Ragetotem are drawn to the Bloodhoof.";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      $"Learn to train {GetObjectName(Constants.UNIT_O06T_TAUREN_GLADIATOR_FROSTWOLF)}s from the {GetObjectName(Constants.UNIT_OTTO_TAUREN_TOTEM_FROSTWOLF_SIEGE)}";
+      $"Learn to train {GetObjectName(UNIT_O06T_TAUREN_GLADIATOR_FROSTWOLF)}s from the {GetObjectName(UNIT_OTTO_TAUREN_TOTEM_FROSTWOLF_SIEGE)}";
 
   }
 }

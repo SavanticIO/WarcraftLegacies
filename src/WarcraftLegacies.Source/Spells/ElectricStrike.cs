@@ -1,10 +1,9 @@
 using System;
 using MacroTools.DummyCasters;
-using MacroTools.Extensions;
 using MacroTools.SpellSystem;
+using MacroTools.Utils;
 using WCSharp.Effects;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Spells
 {
@@ -54,7 +53,7 @@ namespace WarcraftLegacies.Source.Spells
       try
       {
         EffectSystem.Add(AddSpecialEffect(Effect, targetPoint.X, targetPoint.Y));
-        foreach (var unit in CreateGroup().EnumUnitsInRange(targetPoint, Radius).EmptyToList())
+        foreach (var unit in GlobalGroup.EnumUnitsInRange(targetPoint, Radius))
         {
           if (IsUnitType(unit, UNIT_TYPE_STRUCTURE) || !UnitAlive(unit)) 
             continue;

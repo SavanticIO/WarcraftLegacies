@@ -2,6 +2,8 @@
 using System.Linq;
 using MacroTools.Extensions;
 using MacroTools.LegendSystem;
+using MacroTools.Systems;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.FactionSystem
@@ -11,11 +13,8 @@ namespace MacroTools.FactionSystem
   /// </summary>
   public static class PlayerDistributor
   {
-    /// <summary>How much gold and lumber is refunded from units that get refunded when a player leaves.</summary>
+    /// <summary>How much gold is refunded from units that get refunded when a player leaves.</summary>
     private const float RefundMultiplier = 1;
-
-    /// <summary>How much experience is transferred from heroes that leave the game.</summary>
-    private const float ExperienceTransferMultiplier = 1;
     
     /// <summary>The gold cost value of a hero.</summary>
     public const int HeroCost = 100;
@@ -26,20 +25,17 @@ namespace MacroTools.FactionSystem
     public static void DistributePlayer(player player)
     {
       var eligiblePlayers = GetPlayersEligibleForReceivingDistribution(player);
-
-      if (eligiblePlayers.Any() && GameTime.GetGameTime() > GameTime.TurnDuration)
-        DistributePlayer(player, eligiblePlayers);
+      if (eligiblePlayers.Any())
+      {
+        var resourcesToRefund = DistributeAndRefundUnits(player, eligiblePlayers);
+        DistributeGold(player, eligiblePlayers, resourcesToRefund);
+        DistributeExperience(eligiblePlayers, resourcesToRefund.Experience);
+      }
       else
-        player
-          .RemoveAllResources()
-          .RemoveAllUnits();
-    }
-
-    private static void DistributePlayer(player player, List<player> eligiblePlayers)
-    {
-      var resourcesToRefund = DistributeAndRefundUnits(player, eligiblePlayers);
-      DistributeGoldAndLumber(player, eligiblePlayers, resourcesToRefund);
-      DistributeExperience(eligiblePlayers, resourcesToRefund.Experience);
+      {
+        player.RemoveAllUnits();
+        player.RemoveAllResources();
+      }
     }
 
     private static List<player> GetPlayersEligibleForReceivingDistribution(player playerBeingDistributed)
@@ -64,34 +60,29 @@ namespace MacroTools.FactionSystem
 
     private static void DistributeExperience(List<player> playersToDistributeTo, int experience)
     {
+      var experiencePerPlayer = experience / playersToDistributeTo.Count;
       foreach (var ally in playersToDistributeTo)
       {
-        var allyHeroes = CreateGroup()
+        var allyHeroes = GlobalGroup
           .EnumUnitsOfPlayer(ally)
-          .EmptyToList()
           .FindAll(unit => IsUnitType(unit, UNIT_TYPE_HERO));
 
         foreach (var hero in allyHeroes)
         {
-          var expToAdd = (int)((float)experience / (playersToDistributeTo.Count - 1) / allyHeroes.Count * ExperienceTransferMultiplier);
+          var expToAdd = (int)((float)experiencePerPlayer / allyHeroes.Count);
           AddHeroXP(hero, expToAdd, true);
         }
       }
     }
 
-    private static void DistributeGoldAndLumber(player playerToDistribute, List<player> playersToDistributeTo, UnitsRefund refund)
+    private static void DistributeGold(player playerToDistribute, List<player> playersToDistributeTo, UnitsRefund refund)
     {
       var goldToDistribute = refund.Gold + playerToDistribute.GetGold();
-      var lumberToDistribute = refund.Lumber + playerToDistribute.GetLumber();
       
-      foreach (var player in playersToDistributeTo)
-      {
+      foreach (var player in playersToDistributeTo) 
         player.AddGold(goldToDistribute / playersToDistributeTo.Count);
-        player.AddLumber(lumberToDistribute / playersToDistributeTo.Count);
-      }
 
       playerToDistribute.SetGold(0);
-      playerToDistribute.SetLumber(0);
     }
 
     /// <summary>
@@ -102,9 +93,8 @@ namespace MacroTools.FactionSystem
     /// <returns>Resources to be refunded from units that the process removes.</returns>
     private static UnitsRefund DistributeAndRefundUnits(player playerToDistribute, IReadOnlyList<player> playersToDistributeTo)
     {
-      var playerUnits = CreateGroup()
-        .EnumUnitsOfPlayer(playerToDistribute)
-        .EmptyToList();
+      var playerUnits = GlobalGroup
+        .EnumUnitsOfPlayer(playerToDistribute);
 
       var refund = new UnitsRefund();
       foreach (var unit in playerUnits)
@@ -128,11 +118,8 @@ namespace MacroTools.FactionSystem
 
         if (unit.IsRemovable())
         {
-          if (!IsUnitType(unit, UNIT_TYPE_STRUCTURE))
-          {
+          if (!IsUnitType(unit, UNIT_TYPE_STRUCTURE)) 
             refund.Gold += loopUnitType.GoldCost * RefundMultiplier;
-            refund.Lumber += loopUnitType.LumberCost * RefundMultiplier;
-          }
           unit
             .DropAllItems()
             .Kill()
@@ -154,9 +141,6 @@ namespace MacroTools.FactionSystem
     {
       /// <summary>Any gold that has been refunded.</summary>
       public float Gold { get; set; }
-      
-      /// <summary>Any lumber that has been refunded.</summary>
-      public float Lumber { get; set; }
       
       /// <summary>Any hero experience that has been refunded.</summary>
       public int Experience { get; set; }

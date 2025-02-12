@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using MacroTools;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
+using MacroTools.Systems;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Zandalar
 {
@@ -27,20 +25,20 @@ namespace WarcraftLegacies.Source.Quests.Zandalar
     public QuestZandalar(Rectangle rescueRect, PreplacedUnitSystem preplacedUnitSystem) : base("City of Gold", "We need to regain control of our land.",
       @"ReplaceableTextures\CommandButtons\BTNBloodTrollMage.blp")
     {
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N092_ZUL_FARRAK)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N0BK_LOST_CITY_OF_THE_TOL_VIR)));
-      AddObjective(new ObjectiveControlPoint(ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N025_UN_GORO_CRATER)));
-      AddObjective(new ObjectiveUpgrade(Constants.UNIT_O03Z_FORTRESS_ZANDALARI_T3, Constants.UNIT_O03Y_STRONGHOLD_ZANDALARI_T2));
+      AddObjective(new ObjectiveControlPoint(UNIT_N092_ZUL_FARRAK));
+      AddObjective(new ObjectiveControlPoint(UNIT_N0BK_LOST_CITY_OF_THE_TOL_VIR));
+      AddObjective(new ObjectiveControlPoint(UNIT_N025_UN_GORO_CRATER));
+      AddObjective(new ObjectiveUpgrade(UNIT_O03Z_FORTRESS_ZANDALARI_T3, UNIT_O03Y_STRONGHOLD_ZANDALARI_T2));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R04W_QUEST_COMPLETED_CITY_OF_GOLD;
+      ResearchId = UPGRADE_R04W_QUEST_COMPLETED_CITY_OF_GOLD;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.Invulnerable);
       //For some reason that one dock just does not get rescured even though it is inside the rect so we add it manually here.
-      _rescueUnits.Add(preplacedUnitSystem.GetUnit(Constants.UNIT_O049_GOLDEN_DOCK_ZANDALARI_SHIPYARD, new Point(-3738, -16911)));
+      _rescueUnits.Add(preplacedUnitSystem.GetUnit(UNIT_O049_GOLDEN_DOCK_ZANDALARI_SHIPYARD, new Point(-3738, -16911)));
       
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The City of Gold is now yours to command and has joined the Zandalari";
 
     /// <inheritdoc/>
@@ -60,11 +58,9 @@ namespace WarcraftLegacies.Source.Quests.Zandalar
     /// <inheritdoc/>
     protected override void OnComplete(Faction completingFaction)
     {
-      if(completingFaction.Player != null)
-        completingFaction.Player.RescueGroup(_rescueUnits);
-      
-      if (GetLocalPlayer() == completingFaction.Player) 
-        PlayThematicMusic("war3mapImported\\ZandalarTheme.mp3");
+      completingFaction.Player?
+        .PlayMusicThematic("war3mapImported\\ZandalarTheme.mp3")
+        .RescueGroup(_rescueUnits);
     }
   }
 }

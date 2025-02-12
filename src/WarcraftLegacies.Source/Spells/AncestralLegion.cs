@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using MacroTools;
+using MacroTools.Data;
 using MacroTools.Extensions;
 using MacroTools.SpellSystem;
 using WCSharp.Events;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Spells
 {

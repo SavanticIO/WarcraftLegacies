@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using MacroTools.QuestSystem;
-using WCSharp.Shared.Data;
-using static War3Api.Common;
-using static War3Api.Blizzard;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
+using MacroTools.ObjectiveSystem.Objectives.QuestBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
-using System.Linq;
+using MacroTools.QuestSystem;
+using MacroTools.Utils;
+using WCSharp.Shared.Data;
+using static War3Api.Blizzard;
 
 namespace WarcraftLegacies.Source.Quests.KulTiras
 {
@@ -26,24 +27,23 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
     /// </summary>
     /// <param name="rescueRect">All units in this area will be made neutral, then rescued when the quest is completed.</param>
     /// <param name="proudmooreCapitalShip">starts invulnerable and unusable. Made usuable and vulnerable when the quest is completed.</param>
-    /// <param name="legendBoralus">Must be controlled to complete the quest.</param>
     /// <param name="daelinProudmoore">Must be controlled to complete the quest.</param>
-    public QuestUnlockShip(Rectangle rescueRect, unit proudmooreCapitalShip, Capital legendBoralus,
-      LegendaryHero daelinProudmoore) : base("Stranglethorn Expedition",
+    /// <param name="prerequisite">Needs to be completed first.</param>
+    public QuestUnlockShip(Rectangle rescueRect, unit proudmooreCapitalShip, LegendaryHero daelinProudmoore,
+      QuestData prerequisite) : base("Stranglethorn Expedition",
       "The Stranglethorn vale is still infested with trolls and pirates. If peace is to be brought back to the South Alliance, it needs to be purged",
       @"ReplaceableTextures\CommandButtons\BTNGalleonIcon.blp")
     {
-      AddObjective(new ObjectiveControlCapital(legendBoralus, false));
+      AddObjective(new ObjectiveQuestComplete(prerequisite));
       AddObjective(new ObjectiveControlLegend(daelinProudmoore, false));
-      AddObjective(new ObjectiveResearch(Constants.UPGRADE_R05J_STRANGLETHORN_EXPEDITION_KULTIRAS, Constants.UNIT_H046_BORALUS_KEEP_KUL_TIRAS));
+      AddObjective(new ObjectiveResearch(UPGRADE_R05J_STRANGLETHORN_EXPEDITION_KULTIRAS, UNIT_H046_BORALUS_KEEP_KUL_TIRAS));
       AddObjective(new ObjectiveSelfExists());
       _proudmooreCapitalShip = proudmooreCapitalShip;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
-      
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => "The capital ship will set sail with the Kul'tiran navy army to Stranglethorn Vale.";
+    public override string RewardFlavour => "The capital ship will set sail with the Kul'tiran navy army to Stranglethorn Vale.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
@@ -70,14 +70,13 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
 
     private static void MoveStranglethorn(player whichPlayer)
     {
-      foreach (var unit in CreateGroup().EnumUnitsInRect(Rectangle.WorldBounds).EmptyToList().Where(x => x.OwningPlayer() == whichPlayer))
+      foreach (var unit in GlobalGroup.EnumUnitsInRect(Rectangle.WorldBounds).Where(x => x.OwningPlayer() == whichPlayer))
       {
         if (!IsUnitType(unit, UNIT_TYPE_STRUCTURE) && !IsUnitType(unit, UNIT_TYPE_ANCIENT) && !IsUnitType(unit, UNIT_TYPE_PEON))
           SetUnitPosition(unit, 6864, -17176);
       }
 
-      if (GetLocalPlayer() == whichPlayer)
-        SetCameraPosition(6864, -17176);
+      whichPlayer.RepositionCamera(6864, -17176);
     }
 
     /// <inheritdoc/>

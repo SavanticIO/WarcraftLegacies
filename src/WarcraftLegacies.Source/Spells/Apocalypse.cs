@@ -1,10 +1,9 @@
 ﻿using System;
-using MacroTools;
+using MacroTools.Data;
 using MacroTools.Extensions;
 using MacroTools.Libraries;
 using MacroTools.SpellSystem;
 using WCSharp.Missiles;
-using static War3Api.Common;
 using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Spells

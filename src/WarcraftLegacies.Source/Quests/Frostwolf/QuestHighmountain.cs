@@ -1,11 +1,10 @@
-﻿using MacroTools.QuestSystem;
-using static War3Api.Common;
-using MacroTools.ObjectiveSystem.Objectives.LegendBased;
-using MacroTools.LegendSystem;
+﻿using System.Collections.Generic;
 using MacroTools.Extensions;
-using System.Collections.Generic;
-using WCSharp.Shared.Data;
 using MacroTools.FactionSystem;
+using MacroTools.LegendSystem;
+using MacroTools.ObjectiveSystem.Objectives.LegendBased;
+using MacroTools.QuestSystem;
+using WCSharp.Shared.Data;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -22,17 +21,17 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
       @"ReplaceableTextures/CommandButtons/BTNPigHead.blp")
     {
       AddObjective(new ObjectiveLegendInRect(cairne, rescueRect, "Highmountain, north of Stormheim"));
-      ResearchId = Constants.UPGRADE_R0A9_QUEST_COMPLETED_A_FEAST_FOR_OUR_KIN;
+      ResearchId = UPGRADE_R0A9_QUEST_COMPLETED_A_FEAST_FOR_OUR_KIN;
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.Invulnerable);
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Cairne is welcomed in Highmountain like a lost-long friend. Eager to explore the world and fight alongside their long-lost brethren, the Highmountain send their best hunters to support the Horde, and offer their home as a traveler's respite.";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      $"Gain control of all units in Highmountain, and learn to train {GetObjectName(Constants.UNIT_N049_WANDERER_FROSTWOLF)}s from the {GetObjectName(Constants.UNIT_OTTO_TAUREN_TOTEM_FROSTWOLF_SIEGE)}";
+      $"Gain control of all units in Highmountain, and learn to train {GetObjectName(UNIT_N049_WANDERER_FROSTWOLF)}s from the {GetObjectName(UNIT_OTTO_TAUREN_TOTEM_FROSTWOLF_SIEGE)}";
 
     protected override void OnFail(Faction completingFaction)
     {

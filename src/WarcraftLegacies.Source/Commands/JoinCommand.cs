@@ -1,6 +1,6 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using static War3Api.Common;
+using WCSharp.Shared;
 
 namespace WarcraftLegacies.Source.Commands
 {
@@ -20,9 +20,8 @@ namespace WarcraftLegacies.Source.Commands
       var content = SubString(enteredString, StringLength(Command), StringLength(enteredString));
       content = StringCase(content, false);
 
-      if (FactionManager.TeamWithNameExists(content))
+      if (FactionManager.TryGetTeamByName(content, out var targetTeam))
       {
-        var targetTeam = FactionManager.GetTeamByName(content);
         if (targetTeam.IsPlayerInvited(triggerPlayer))
         {
           triggerPlayer.SetTeam(targetTeam);
@@ -30,20 +29,16 @@ namespace WarcraftLegacies.Source.Commands
           targetTeam.DisplayText($"{triggerPlayer?.GetFaction()?.ColoredName} has joined the {targetTeam.Name}.");
         }
         else
-        {
-          DisplayTextToPlayer(triggerPlayer, 0, 0, "You have !been invited to join " + targetTeam.Name + ".");
-        }
+          DisplayTextToPlayer(triggerPlayer, 0, 0, $"You have not been invited to join {targetTeam.Name}.");
       }
       else
-      {
-        DisplayTextToPlayer(triggerPlayer, 0, 0, "There is no Team with the name " + content + ".");
-      }
+        DisplayTextToPlayer(triggerPlayer, 0, 0, $"There is no Team with the name {content}.");
     }
 
     public static void Setup()
     {
       var trig = CreateTrigger();
-      foreach (var player in WCSharp.Shared.Util.EnumeratePlayers()) 
+      foreach (var player in Util.EnumeratePlayers()) 
         TriggerRegisterPlayerChatEvent(trig, player, Command, false);
       TriggerAddAction(trig, Actions);
     }

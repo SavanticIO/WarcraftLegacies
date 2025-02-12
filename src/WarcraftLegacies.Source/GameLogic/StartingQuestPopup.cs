@@ -1,7 +1,7 @@
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
+using WCSharp.Shared;
 
 namespace WarcraftLegacies.Source.GameLogic
 {
@@ -21,11 +21,11 @@ namespace WarcraftLegacies.Source.GameLogic
       TriggerRegisterTimerEvent(trig, timeToDisplay, false);
       TriggerAddAction(trig, () =>
       {
-        foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+        foreach (var player in Util.EnumeratePlayers())
         {
           var playerFaction = player.GetFaction();
-          if (playerFaction != null && player.GetFaction()?.StartingQuest != null && GetLocalPlayer() == player)
-            playerFaction.StartingQuest?.DisplayDiscovered(playerFaction);
+          if (playerFaction?.StartingQuest != null)
+            playerFaction.DisplayDiscovered(playerFaction.StartingQuest);
         }
       });
     }

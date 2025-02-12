@@ -1,5 +1,6 @@
 ﻿using MacroTools.CommandSystem;
 using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 
 namespace MacroTools.Cheats
@@ -12,12 +13,9 @@ namespace MacroTools.Cheats
 
     /// <inheritdoc />
     public override string CommandText => "level";
-    
-    /// <inheritdoc />
-    public override bool Exact => false;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 1;
+    public override ExpectedParameterCount ExpectedParameterCount => new(1);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -30,7 +28,7 @@ namespace MacroTools.Cheats
     {
       if (S2I(parameters[0]) > 0)
       {
-        foreach (var unit in CreateGroup().EnumSelectedUnits(cheater).EmptyToList())
+        foreach (var unit in GlobalGroup.EnumSelectedUnits(cheater))
           unit.SetLevel(S2I(parameters[0]));
         
         return $"Setting hero level of selected units to {parameters[0]}.";

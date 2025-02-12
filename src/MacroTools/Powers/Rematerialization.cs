@@ -1,6 +1,7 @@
 ﻿using System;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
+using MacroTools.Setup;
 using WCSharp.Events;
 using WCSharp.Shared.Data;
 using static War3Api.Common;
@@ -33,7 +34,7 @@ namespace MacroTools.Powers
       _chance = chance;
       _returnPoint = returnPoint;
       _noReturnRect = noReturnRect;
-      Description = $"Your unlimited units have a {chance*100}% chance to rematerialize at {returnPointName} upon death.";
+      Description = $"Your non-Resistant units have a {chance*100}% chance to rematerialize in {returnPointName} upon death.";
     }
     
     /// <inheritdoc />
@@ -50,10 +51,12 @@ namespace MacroTools.Powers
       if (GetRandomReal(0, 1) > _chance 
           || !EligibilityCondition(dyingUnit) 
           || _noReturnRect.Contains(dyingUnit.GetPosition())
+          || dyingUnit.IsType(UNIT_TYPE_RESISTANT)
           || dyingUnit.IsType(UNIT_TYPE_HERO) 
           || dyingUnit.IsType(UNIT_TYPE_MECHANICAL) 
           || dyingUnit.IsIllusion() 
           || dyingUnit.IsType(UNIT_TYPE_SUMMONED))
+
         return;
       AddSpecialEffect(@"Abilities\Spells\Items\AIil\AIilTarget.mdl", _returnPoint.X, _returnPoint.Y)
         .SetLifespan();

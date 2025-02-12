@@ -1,15 +1,12 @@
-﻿using MacroTools.ControlPointSystem;
+﻿using System.Collections.Generic;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.FactionBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
-using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using System.Collections.Generic;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.KulTiras
 {
@@ -27,17 +24,14 @@ namespace WarcraftLegacies.Source.Quests.KulTiras
       @"ReplaceableTextures\CommandButtons\BTNHeroTinker.blp")
     {
       _katherine = katherine;
-      AddObjective(new ObjectiveHostilesInAreaAreDead(new List<Rectangle> { Regions.BootyBayQuest }, "in Booty Bay"));
       AddObjective(new ObjectiveControlLegend(katherine, false));
-      AddObjective(
-        new ObjectiveControlPoint(
-          ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N00L_BOOTY_BAY)));
+      AddObjective(new ObjectiveControlPoint(UNIT_N00L_BOOTY_BAY));
       AddObjective(new ObjectiveSelfExists());
       _rescueUnits = rescueRect.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "With the south coast of the Eastern Kingdoms now secure, High Bank has been established as a base of operations on an island near the Twilight Highlands.";
 
     /// <inheritdoc/>

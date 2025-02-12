@@ -7,7 +7,11 @@
       return new IMapMigration[]
       {
         new ControlPointMapMigration(),
-        new GoldBountyMapMigration()
+        new CreepLevelMapMigration(),
+        new GoldBountyMapMigration(),
+        new FlightMigration(),
+        new UnitTooltipMigration(),
+        new PortraitModelFileMapMigration()
       };
     }
   }

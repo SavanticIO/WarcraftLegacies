@@ -1,6 +1,6 @@
-﻿using MacroTools;
-using MacroTools.LegendSystem;
-using static War3Api.Common;
+﻿using MacroTools.LegendSystem;
+using MacroTools.Systems;
+
 #pragma warning disable CS1591
 
 namespace WarcraftLegacies.Source.Setup.Legends
@@ -45,9 +45,9 @@ namespace WarcraftLegacies.Source.Setup.Legends
         PlayerColor = PLAYER_COLOR_GREEN
       };
 
-      LegionStronghold = new Capital()
+      LegionStronghold = new Capital
       {
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_U00G_LEGION_STRONGHOLD_LEGION_OTHER),
+        Unit = preplacedUnitSystem.GetUnit(UNIT_U00G_LEGION_STRONGHOLD_LEGION_OTHER),
         DeathMessage =
           "The great Stronghold of the Legian has fallen",
         Essential = true

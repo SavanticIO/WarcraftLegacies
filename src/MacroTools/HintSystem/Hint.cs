@@ -27,9 +27,22 @@ namespace MacroTools.HintSystem
       Unread.Add(hint);
     }
 
+    /// <summary>
+    /// Registers a new <see cref="Hint"/> with the specified message.
+    /// </summary>
+    public static void Register(string message)
+    {
+      if (!_initialized)
+      {
+        Initialize();
+      }
+      Unread.Add(new Hint(message));
+    }
+
     private void Display()
     {
-      GetLocalPlayer().DisplayHint(_msg);
+      foreach (var player in WCSharp.Shared.Util.EnumeratePlayers())
+        player.DisplayHint(_msg);
       Unread.Remove(this);
     }
 

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using MacroTools.Extensions;
 using MacroTools.Libraries;
+using MacroTools.Utils;
 using WCSharp.Events;
 using WCSharp.Missiles;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.ArtifactBehaviour
 {
@@ -17,7 +17,7 @@ namespace WarcraftLegacies.Source.ArtifactBehaviour
     /// </summary>
     public static void Setup()
     {
-      PlayerUnitEvents.Register(ItemTypeEvent.IsPickedUp, OnEyeOfSargerasPickedUp, Constants.ITEM_I003_EYE_OF_SARGERAS);
+      PlayerUnitEvents.Register(ItemTypeEvent.IsPickedUp, OnEyeOfSargerasPickedUp, ITEM_I003_EYE_OF_SARGERAS);
     }
 
     private static void OnEyeOfSargerasPickedUp()
@@ -25,14 +25,14 @@ namespace WarcraftLegacies.Source.ArtifactBehaviour
       if (GetTriggerUnit().OwningPlayer() == Player(PLAYER_NEUTRAL_AGGRESSIVE))
         return;
 
-      var hostileNearby = CreateGroup()
-        .EnumUnitsInRange(GetTriggerUnit().GetPosition(), 700).EmptyToList()
+      var hostileNearby = GlobalGroup
+        .EnumUnitsInRange(GetTriggerUnit().GetPosition(), 700)
         .OrderByDescending(x => MathEx.GetDistanceBetweenPoints(x.GetPosition(), GetTriggerUnit().GetPosition()))
         .FirstOrDefault(x => x.OwningPlayer() == Player(PLAYER_NEUTRAL_AGGRESSIVE) && UnitAlive(x) && !x.IsType(UNIT_TYPE_ANCIENT));
       if (hostileNearby == null)
       {
         PlayerUnitEvents.Unregister(ItemTypeEvent.IsPickedUp, OnEyeOfSargerasPickedUp,
-          Constants.ITEM_I003_EYE_OF_SARGERAS);
+          ITEM_I003_EYE_OF_SARGERAS);
         return;
       }
 

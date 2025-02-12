@@ -1,10 +1,9 @@
-﻿using MacroTools.ControlPointSystem;
-using MacroTools.Extensions;
+﻿using MacroTools.Extensions;
 using MacroTools.FactionSystem;
-using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
-using MacroTools.QuestSystem;
 using MacroTools.LegendSystem;
+using MacroTools.ObjectiveSystem.Objectives.ControlPointBased;
 using MacroTools.ObjectiveSystem.Objectives.QuestBased;
+using MacroTools.QuestSystem;
 
 namespace WarcraftLegacies.Source.Quests.Scarlet
 {
@@ -22,9 +21,8 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
     {
       _crimsonCathedral = crimsonCathedral;
       AddObjective(new ObjectiveQuestComplete(newhearthglen));
-      AddObjective(new ObjectiveControlPoint(
-        ControlPointManager.Instance.GetFromUnitType(Constants.UNIT_N00F_SHOLAZAR_BASIN)));
-      ResearchId = Constants.UPGRADE_R04H_QUEST_COMPLETED_THE_CRIMSON_CATHEDRAL;
+      AddObjective(new ObjectiveControlPoint(UNIT_N00F_SHOLAZAR_BASIN));
+      ResearchId = UPGRADE_R04H_QUEST_COMPLETED_THE_CRIMSON_CATHEDRAL;
       crimsonCathedral.Unit?
         .SetInvulnerable(true)
         .Show(false);
@@ -38,7 +36,7 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "The Crimson Cathedral has been established in Northrend. Seeing first-hand that the Light can reach even the darkest places of the world, what few shreds of doubt lingering in Brigitte Abbendis' soul evaporate.";
 
     /// <inheritdoc/>

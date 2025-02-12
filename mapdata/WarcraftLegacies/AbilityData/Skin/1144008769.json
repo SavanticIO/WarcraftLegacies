@@ -8,16 +8,12 @@
     {
       "Id": 1768841569,
       "Type": 3,
-      "Value": "spell,slam"
+      "Value": "spell"
     },
     {
       "Id": 1953653089,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNWarpPortal.blp"
-    },
-    {
-      "Id": 2020631137,
-      "Value": 3
+      "Value": "ReplaceableTextures\\CommandButtons\\BTNWispSplode.blp"
     },
     {
       "Id": 2037408353,
@@ -36,7 +32,7 @@
     {
       "Id": 1718840929,
       "Type": 3,
-      "Value": "(Stormwind - Khadgar)"
+      "Value": "(Quel\u0027thalas - Sunwell)"
     },
     {
       "Id": 1952540001,
@@ -44,19 +40,14 @@
       "Value": ""
     },
     {
-      "Id": 2037082209,
-      "Type": 3,
-      "Value": "R"
-    },
-    {
       "Id": 1835101793,
       "Type": 3,
-      "Value": "Slipstream"
+      "Value": "Destroy the Corrupted Sunwell"
     },
     {
       "Id": 1918988897,
       "Type": 3,
-      "Value": "ReplaceableTextures\\CommandButtons\\BTNWarpPortal.blp"
+      "Value": "ReplaceableTextures\\CommandButtons\\BTNMind Crush.blp"
     },
     {
       "Id": 2020635233,
@@ -65,17 +56,17 @@
     {
       "Id": 1802007137,
       "Type": 3,
-      "Value": "R"
+      "Value": "Z"
     },
     {
       "Id": 1952805473,
       "Type": 3,
-      "Value": "Learn Slipstream - [|cffffcc00Level %d|r]"
+      "Value": "Learn Inspire Madness - [|cffffcc00Level %d|r]"
     },
     {
       "Id": 1953854049,
       "Type": 3,
-      "Value": "Opens a two-way portal to the target location. The portal becomes useable after 5 seconds, and closes 10 seconds after the caster stops channeling.|n|n|cffffcc00Level 1|r - \u003CA00D,Rng1\u003E range. |n|cffffcc00Level 2|r - \u003CA00D,Rng2\u003E range. |n|cffffcc00Level 3|r - \u003CA00D,Rng3\u003E range."
+      "Value": "Takes control of several random enemy units in the target area. After 30 seconds, each unit controlled this way dies of madness.|n|n|cffffcc00Level 1|r - Controls 6 units. |n|cffffcc00Level 2|r - Controls 10 units. |n|cffffcc00Level 3|r - Controls 14 units."
     },
     {
       "Id": 1952543841,
@@ -86,37 +77,13 @@
       "Level": 1,
       "Id": 829453409,
       "Type": 3,
-      "Value": "Slipstream - [|cffffcc00Level 1|r]"
-    },
-    {
-      "Level": 2,
-      "Id": 829453409,
-      "Type": 3,
-      "Value": "Slipstream - [|cffffcc00Level 2|r]"
-    },
-    {
-      "Level": 3,
-      "Id": 829453409,
-      "Type": 3,
-      "Value": "Slipstream - [|cffffcc00Level 3|r]"
+      "Value": "Destroy the Corrupted Sunwell"
     },
     {
       "Level": 1,
       "Id": 828536161,
       "Type": 3,
-      "Value": "Opens a two-way portal to the target location within a range of \u003CA00D,Rng1\u003E. The portal becomes useable after 5 seconds, and closes 10 seconds after the caster stops channeling."
-    },
-    {
-      "Level": 2,
-      "Id": 828536161,
-      "Type": 3,
-      "Value": "Opens a two-way portal to the target location within a range of \u003CA00D,Rng2\u003E. The portal becomes useable after 5 seconds, and closes 10 seconds after the caster stops channeling."
-    },
-    {
-      "Level": 3,
-      "Id": 828536161,
-      "Type": 3,
-      "Value": "Opens a two-way portal to the target location within a range of \u003CA00D,Rng3\u003E. The portal becomes useable after 5 seconds, and closes 10 seconds after the caster stops channeling."
+      "Value": "Destroys the Sunwell, putting an end to its corruptive influence over the land."
     }
   ]
 }

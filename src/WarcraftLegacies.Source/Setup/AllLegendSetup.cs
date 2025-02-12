@@ -1,5 +1,5 @@
-﻿using MacroTools;
-using MacroTools.LegendSystem;
+﻿using MacroTools.LegendSystem;
+using MacroTools.Systems;
 using WarcraftLegacies.Source.Setup.Legends;
 
 namespace WarcraftLegacies.Source.Setup
@@ -91,17 +91,21 @@ namespace WarcraftLegacies.Source.Setup
 
     public LegendTroll Troll { get; }
     
-    public LegendCthun Cthun { get; }
+    public LegendAhnqiraj Ahnqiraj { get; }
     
     public LegendNazjatar Nazjatar { get; }
     
     public LegendBlackEmpire BlackEmpire { get; }
-    
+
+    public LegendSkywall Skywall { get; }
+
     public LegendTwilight Twilight { get; }
-    
+
     public LegendGilneas Gilneas { get; }
-    
+
     public LegendScarlet Scarlet { get; }
+
+    public LegendSunfury Sunfury { get; }
 
     /// <summary>
     /// Contains references to all Neutral <see cref="Legend"/>s.
@@ -132,11 +136,13 @@ namespace WarcraftLegacies.Source.Setup
       Warsong = new LegendWarsong(preplacedUnitSystem);
       Neutral = new LegendNeutral(preplacedUnitSystem);
       Gilneas = new LegendGilneas(preplacedUnitSystem);
-      Cthun = new LegendCthun();
+      Ahnqiraj = new LegendAhnqiraj(preplacedUnitSystem);
       Nazjatar = new LegendNazjatar();
       BlackEmpire = new LegendBlackEmpire(preplacedUnitSystem);
+      Skywall = new LegendSkywall(preplacedUnitSystem);
       Twilight = new LegendTwilight();
       Scarlet = new LegendScarlet(preplacedUnitSystem);
+      Sunfury = new LegendSunfury(preplacedUnitSystem);
     }
 
     /// <summary>
@@ -161,13 +167,15 @@ namespace WarcraftLegacies.Source.Setup
       Stormwind.RegisterLegends();
       Warsong.RegisterLegends();
       Troll.RegisterLegends();
-      Cthun.RegisterLegends();
+      Ahnqiraj.RegisterLegends();
       Nazjatar.RegisterLegends();
       BlackEmpire.RegisterLegends();
+      Skywall.RegisterLegends();
       Twilight.RegisterLegends();
       Neutral.RegisterLegends();
       Gilneas.RegisterLegends();
       Scarlet.RegisterLegends();
+      Sunfury.RegisterLegends();
     }
   }
 }

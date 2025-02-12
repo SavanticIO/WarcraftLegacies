@@ -7,7 +7,6 @@ using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Fel_Horde
 {
@@ -18,7 +17,6 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
   {
     private readonly List<unit> _rescueUnits1;
     private readonly List<unit> _rescueUnits2;
-    private Rectangle _rescueRect;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuestBlackrock"/> class.
@@ -29,20 +27,18 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
     {
       foreach (var prequisite in prequisites)
         AddObjective(new ObjectiveQuestComplete(prequisite));
-      AddObjective(new ObjectiveResearch(Constants.UPGRADE_R090_ACTIVATE_THE_BLACKROCK_CLAN_FEL, Constants.UNIT_O008_HELLFIRE_CITADEL_FEL_HORDE));
+      AddObjective(new ObjectiveResearch(UPGRADE_R090_ACTIVATE_THE_BLACKROCK_CLAN_FEL, UNIT_O008_HELLFIRE_CITADEL_FEL_HORDE));
       AddObjective(new ObjectiveTime(540));
       AddObjective(new ObjectiveExpire(660, Title));
       AddObjective(new ObjectiveSelfExists());
-      ResearchId = Constants.UPGRADE_R03C_QUEST_COMPLETED_BLACKROCK_UNIFICATION;
+      ResearchId = UPGRADE_R03C_QUEST_COMPLETED_BLACKROCK_UNIFICATION;
       _rescueUnits1 = rescueRect1.PrepareUnitsForRescue(RescuePreparationMode.HideNonStructures);
       _rescueUnits2 = rescueRect2.PrepareUnitsForRescue(RescuePreparationMode.HideAll);
-      _rescueRect = rescueRect1;
-      
     }
 
     //Todo: bad flavour
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Blackrock Citadel has been subjugated, and its military is now free to assist the Fel Horde.";
 
     /// <inheritdoc />
@@ -65,14 +61,13 @@ namespace WarcraftLegacies.Source.Quests.Fel_Horde
     {
       completingFaction.Player.RescueGroup(_rescueUnits1);
       completingFaction.Player.RescueGroup(_rescueUnits2);
-      foreach (var unit in _rescueUnits1)
-        if (!unit.IsType(UNIT_TYPE_PEON))
-          unit.IssueOrder("attack", new Point(14131.0f, -13207.0f));
+
+      completingFaction.Player.PingMinimapSimple(12400.0f, -11800.0f, 3.0f);
     }
     
 
     /// <inheritdoc />
     protected override void OnAdd(Faction whichFaction) => 
-      whichFaction.ModObjectLimit(Constants.UPGRADE_R090_ACTIVATE_THE_BLACKROCK_CLAN_FEL, Faction.UNLIMITED);
+      whichFaction.ModObjectLimit(UPGRADE_R090_ACTIVATE_THE_BLACKROCK_CLAN_FEL, Faction.UNLIMITED);
   }
 }

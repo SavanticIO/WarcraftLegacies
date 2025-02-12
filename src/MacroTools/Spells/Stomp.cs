@@ -1,6 +1,6 @@
 ﻿using MacroTools.DummyCasters;
-using MacroTools.Extensions;
 using MacroTools.SpellSystem;
+using MacroTools.Utils;
 using WCSharp.Effects;
 using WCSharp.Shared.Data;
 using static War3Api.Common;
@@ -71,16 +71,13 @@ namespace MacroTools.Spells
     {
       EffectSystem.Add(AddSpecialEffect(SpecialEffect, GetUnitX(caster), GetUnitY(caster)));
       
-      foreach (var enumUnit in CreateGroup()
-                 .EnumUnitsInRange(new Point(GetUnitX(caster), GetUnitY(caster)), Radius)
-                 .EmptyToList())
+      foreach (var enumUnit in GlobalGroup
+                 .EnumUnitsInRange(new Point(GetUnitX(caster), GetUnitY(caster)), Radius))
       {
         if (!CastFilters.IsTargetEnemyAndAlive(caster, enumUnit)) continue;
         DamageUnit(caster, enumUnit);
         StunUnit(caster, enumUnit);
       }
-      DestroyEffect(AddSpecialEffect(@"Abilities\\Spells\\Orc\\Warstomp\\WarStompCaster.mdl", GetUnitX(caster),
-        GetUnitY(caster)));
     }
 
     /// <inheritdoc />

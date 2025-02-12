@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.QuestSystem;
+using MacroTools.Utils;
 using WCSharp.Shared.Data;
 using static War3Api.Common;
 
@@ -54,13 +56,14 @@ namespace MacroTools.ObjectiveSystem.Objectives.UnitBased
     /// <inheritdoc />
     public string CompletingUnitName => CompletingUnit != null ? CompletingUnit.GetProperName() : "an unknown hero";
 
-    private bool IsUnitValid(unit whichUnit) =>
-      EligibleFactions.Contains(whichUnit.OwningPlayer()) && whichUnit.IsAlive() &&
-      (IsUnitType(whichUnit, UNIT_TYPE_HERO) || !_heroOnly);
+    private bool IsUnitValid(unit whichUnit) => EligibleFactions.Contains(whichUnit.OwningPlayer()) &&
+                                                whichUnit.IsAlive() &&
+                                                (IsUnitType(whichUnit, UNIT_TYPE_HERO) || !_heroOnly) &&
+                                                !whichUnit.IsControlPoint() && whichUnit.IsSelectable();
 
-    private bool IsValidUnitInRect() => CreateGroup().EnumUnitsInRect(_targetRect).EmptyToList().Any(IsUnitValid);
+    private bool IsValidUnitInRect() => GlobalGroup.EnumUnitsInRect(_targetRect).Any(IsUnitValid);
 
-    internal override void OnAdd(FactionSystem.Faction whichFaction)
+    public override void OnAdd(FactionSystem.Faction whichFaction)
     {
       Progress = IsValidUnitInRect() ? QuestProgress.Complete : QuestProgress.Incomplete;
     }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using MacroTools;
+using MacroTools.Utils;
 using WarcraftLegacies.Source.Setup;
-
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source
 {

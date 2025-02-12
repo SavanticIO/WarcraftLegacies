@@ -1,7 +1,6 @@
-﻿using MacroTools.QuestSystem;
-using static War3Api.Common;
+﻿using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
-using MacroTools.LegendSystem;
+using MacroTools.QuestSystem;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -19,16 +18,16 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
     {
       _rexxar = rexxar;
       AddObjective(new ObjectiveLegendInRect(rexxar, Regions.Borean_Tundra, "Borean Tundra"));
-      ResearchId = Constants.UPGRADE_R0AA_QUEST_COMPLETED_LONE_WANDERER;
+      ResearchId = UPGRADE_R0AA_QUEST_COMPLETED_LONE_WANDERER;
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Rexxar ventures north into lands once thought incompatible with life, and discovers the paradise of furred megafauna that is the Borean Tundra. He tames the woolly mammoths there, and teaches the Frostwolf to ride them into battle.";
 
     /// <inheritdoc />
     protected override string RewardDescription =>
-      $"Learn to train {GetObjectName(Constants.UNIT_H0CO_MAMMOTH_WRANGLER_FROSTWOLF)}s from the {GetObjectName(Constants.UNIT_OBEA_BEASTIARY_FROSTWOLF_SPECIALIST)}";
+      $"Learn to train {GetObjectName(UNIT_H0CO_MAMMOTH_WRANGLER_FROSTWOLF)}s from the {GetObjectName(UNIT_OBEA_BEASTIARY_FROSTWOLF_SPECIALIST)}";
 
   }
 }

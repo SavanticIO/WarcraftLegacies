@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MacroTools.CommandSystem;
 using MacroTools.Extensions;
+using MacroTools.Utils;
 using static War3Api.Common;
 using static MacroTools.Libraries.GeneralHelpers;
 
@@ -13,12 +14,9 @@ namespace MacroTools.Cheats
   {
     /// <inheritdoc />
     public override string CommandText => "getAbilities";
-    
-    /// <inheritdoc />
-    public override bool Exact => true;
 
     /// <inheritdoc />
-    public override int MinimumParameterCount => 0;
+    public override ExpectedParameterCount ExpectedParameterCount => new(0);
 
     /// <inheritdoc />
     public override CommandType Type => CommandType.Cheat;
@@ -30,7 +28,7 @@ namespace MacroTools.Cheats
     public override string Execute(player cheater, params string[] parameters)
     {
       var abilityString = "";
-      var firstSelectedUnit = CreateGroup().EnumSelectedUnits(cheater).EmptyToList().First();
+      var firstSelectedUnit = GlobalGroup.EnumSelectedUnits(cheater).First();
       foreach (var ability in firstSelectedUnit.GetUnitAbilities())
       {
         abilityString += $"{BlzGetAbilityStringField(ability,ABILITY_SF_NAME)}: {BlzGetAbilityId(ability)}\n";

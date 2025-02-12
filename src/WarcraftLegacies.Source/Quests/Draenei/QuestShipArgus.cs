@@ -3,7 +3,6 @@ using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Draenei
 {
@@ -33,7 +32,7 @@ namespace WarcraftLegacies.Source.Quests.Draenei
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "Velen has opened the portal to Argus";
+    public override string RewardFlavour => "Velen has opened the portal to Argus";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Open a Portal between Tempest Keep and Argus";

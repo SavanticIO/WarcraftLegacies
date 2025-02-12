@@ -4,7 +4,6 @@ using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Frostwolf
 {
@@ -12,19 +11,19 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
   {
     private readonly LegendaryHero _thrall;
 
-    public QuestDrektharsSpellbook(Capital nodrassil, LegendaryHero thrall) : base("Drekthar's Spellbook",
-      "The savage Night Elves threaten the safety of the entire Horde. Capture their World Tree and bring Thrall to its roots.",
+    public QuestDrektharsSpellbook(Capital vortex, LegendaryHero thrall) : base("Drekthar's Spellbook",
+      "The elemental planes are out of control. Bring Thrall to the Vortex Pinnacle to bring back the balance.",
       @"ReplaceableTextures\CommandButtons\BTNSorceressMaster.blp")
     {
       _thrall = thrall;
-      AddObjective(new ObjectiveControlCapital(nodrassil, false));
-      AddObjective(new ObjectiveLegendInRect(thrall, Regions.Drekthars_Spellbook,
-        "Nordrassil"));
+      AddObjective(new ObjectiveControlCapital(vortex, false));
+      AddObjective(new ObjectiveLegendInRect(thrall, Regions.Tempest_Rain,
+        "Vortex Pinnacle"));
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour =>
-      "The World Tree, Nordrassil, has been captured by the forces of the Horde. Drek'thar has gifted Warchief Thrall his magical spellbook for this achievement.";
+    public override string RewardFlavour =>
+      "The Vortex Pinnacle has been captured by the Horde. Drek'thar has gifted Warchief Thrall his magical spellbook for this achievement.";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Drek'thar's Spellbook";
@@ -32,7 +31,7 @@ namespace WarcraftLegacies.Source.Quests.Frostwolf
     /// <inheritdoc />
     protected override void OnComplete(Faction completingFaction)
     {
-      var drektharsSpellBook = new Artifact(CreateItem(Constants.ITEM_DTSB_DREK_THAR_S_SPELLBOOK, 0, 0));
+      var drektharsSpellBook = new Artifact(CreateItem(ITEM_DTSB_DREK_THAR_S_SPELLBOOK, 0, 0));
       ArtifactManager.Register(drektharsSpellBook);
       _thrall.Unit?.AddItemSafe(drektharsSpellBook.Item);
     }

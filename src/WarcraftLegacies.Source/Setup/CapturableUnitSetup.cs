@@ -1,6 +1,5 @@
-﻿using MacroTools;
-using MacroTools.Extensions;
-using static War3Api.Common;
+﻿using MacroTools.Extensions;
+using MacroTools.Systems;
 
 namespace WarcraftLegacies.Source.Setup
 {

@@ -1,22 +1,16 @@
-﻿using MacroTools;
-using MacroTools.CommandSystem;
+﻿using MacroTools.CommandSystem;
 using MacroTools.ControlPointSystem;
 using MacroTools.GameModes;
-using MacroTools.Mechanics;
 using MacroTools.PassiveAbilitySystem;
 using MacroTools.Save;
+using MacroTools.Sound;
+using MacroTools.Systems;
 using MacroTools.UserInterface;
 using WarcraftLegacies.Source.ArtifactBehaviour;
 using WarcraftLegacies.Source.GameLogic;
 using WarcraftLegacies.Source.GameLogic.GameEnd;
 using WarcraftLegacies.Source.GameModes;
-using WarcraftLegacies.Source.Mechanics.Druids;
-using WarcraftLegacies.Source.Mechanics.Frostwolf;
-using WarcraftLegacies.Source.Mechanics.Scourge;
-using WarcraftLegacies.Source.Mechanics.Scourge.Blight;
-using WarcraftLegacies.Source.Setup.FactionSetup;
 using WarcraftLegacies.Source.UnitTypes;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Setup
 {
@@ -30,6 +24,7 @@ namespace WarcraftLegacies.Source.Setup
     /// </summary>
     public static void Setup()
     {
+      UnitTypeConfig.Setup();
       SaveManager.Initialize();
       DisplayIntroText.Setup(25);
       CinematicMode.Setup(59);
@@ -42,31 +37,24 @@ namespace WarcraftLegacies.Source.Setup
       ShoreSetup.Setup();
       ControlPointSetup.Setup();
       InstanceSetup.Setup(preplacedUnitSystem);
-      TeamSetup.Setup();
-      AllFactionSetup.Setup(preplacedUnitSystem, artifactSetup, allLegendSetup);
-      SharedFactionConfigSetup.Setup();
-      PlayerSetup.Setup();
-      FactionChoiceDialogSetup.Setup(preplacedUnitSystem, artifactSetup, allLegendSetup);
       NeutralHostileSetup.Setup();
-      AllQuestSetup.Setup(preplacedUnitSystem, artifactSetup, allLegendSetup);
-      ObserverSetup.Setup(new[] { Player(21) });
-      SpellsSetup.Setup();
       var commandManager = new CommandManager();
       CommandSetup.Setup(commandManager);
+      CheatSetup.Setup(commandManager, artifactSetup);
+      TeamSetup.Setup();
+      new PlayerSetup(preplacedUnitSystem, allLegendSetup, artifactSetup).Setup();
+      FactionChoiceDialogSetup.Setup(preplacedUnitSystem, artifactSetup, allLegendSetup);
+      SharedQuestSetup.Setup(preplacedUnitSystem, artifactSetup, allLegendSetup);
+      SpellsSetup.Setup();
       FactionMultiboard.Setup();
       BookSetup.Setup();
       HintConfig.Setup();
-      WaygateManager.Setup(Constants.UNIT_N0AO_WAY_GATE_DALARAN_SIEGE);
-      BlightSystem.Setup(ScourgeSetup.Scourge);
-      BlightSetup.Setup(preplacedUnitSystem);
       QuestMenuSetup.Setup();
       GameTime.Start();
-      CheatSetup.Setup(commandManager);
-      DialogueSetup.Setup(preplacedUnitSystem, allLegendSetup);
+      
       MapFlagSetup.Setup();
       InfoQuests.Setup();
       DestructibleSetup.Setup(preplacedUnitSystem);
-      ResearchSetup.Setup(preplacedUnitSystem);
       PatronSystem.Setup(preplacedUnitSystem);
       var gameModeManager =new GameModeManager(new IGameMode[]
       {
@@ -81,7 +69,6 @@ namespace WarcraftLegacies.Source.Setup
       gameModeManager.Setup();
       RockSetup.Setup();
       TurnResearchSetup.Setup();
-      UnitTypeConfig.Setup();
       ShipyardBanZonesSetup.Setup();
       BlockerSetup.Setup();
       NeutralVictimAndPassiveSetup.Setup();
@@ -102,12 +89,8 @@ namespace WarcraftLegacies.Source.Setup
       EyeOfSargerasCooldowns.Setup();
       CapturableUnitSetup.Setup(preplacedUnitSystem);
       EyeOfSargerasPickup.Setup();
-      SacrificeAcolyte.Setup();
       RuntimeIntegrityChecker.Setup();
-      PeonsStartHarvestingShips.Setup(preplacedUnitSystem);
       DarkPortalControlNexusSetup.Setup(preplacedUnitSystem);
-      CenariusGhost.Setup(allLegendSetup.Druids);
-      HelmOfDominationDropsWhenScourgeLeaves.Setup(artifactSetup.HelmOfDomination, allLegendSetup.Scourge.TheFrozenThrone);
       TagSummonedUnits.Setup();
     }
 
@@ -117,12 +100,12 @@ namespace WarcraftLegacies.Source.Setup
       {
         StartingMaxHitPoints = 1900,
         HostileStartingCurrentHitPoints = 1000,
-        RegenerationAbility = Constants.ABILITY_A0UT_CP_LIFE_REGEN,
-        PiercingResistanceAbility = Constants.ABILITY_A13X_MAGIC_RESISTANCE_CONTROL_POINT_TOWER,
-        IncreaseControlLevelAbilityTypeId = Constants.ABILITY_A0A8_FORTIFY_CONTROL_POINTS_SHARED,
+        RegenerationAbility = ABILITY_A0UT_CP_LIFE_REGEN,
+        PiercingResistanceAbility = ABILITY_A13X_MAGIC_RESISTANCE_CONTROL_POINT_TOWER,
+        IncreaseControlLevelAbilityTypeId = ABILITY_A0A8_FORTIFY_CONTROL_POINTS_SHARED,
         ControlLevelSettings = new ControlLevelSettings
         {
-          DefaultDefenderUnitTypeId = Constants.UNIT_H03W_CONTROL_POINT_DEFENDER_LORDAERON,
+          DefaultDefenderUnitTypeId = UNIT_H03W_CONTROL_POINT_DEFENDER_LORDAERON,
           DamageBase = 8,
           DamagePerControlLevel = 1,
           ArmorPerControlLevel = 1,

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <RootNamespace>TestMap.Source</RootNamespace>
     </PropertyGroup>
@@ -9,5 +9,6 @@
     <ItemGroup>
         <ProjectReference Include="..\MacroTools\MacroTools.csproj" />
     </ItemGroup>
+
 
 </Project>

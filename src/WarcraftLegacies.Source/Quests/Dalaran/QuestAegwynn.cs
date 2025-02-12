@@ -2,7 +2,6 @@
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
 
-
 namespace WarcraftLegacies.Source.Quests.Dalaran
 {
   public sealed class QuestAegwynn : QuestData
@@ -14,11 +13,11 @@ namespace WarcraftLegacies.Source.Quests.Dalaran
     {
       AddObjective(new ObjectiveLegendLevel(antonidas, 7));
       AddObjective(new ObjectiveLegendLevel(jaina, 7));
-      ResearchId = Constants.UPGRADE_R09F_QUEST_COMPLETED_RETURN_FROM_EXILE;
+      ResearchId = UPGRADE_R09F_QUEST_COMPLETED_RETURN_FROM_EXILE;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Aegwynn will come back from exile to mentor Jaina.";
 
     /// <inheritdoc/>

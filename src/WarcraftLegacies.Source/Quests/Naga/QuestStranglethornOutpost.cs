@@ -7,7 +7,6 @@ using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.TimeBased;
 using MacroTools.QuestSystem;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests.Naga
 {
@@ -21,7 +20,7 @@ namespace WarcraftLegacies.Source.Quests.Naga
     /// Initializes a new instance of the <see cref="QuestStranglethornOutpost"/> class.
     /// </summary>
     public QuestStranglethornOutpost(Rectangle rescueRect, LegendaryHero vashj) : base("The Cape of Stranglethorn",
-      $"The Ruins in the Cape of Stranglethorn are an old Naga outpost, they could serve Illidan well",
+      "The Ruins in the Cape of Stranglethorn are an old Naga outpost, they could serve Illidan well",
       @"ReplaceableTextures\CommandButtons\BTNIllidariSpawningGrounds.blp")
     {
       AddObjective(new ObjectiveLegendInRect(vashj, rescueRect, "the Cape of Stranglethorn"));
@@ -32,7 +31,7 @@ namespace WarcraftLegacies.Source.Quests.Naga
     }
 
     /// <inheritdoc />
-    protected override string RewardFlavour => "The outpost in Stranglethorn is now built";
+    public override string RewardFlavour => "The outpost in Stranglethorn is now built";
 
     /// <inheritdoc />
     protected override string RewardDescription => "Gain control of the Stranglethorn Outpost";

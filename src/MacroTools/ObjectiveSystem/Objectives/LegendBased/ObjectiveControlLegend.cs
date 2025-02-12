@@ -22,7 +22,8 @@ namespace MacroTools.ObjectiveSystem.Objectives.LegendBased
       _target = target;
       Description = $"You control {target.Name}";
       _canFail = canFail;
-      if (target.Unit != null) TargetWidget = target.Unit;
+      if (target.Unit != null) 
+        TargetWidget = target.Unit;
 
       DisplaysPosition = GetOwningPlayer(target.Unit) == Player(PLAYER_NEUTRAL_AGGRESSIVE);
       target.ChangedOwner += OnTargetChangeOwner;
@@ -30,7 +31,7 @@ namespace MacroTools.ObjectiveSystem.Objectives.LegendBased
       Position = new(GetUnitX(_target.Unit), GetUnitY(_target.Unit));
     }
 
-    internal override void OnAdd(Faction whichFaction)
+    public override void OnAdd(Faction whichFaction)
     {
       if (_target.Unit != null && IsPlayerOnSameTeamAsAnyEligibleFaction(_target.Unit.OwningPlayer()))
         Progress = QuestProgress.Complete;

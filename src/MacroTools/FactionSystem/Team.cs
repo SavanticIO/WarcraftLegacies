@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MacroTools.ControlPointSystem;
 using MacroTools.Extensions;
 using MacroTools.LegendSystem;
 using static War3Api.Common;
@@ -15,24 +14,10 @@ namespace MacroTools.FactionSystem
   {
     private readonly List<player> _members = new();
     private readonly List<player> _invitees = new();
+    private TeamSharedVisionMode _sharedVisionMode = TeamSharedVisionMode.All;
 
-    public Team(string name)
-    {
-      Name = name;
-    }
+    public Team(string name) => Name = name;
 
-    /// <summary>
-    /// Control points the team own
-    /// </summary>
-    public List<ControlPoint> ControlPoints {
-      get
-      {
-        var tempList = new List<ControlPoint>();
-        _members.ForEach(x=> tempList.AddRange(x.GetControlPoints()));
-        return tempList;
-      }
-    }
-    
     public string Name { get; }
 
     /// <summary>
@@ -50,6 +35,26 @@ namespace MacroTools.FactionSystem
     /// </summary>
     public string? VictoryMusic { get; init; }
 
+    /// <summary>
+    /// How shared vision in this <see cref="Team"/> should behave.
+    /// </summary>
+    internal TeamSharedVisionMode SharedVisionMode
+    {
+      get => _sharedVisionMode;
+      set
+      {
+        foreach (var outerMember in _members)
+        foreach (var innerMember in _members)
+          if (outerMember != innerMember)
+          {
+            var allianceState = DetermineAllianceState(outerMember, innerMember);
+            innerMember.SetAllianceState(outerMember, allianceState);
+          }
+
+        _sharedVisionMode = value;
+      }
+    }
+    
     public IEnumerable<Faction> GetAllFactions()
     {
       foreach (var member in _members)
@@ -88,8 +93,9 @@ namespace MacroTools.FactionSystem
     {
       foreach (var player in _members)
       {
-        whichPlayer.SetAllianceState(player, AllianceState.AlliedVision);
-        player.SetAllianceState(whichPlayer, AllianceState.AlliedVision);
+        var allianceState = DetermineAllianceState(whichPlayer, player);
+        whichPlayer.SetAllianceState(player, allianceState);
+        player.SetAllianceState(whichPlayer, allianceState);
       }
     }
 
@@ -131,8 +137,6 @@ namespace MacroTools.FactionSystem
       if (_members.Contains(whichPlayer) || _invitees.Contains(whichPlayer)) 
         return;
       
-      //if (GetLocalPlayer() == whichFaction.Player || ContainsPlayer(GetLocalPlayer()))
-      //StartSound("Sound\Interface\ArrangedTeamInvitation.wav");
       var faction = whichPlayer.GetFaction();
       
       if (faction == null) 
@@ -176,6 +180,28 @@ namespace MacroTools.FactionSystem
           return true;
       
       return false;
+    }
+
+    private AllianceState DetermineAllianceState(player playerA, player playerB)
+    {
+      AllianceState allianceState;
+      switch (SharedVisionMode)
+      {
+        case TeamSharedVisionMode.TraditionalAlliesOnly:
+        {
+          var joiningPlayerTradTeam = playerA.GetFaction()?.TraditionalTeam;
+          var existingPlayerTradTeam = playerB.GetFaction()?.TraditionalTeam;
+          allianceState = joiningPlayerTradTeam == existingPlayerTradTeam ? AllianceState.AlliedVision : AllianceState.Allied;
+          break;
+        }
+        case TeamSharedVisionMode.All:
+          allianceState = AllianceState.AlliedVision;
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
+      }
+
+      return allianceState;
     }
   }
 }

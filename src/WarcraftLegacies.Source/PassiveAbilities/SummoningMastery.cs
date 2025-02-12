@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using MacroTools;
+using MacroTools.Data;
 using MacroTools.Extensions;
 using MacroTools.PassiveAbilitySystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.PassiveAbilities
 {

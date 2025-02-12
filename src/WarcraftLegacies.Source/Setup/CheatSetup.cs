@@ -1,4 +1,6 @@
-﻿using MacroTools.Cheats;
+﻿using System.Collections.Generic;
+using MacroTools.ArtifactSystem;
+using MacroTools.Cheats;
 using MacroTools.CommandSystem;
 using MacroTools.QuestSystem;
 using WarcraftLegacies.Source.Cheats;
@@ -7,7 +9,7 @@ namespace WarcraftLegacies.Source.Setup
 {
   public static class CheatSetup
   {
-    public static void Setup(CommandManager commandManager)
+    public static void Setup(CommandManager commandManager, ArtifactSetup artifactSetup)
     {
       commandManager.Register(new CheatAddSpell());
       commandManager.Register(new CheatResearchLevel());
@@ -16,7 +18,8 @@ namespace WarcraftLegacies.Source.Setup
       commandManager.Register(new CheatQuestProgress("fail", QuestProgress.Failed));
       commandManager.Register(new CheatQuestProgress("uncomplete", QuestProgress.Incomplete));
       commandManager.Register(new CheatQuestProgress("undiscover", QuestProgress.Undiscovered));
-      commandManager.Register(new CheatControl());
+      commandManager.Register(new CheatControl("control", true));
+      commandManager.Register(new CheatControl("uncontrol", false));
       commandManager.Register(new CheatDestroy());
       commandManager.Register(new CheatFaction());
       commandManager.Register(new CheatFood());
@@ -25,7 +28,6 @@ namespace WarcraftLegacies.Source.Setup
       commandManager.Register(new CheatHp());
       commandManager.Register(new CheatKick());
       commandManager.Register(new CheatLevel());
-      commandManager.Register(new CheatLumber());
       commandManager.Register(new CheatMana());
       commandManager.Register(new CheatMp());
       commandManager.Register(new CheatNocd());
@@ -38,7 +40,6 @@ namespace WarcraftLegacies.Source.Setup
       commandManager.Register(new CheatTeam());   
       commandManager.Register(new CheatTele());
       commandManager.Register(new CheatTime());
-      commandManager.Register(new CheatUncontrol());
       commandManager.Register(new CheatVision());
       commandManager.Register(new CheatShore());
       commandManager.Register(new CheatPosition());
@@ -47,6 +48,19 @@ namespace WarcraftLegacies.Source.Setup
       commandManager.Register(new CheatSkipTurns());
       commandManager.Register(new CheatPermaKill());
       commandManager.Register(new CheatGetUnitCurrentOrder());
+      commandManager.Register(new AssembleZinrokh(new List<Artifact>
+      {
+        artifactSetup.AzureFragment,
+        artifactSetup.BronzeFragment,
+        artifactSetup.EmeraldFragment,
+        artifactSetup.RubyFragment,
+        artifactSetup.ObsidianFragment
+      }));
+      commandManager.Register(new PreviewForsaken());
+      commandManager.Register(new CheatPingGoldMines());
+      commandManager.Register(new CheatGetWaygateDestination());
+      commandManager.Register(new CheatPause());
+      commandManager.Register(new CheatRemovePower());
       TestMode.Setup(commandManager);
       CheatSkipCinematic.Init();
     }

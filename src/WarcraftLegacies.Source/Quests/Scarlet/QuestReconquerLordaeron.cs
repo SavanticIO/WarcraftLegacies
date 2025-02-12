@@ -22,12 +22,12 @@ namespace WarcraftLegacies.Source.Quests.Scarlet
       AddObjective(new ObjectiveQuestComplete(hearthglen));
       AddObjective(new ObjectiveQuestComplete(brill));
       AddObjective(new ObjectiveQuestComplete(andorhal));
-      ResearchId = Constants.UPGRADE_R02A_QUEST_COMPLETED_A_ONCE_GREAT_PEOPLE;
+      ResearchId = UPGRADE_R02A_QUEST_COMPLETED_A_ONCE_GREAT_PEOPLE;
       Global = true;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Against all odds, the Scarlet Crusade has reclaimed and rebuilt the lands of Lordaeron, filling its cities and fields with the beginnings of a new generation. Having proven itself capable of far more than simple vengeance, the Crusade receives the Light's ultimate blessing.";
 
     /// <inheritdoc/>

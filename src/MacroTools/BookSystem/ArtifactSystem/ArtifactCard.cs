@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using MacroTools.ArtifactSystem;
+using MacroTools.BookSystem.Core;
 using MacroTools.Extensions;
 using MacroTools.FactionSystem;
 using MacroTools.Frames;
@@ -11,45 +12,82 @@ namespace MacroTools.BookSystem.ArtifactSystem
   /// <summary>
   ///   Represents a single Artifact in a black rectangle.
   /// </summary>
-  public sealed class ArtifactCard : Card
+  public sealed class ArtifactCard : Card<Artifact>
   {
     private const float BoxWidth = 0.13f;
     private const float BoxHeight = 0.086f;
-    private readonly Artifact _artifact;
-    private readonly Frame _pingButton;
-
+    private Artifact? _artifact;
+    
+    private readonly Button _pingButton;
     private readonly TextFrame _text;
+    private readonly Frame _icon;
+    private readonly TextFrame _title;
 
+    /// <inheritdoc />
+    public override bool Occupied => Item != null;
+
+    /// <inheritdoc />
+    public override void Clear() => Item = null;
+
+    /// <summary>
+    /// The <see cref="Item"/> currently being represented by this <see cref="ArtifactCard"/>.
+    /// </summary>
+    public override Artifact? Item
+    {
+      get => _artifact;
+      set
+      {
+        Visible = value != null;
+
+        if (_artifact != null)
+        {
+          _artifact.OwnerChanged -= OnArtifactOwnerChanged;
+          _artifact.StatusChanged -= OnArtifactStatusChanged;
+          _artifact.FactionChanged -= OnArtifactOwnerChanged;
+        }
+        
+        _artifact = value;
+
+        if (_artifact == null)
+          return;
+        
+        _icon.Texture = BlzGetItemIconPath(_artifact.Item);
+        _title.Text = GetItemName(_artifact.Item);
+        _pingButton.OnClick = _artifact.Ping;
+        _artifact.OwnerChanged += OnArtifactOwnerChanged;
+        _artifact.StatusChanged += OnArtifactStatusChanged;
+        _artifact.FactionChanged += OnArtifactOwnerChanged;
+        RefreshLocationDescriptionFrame();
+      }
+    }
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="ArtifactCard"/> class.
     /// </summary>
-    /// <param name="artifact">The <see cref="Artifact"/> being represented.</param>
     /// <param name="parent"><inheritdoc /></param>
-    public ArtifactCard(Artifact artifact, Frame parent) : base(parent, BoxWidth, BoxHeight)
+    public ArtifactCard(Frame parent) : base(parent, BoxWidth, BoxHeight)
     {
-      _artifact = artifact;
-
-      var icon = new Frame("BACKDROP", "ArtifactIcon", this)
+      _icon = new Frame("BACKDROP", "ArtifactIcon", this)
       {
         Width = 0.04f,
         Height = 0.04f,
-        Texture = BlzGetItemIconPath(artifact.Item)
+        Texture = ""
       };
-      icon.SetPoint(FRAMEPOINT_LEFT, this, FRAMEPOINT_LEFT, 0.015f, -0.0090f);
-      AddFrame(icon);
+      _icon.SetPoint(FRAMEPOINT_LEFT, this, FRAMEPOINT_LEFT, 0.015f, -0.0090f);
+      AddFrame(_icon);
 
-      var title = new TextFrame("ArtifactItemTitle", this, 0)
+      _title = new TextFrame("ArtifactItemTitle", this, 0)
       {
-        Text = GetItemName(artifact.Item),
+        Text = "",
         Width = BoxWidth - 0.04f,
         Height = 0
       };
-      title.SetPoint(FRAMEPOINT_CENTER, this, FRAMEPOINT_CENTER, 0, 0.0255f);
-      AddFrame(title);
+      _title.SetPoint(FRAMEPOINT_CENTER, this, FRAMEPOINT_CENTER, 0, 0.0255f);
+      AddFrame(_title);
 
       _text = new TextFrame("ArtifactItemOwnerText", this, 0);
-      _text.SetPoint(FRAMEPOINT_TOPLEFT, icon, FRAMEPOINT_TOPRIGHT, 0.007f, 0);
-      _text.SetPoint(FRAMEPOINT_BOTTOMLEFT, icon, FRAMEPOINT_BOTTOMRIGHT, 0.007f, 0);
+      _text.SetPoint(FRAMEPOINT_TOPLEFT, _icon, FRAMEPOINT_TOPRIGHT, 0.007f, 0);
+      _text.SetPoint(FRAMEPOINT_BOTTOMLEFT, _icon, FRAMEPOINT_BOTTOMRIGHT, 0.007f, 0);
       _text.SetPoint(FRAMEPOINT_RIGHT, this, FRAMEPOINT_RIGHT, -0.007f, 0);
       AddFrame(_text);
 
@@ -58,18 +96,12 @@ namespace MacroTools.BookSystem.ArtifactSystem
         Width = 0.062f,
         Height = 0.027f,
         Text = "Ping",
-        Visible = false,
-        OnClick = artifact.Ping
+        Visible = false
       };
       _pingButton.SetPoint(FRAMEPOINT_LEFT, this, FRAMEPOINT_LEFT, 0.057f, -0.009f);
       AddFrame(_pingButton);
-
-      artifact.OwnerChanged += OnArtifactOwnerChanged;
-      artifact.StatusChanged += OnArtifactStatusChanged;
-      artifact.FactionChanged += OnArtifactOwnerChanged;
-      FactionManager.AnyFactionNameChanged += OnAnyFactionNameChanged;
       
-      RefreshLocationDescriptionFrame();
+      FactionManager.AnyFactionNameChanged += OnAnyFactionNameChanged;
     }
 
     /// <summary>
@@ -77,7 +109,7 @@ namespace MacroTools.BookSystem.ArtifactSystem
     /// </summary>
     private void RefreshLocationDescriptionFrame()
     {
-      switch (_artifact.LocationType)
+      switch (_artifact!.LocationType)
       {
         case ArtifactLocationType.Unit:
           if (_artifact.OwningPlayer?.GetFaction() != null)
@@ -129,21 +161,13 @@ namespace MacroTools.BookSystem.ArtifactSystem
     {
       try
       {
-        if (e == _artifact.OwningPlayer?.GetFaction())
+        if (e == _artifact?.OwningPlayer?.GetFaction())
           RefreshLocationDescriptionFrame();
       }
       catch (Exception ex)
       {
         Console.WriteLine(ex);
       }
-    }
-
-    /// <inheritdoc />
-    protected override void DisposeEvents()
-    {
-      _artifact.OwnerChanged -= OnArtifactOwnerChanged;
-      _artifact.StatusChanged -= OnArtifactStatusChanged;
-      _artifact.FactionChanged -= OnArtifactOwnerChanged;
     }
   }
 }

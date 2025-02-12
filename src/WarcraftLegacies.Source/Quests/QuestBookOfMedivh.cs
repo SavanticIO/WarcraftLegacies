@@ -7,7 +7,6 @@ using MacroTools.ObjectiveSystem.Objectives.ArtifactBased;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.ObjectiveSystem.Objectives.UnitBased;
 using MacroTools.QuestSystem;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Quests
 {
@@ -50,10 +49,10 @@ namespace WarcraftLegacies.Source.Quests
 
       if (_bookOfMedivhPedestal == null)
       {
-        _bookOfMedivhPedestal = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), Constants.UNIT_NBSM_BOOK_OF_MEDIVH,
+        _bookOfMedivhPedestal = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), UNIT_NBSM_BOOK_OF_MEDIVH,
           bookLocation.Rectangle.Center.X, bookLocation.Rectangle.Center.Y, 270);
         _bookOfMedivhPedestal.SetInvulnerable(true)
-          .AddAbility(Constants.ABILITY_A01Y_INVENTORY_DUMMY_DROP_ARTIFACT)
+          .AddAbility(ABILITY_A01Y_INVENTORY_DUMMY_DROP_ARTIFACT)
           .AddItemSafe(bookOfMedivh.Item);
       }
       
@@ -66,12 +65,12 @@ namespace WarcraftLegacies.Source.Quests
       : "The Book of Medivh";
 
     /// <inheritdoc/>
-    protected override string RewardFlavour => _bypassLevelRequirement
+    public override string RewardFlavour => _bypassLevelRequirement
       ? $"{_objectiveWithCompletingUnit.CompletingUnitName} has retrieved the Book of Medivh from its pedestal. With its power, we can summon the full might of the Burning Legion from the depths of the Twisting Nether."
       : $"{_objectiveWithCompletingUnit.CompletingUnitName} has retrieved the Book of Medivh from its pedestal, and now prepares to harness its untold power.";
 
     /// <inheritdoc/>
-    protected override string PenaltyFlavour => 
+    public override string PenaltyFlavour => 
       "Another faction has retrieved the Book of Medivh from its pedestal. Hopefully they do not turn its nefarious power against us.";
 
     /// <inheritdoc/>

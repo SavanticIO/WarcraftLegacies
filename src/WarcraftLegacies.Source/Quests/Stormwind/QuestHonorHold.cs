@@ -4,9 +4,8 @@ using MacroTools.FactionSystem;
 using MacroTools.LegendSystem;
 using MacroTools.ObjectiveSystem.Objectives.LegendBased;
 using MacroTools.QuestSystem;
+using MacroTools.Utils;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
-
 
 namespace WarcraftLegacies.Source.Quests.Stormwind
 {
@@ -18,23 +17,23 @@ namespace WarcraftLegacies.Source.Quests.Stormwind
       "Despite Outland's incredibly harsh climate, some Alliance forces have managed to make a home there - a town called Honor Hold",
       @"ReplaceableTextures\CommandButtons\BTNHumanBarracks.blp")
     {
-      foreach (var unit in CreateGroup().EnumUnitsInRect(rescueRect).EmptyToList())
+      foreach (var unit in GlobalGroup.EnumUnitsInRect(rescueRect))
         if (GetOwningPlayer(unit) == Player(PLAYER_NEUTRAL_PASSIVE))
         {
           SetUnitInvulnerable(unit, true);
           _rescueUnits.Add(unit);
         }
       AddObjective(new ObjectiveCapitalDead(hellfireCitadel));
-      ResearchId = Constants.UPGRADE_R039_QUEST_COMPLETED_HONOR_HOLD;
+      ResearchId = UPGRADE_R039_QUEST_COMPLETED_HONOR_HOLD;
     }
 
     /// <inheritdoc/>
-    protected override string RewardFlavour =>
+    public override string RewardFlavour =>
       "Honor Hold is now free from the constant looming threat of Hellfire Citadel, and have finally been reconnected with their Alliance from Azeroth.";
 
     /// <inheritdoc/>
     protected override string RewardDescription =>
-      $"Control of all units at Honor Hold and {GetObjectName(Constants.UNIT_O06K_SIEGE_TOWER_STORMWIND)} gain the {GetObjectName(Constants.ABILITY_A108_ARTILLERY_BOMBARDMENT_STORMWIND)} ability."; 
+      $"Control of all units at Honor Hold and {GetObjectName(UNIT_O06K_SIEGE_TOWER_STORMWIND)} gain the {GetObjectName(ABILITY_A108_ARTILLERY_BOMBARDMENT_STORMWIND)} ability."; 
 
     /// <inheritdoc/>
     protected override void OnFail(Faction completingFaction)

@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using MacroTools.Channels;
 using MacroTools.ChannelSystem;
-using MacroTools.Extensions;
 using MacroTools.SpellSystem;
+using MacroTools.Utils;
 using WCSharp.Shared.Data;
-using static War3Api.Common;
 
 namespace WarcraftLegacies.Source.Spells
 {
@@ -69,9 +68,8 @@ namespace WarcraftLegacies.Source.Spells
     /// <inheritdoc />
     public override void OnCast(unit caster, unit target, Point targetPoint)
     {
-      var targets = CreateGroup()
-        .EnumUnitsInRange(targetPoint, Radius)
-        .EmptyToList().Where(unit => IsValidTarget(caster, unit))
+      var targets = GlobalGroup
+        .EnumUnitsInRange(targetPoint, Radius).Where(unit => IsValidTarget(caster, unit))
         .Take(TargetCountBase + TargetCountLevel * GetAbilityLevel(caster));
       foreach (var unit in targets)
       {

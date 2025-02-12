@@ -1,6 +1,6 @@
-﻿using MacroTools;
-using MacroTools.LegendSystem;
-using static War3Api.Common;
+﻿using MacroTools.LegendSystem;
+using MacroTools.Systems;
+
 #pragma warning disable CS1591
 
 namespace WarcraftLegacies.Source.Setup.Legends
@@ -8,6 +8,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
   public sealed class LegendNeutral
   {
     public LegendaryHero Ragnaros { get; }
+    public LegendaryHero YoggSaron { get; }
     public Capital Auchindoun { get; }
     public Capital DraktharonKeep { get; }
     public Capital Oshugun { get; }
@@ -32,16 +33,28 @@ namespace WarcraftLegacies.Source.Setup.Legends
     {
       Ragnaros = new LegendaryHero("Ragnaros")
       {
-        UnitType = Constants.UNIT_N00D_PRIMARY_FIRELORD_CREEP,
+        UnitType = UNIT_N00D_PRIMARY_FIRELORD_CREEP,
         DeathMessage = "Ragnaros, the King of Fire and Lord of the Firelands, has been extinguished.",
         StartingArtifacts = new()
         {
-          new(CreateItem(Constants.ITEM_I00H_SULFURAS_HAND_OF_RAGNAROS, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
+          new(CreateItem(ITEM_I00H_SULFURAS_HAND_OF_RAGNAROS, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
         },
         StartingXp = 15404
       };
 
-      Auchindoun = new Capital
+        YoggSaron = new LegendaryHero("Yogg-Saron")
+        {
+          UnitType = UNIT_U02C_OLD_GOD,
+          PermaDies = true,
+          DeathMessage = "Yogg-Saron, the beast with a thousand maws has been destroyed.",
+          StartingArtifacts = new()
+        {
+          new(CreateItem(ITEM_IYGL_VAL_ANYR_HAMMER_OF_ANCIENT_KINGS, Regions.ArtifactDummyInstance.Center.X, Regions.ArtifactDummyInstance.Center.Y))
+        },
+          StartingXp = 23800
+        };
+
+        Auchindoun = new Capital
       {
         Capturable = true,
         Unit = preplacedUnitSystem.GetUnit(FourCC("h026"))
@@ -62,7 +75,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
       Jinthaalor = new Capital
       {
         Capturable = true,
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_O02G_JINTHA_ALOR)
+        Unit = preplacedUnitSystem.GetUnit(UNIT_O02G_JINTHA_ALOR)
       };
 
       ShrineOfUlatek = new Capital
@@ -151,7 +164,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
 
       Shaladrassil = new Capital
       {
-        Unit = preplacedUnitSystem.GetUnit(Constants.UNIT_E01W_SHALADRASSIL_DRUID_OTHER),
+        Unit = preplacedUnitSystem.GetUnit(UNIT_E01W_SHALADRASSIL_DRUID_OTHER),
         Capturable = true
       };
     }
@@ -159,6 +172,7 @@ namespace WarcraftLegacies.Source.Setup.Legends
     public void RegisterLegends()
     {
       LegendaryHeroManager.Register(Ragnaros);
+      LegendaryHeroManager.Register(YoggSaron);
       LegendaryHeroManager.Register(Vaelastrasz);
       CapitalManager.Register(Auchindoun);
       CapitalManager.Register(DraktharonKeep);
